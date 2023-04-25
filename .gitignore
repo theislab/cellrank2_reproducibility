@@ -149,8 +149,8 @@ dmypy.json
 *.gmt
 *.gmx
 
-# data/
-# figures/
+data/
+figures/
 
 # OS specifics
 **.DS_Store
