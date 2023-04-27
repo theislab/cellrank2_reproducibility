@@ -29,6 +29,7 @@ def plot_states(
     inplace: bool = False,
     fpath: Optional[str] = None,
     format: str = "eps",
+    dpi: int = 400,
     **kwargs,
 ):
     if not inplace:
@@ -57,4 +58,4 @@ def plot_states(
     )
 
     if fpath is not None:
-        fig.savefig(fpath, format=format, transparent=True, bbox_inches="tight")
+        fig.savefig(fpath, format=format, transparent=True, bbox_inches="tight", dpi=dpi)
