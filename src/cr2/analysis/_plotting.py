@@ -8,13 +8,8 @@ import seaborn as sns
 import scvelo as scv
 
 
-def plot_state_purity(state_purity, color="grey", fpath: Optional[str] = None, format: str = "eps"):
+def plot_state_purity(state_purity, fpath: Optional[str] = None, format: str = "eps", **kwargs):
     """Plot purity of a given state (e.g. macrostate or terminal state)."""
-    if isinstance(color, str):
-        kwargs = {"color": color}
-    else:
-        kwargs = {"palette": dict(zip(state_purity.keys(), color))}
-
     df = pd.DataFrame({"Purity": state_purity.values(), "State": state_purity.keys()}).sort_values(
         "Purity", ascending=False
     )
