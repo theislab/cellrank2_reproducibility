@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal, Optional, Union
 
 import pandas as pd
 
@@ -29,7 +29,7 @@ def plot_states(
     inplace: bool = False,
     fpath: Optional[str] = None,
     format: str = "eps",
-    dpi: int = 400,
+    dpi: Union[int, str] = "figure",
     **kwargs,
 ):
     if not inplace:
