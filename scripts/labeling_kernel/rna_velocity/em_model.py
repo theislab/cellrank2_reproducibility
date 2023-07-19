@@ -224,11 +224,11 @@ if running_in_notebook():
 # #### Fate probabilities
 
 # %%
-estimator.compute_absorption_probabilities()
+estimator.compute_fate_probabilities()
 
 # %%
 if running_in_notebook():
-    estimator.plot_absorption_probabilities(same_plot=False, size=50, basis="umap")
+    estimator.plot_fate_probabilities(same_plot=False, size=50, basis="umap")
 
 # %% [markdown]
 # ### Driver analysis

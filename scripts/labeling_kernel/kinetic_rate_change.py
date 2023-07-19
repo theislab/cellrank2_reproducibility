@@ -108,7 +108,7 @@ terminal_states = estimator.terminal_states.cat.categories
 # #### Fate probabilities
 
 # %%
-estimator.compute_absorption_probabilities()
+estimator.compute_fate_probabilities()
 
 # %% [markdown]
 # ### Driver analysis
@@ -199,7 +199,7 @@ cr.pl.heatmap(
     data_key="alpha_smoothed",
     genes=var_names,
     gene_order=var_names,
-    show_absorption_probabilities=False,
+    show_fate_probabilities=False,
     show_all_genes=True,
     lineages="Goblet cells",
     time_key="velocity_pseudotime",
@@ -218,7 +218,7 @@ cr.pl.heatmap(
     data_key="gamma_smoothed",
     genes=var_names,
     gene_order=var_names,
-    show_absorption_probabilities=False,
+    show_fate_probabilities=False,
     show_all_genes=True,
     lineages="Goblet cells",
     time_key="velocity_pseudotime",
@@ -237,7 +237,7 @@ cr.pl.heatmap(
     data_key="alpha_smoothed",
     genes=var_names,
     gene_order=var_names,
-    show_absorption_probabilities=False,
+    show_fate_probabilities=False,
     show_all_genes=True,
     lineages="Enterocytes",
     time_key="velocity_pseudotime",
@@ -256,7 +256,7 @@ cr.pl.heatmap(
     data_key="gamma_smoothed",
     genes=var_names,
     gene_order=var_names,
-    show_absorption_probabilities=False,
+    show_fate_probabilities=False,
     show_all_genes=True,
     lineages="Enterocytes",
     time_key="velocity_pseudotime",
@@ -264,5 +264,3 @@ cr.pl.heatmap(
     n_jobs=8,
     save=save,
 )
-
-# %%
