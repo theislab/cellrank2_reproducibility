@@ -12,9 +12,9 @@ def get_state_purity(adata, estimator, states: Literal["macrostates", "terminal_
         .groupby(["states", "obs_col"])
         .size()
         .reset_index()
-        .rename(columns={0: "obs_col"})[["states", "obs_col"]]
+        .rename(columns={0: "group_counts"})[["states", "group_counts"]]
         .groupby("states")
-        .max()["obs_col"]
+        .max()["group_counts"]
     )
 
     return (max_obs_count_per_state / states.value_counts()).to_dict()
