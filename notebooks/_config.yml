@@ -1,0 +1,9 @@
+title: CellRank 2 reproducibility
+author: Philipp Weiler, Marius Lange, Michal Klein, Dana Pe'er, Fabian Theis
+execute:
+    execute_notebooks: "off"
+
+repository:
+    url: https://github.com/theislab/cellrank2_reproducibility
+html:
+    use_repository_button: true
