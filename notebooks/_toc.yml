@@ -1,0 +1,43 @@
+format: jb-book
+root: index
+parts:
+    - caption: PseudotimeKernel
+      chapters:
+          - file: pseudotime_kernel/dpt
+          - file: pseudotime_kernel/rna_velocity
+    - caption: CytoTRACEKernel
+      chapters:
+          - file: cytotrace_kernel/benchmark/README
+            sections:
+                - file: cytotrace_kernel/benchmark/runtime
+                - file: cytotrace_kernel/benchmark/cytotrace_vs_cr2_scores
+          - file: cytotrace_kernel/embryoid_body/README
+            sections:
+                - file: cytotrace_kernel/benchmark/cytotrace
+                - file: cytotrace_kernel/benchmark/dpt
+                - file: cytotrace_kernel/benchmark/palantir
+    - caption: RealTimeKernel
+      chapters:
+          - file: realtime_kernel/mef/README
+            sections:
+                - file: realtime_kernel/mef/realtime_informed_pseudotime
+                - file: realtime_kernel/mef/dpt
+                - file: realtime_kernel/mef/palantir
+                - file: realtime_kernel/mef/wot
+          - file: realtime_kernel/pharyngeal_endoderm/README
+            sections:
+                - file: realtime_kernel/pharyngeal_endoderm/realtimekernel_full_data
+                - file: realtime_kernel/pharyngeal_endoderm/realtimekernel_subsetted_data
+                - file: realtime_kernel/pharyngeal_endoderm/wot_subsetted_data
+    - caption: Metabolic labeling
+      chapters:
+          - file: labeling_kernel/preprocessing
+          - file: labeling_kernel/inference
+          - file: labeling_kernel/fate_mapping
+          - file: labeling_kernel/velocity_pseudotime
+          - file: labeling_kernel/kinetic_rate_change
+          - file: labeling_kernel/rna_velocity/em_model
+          - file: labeling_kernel/dynamo/velo_chase_and_pulse
+          - file: labeling_kernel/dynamo/fp_ana_chase_and_pulse
+          - file: labeling_kernel/dynamo/lap_chase_and_pulse
+          - file: labeling_kernel/method_comparison
