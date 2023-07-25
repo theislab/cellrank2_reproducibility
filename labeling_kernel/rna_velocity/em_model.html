@@ -1,0 +1,1313 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Intestinal organoid differentiation - RNA velocity with EM model &#8212; CellRank 2 reproducibility</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'labeling_kernel/rna_velocity/em_model';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Intestinal organoid differentiation - Dynamo velocity for pulse experiment" href="../dynamo/velo_chase_and_pulse.html" />
+    <link rel="prev" title="Intestinal organoid differentiation - Kinetic rate change over (pseudo)time" href="../kinetic_rate_change.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">CellRank 2 reproducibility</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    CellRank 2’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">CytoTRACEKernel</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../cytotrace_kernel/benchmark/README.html">Benchmark</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cytotrace_kernel/benchmark/runtime.html">CytoTRACE runtime comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cytotrace_kernel/benchmark/cytotrace_vs_cr2_scores.html">CytoTRACE vs. CytoTRACEKernel benchmark</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../cytotrace_kernel/embryoid_body/README.html">Embryoid body development</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RealTimeKernel</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../realtime_kernel/mef/README.html">Analysis of mouse embryonic fibroblasts</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/realtime_informed_pseudotime.html">Real-time informed pseudotime on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/dpt.html">Diffusion pseudotime on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/palantir.html">Palantir pseudotime on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/wot.html">WOT-based analysis of mouse embryonic fibroblasts</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/README.html">Analysis of pharyngeal endoderm development</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/realtimekernel_full_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/realtimekernel_subsetted_data.html">Pharyngeal endoderm development analysis with RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/wot_subsetted_data.html">Pharyngeal endoderm development analysis with WOT</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Metabolic labeling</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Intestinal organoid differentiation - Data preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../inference.html">Intestinal organoid differentiation - Parameter inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fate_mapping.html">Intestinal organoid differentiation - Fate mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../velocity_pseudotime.html">Intestinal organoid differentiation - Velocity pseudotime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kinetic_rate_change.html">Intestinal organoid differentiation - Kinetic rate change over (pseudo)time</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Intestinal organoid differentiation - RNA velocity with EM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dynamo/velo_chase_and_pulse.html">Intestinal organoid differentiation - Dynamo velocity for pulse experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dynamo/fp_ana_chase_and_pulse.html">Fixed point analysis - Chase and pulse experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dynamo/lap_chase_and_pulse.html">Least action path analysis with Dynamo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../method_comparison.html">Method comparsion</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/cellrank2_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/labeling_kernel/rna_velocity/em_model.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Intestinal organoid differentiation - RNA velocity with EM model</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data preprocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-inference">Parameter inference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#velocity">Velocity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank">CellRank</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimator-analysis">Estimator analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#macrostates">Macrostates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fate-probabilities">Fate probabilities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#driver-analysis">Driver analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goblet-cells">Goblet cells</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#paneth-cells">Paneth cells</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enteroendocrine">Enteroendocrine</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enterocytes">Enterocytes</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="intestinal-organoid-differentiation-rna-velocity-with-em-model">
+<h1>Intestinal organoid differentiation - RNA velocity with EM model<a class="headerlink" href="#intestinal-organoid-differentiation-rna-velocity-with-em-model" title="Permalink to this heading">#</a></h1>
+<p>Estimates RNA velocity with scVelo’s <em>EM model</em> and analyses corresponding fate mapping.</p>
+<section id="library-imports">
+<h2>Library imports<a class="headerlink" href="#library-imports" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">cellrank</span> <span class="k">as</span> <span class="nn">cr</span>
+<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
+
+<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_state_purity</span><span class="p">,</span>
+    <span class="n">get_var_ranks</span><span class="p">,</span>
+    <span class="n">plot_state_purity</span><span class="p">,</span>
+    <span class="n">plot_states</span><span class="p">,</span>
+    <span class="n">running_in_notebook</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;../../../&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">])</span>
+<span class="kn">from</span> <span class="nn">paths</span> <span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>  <span class="c1"># isort: skip  # noqa: E402</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="general-settings">
+<h2>General settings<a class="headerlink" href="#general-settings" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">cr</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">set_figure_params</span><span class="p">(</span><span class="s2">&quot;scvelo&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;labeling_kernel&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N_JOBS</span> <span class="o">=</span> <span class="mi">8</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-loading">
+<h2>Data loading<a class="headerlink" href="#data-loading" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;raw.h5ad&quot;</span><span class="p">)</span>
+
+<span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;labeling_time&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;dmso&quot;</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="o">~</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Tuft cells&quot;</span><span class="p">]),</span> <span class="p">:]</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;labeling_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;labeling_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span>
+
+<span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;unspliced&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;unlabeled_unspliced&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;labeled_unspliced&quot;</span><span class="p">]</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;spliced&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;unlabeled_spliced&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;labeled_spliced&quot;</span><span class="p">]</span>
+
+<span class="n">umap_coord_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_coords.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">umap_coord_df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">umap_coord_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_umap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">umap_coord_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs_names</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">values</span>
+<span class="k">del</span> <span class="n">umap_coord_df</span>
+
+<span class="n">adata</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_867846/2797837506.py:5: ImplicitModificationWarning: Trying to modify attribute `.obs` of view, initializing view as actual.
+  adata.obs[&quot;labeling_time&quot;] = adata.obs[&quot;labeling_time&quot;].astype(float) / 60
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 3452 × 9157
+    obs: &#39;experiment&#39;, &#39;labeling_time&#39;, &#39;cell_type&#39;, &#39;well_id&#39;, &#39;batch_id&#39;, &#39;log10_gfp&#39;, &#39;som_cluster_id&#39;, &#39;monocle_branch_id&#39;, &#39;monocle_pseudotime&#39;
+    var: &#39;ensum_id&#39;
+    uns: &#39;cell_type_colors&#39;
+    obsm: &#39;X_umap_paper&#39;, &#39;X_umap&#39;
+    layers: &#39;labeled&#39;, &#39;labeled_spliced&#39;, &#39;labeled_unspliced&#39;, &#39;total&#39;, &#39;unlabeled&#39;, &#39;unlabeled_spliced&#39;, &#39;unlabeled_unspliced&#39;, &#39;unspliced&#39;, &#39;spliced&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-preprocessing">
+<h2>Data preprocessing<a class="headerlink" href="#data-preprocessing" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type_merged&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type_merged&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;Enteroendocrine cells&quot;</span><span class="p">:</span> <span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># filter s.t. at least `min_counts` per labeling time point?</span>
+<span class="n">scv</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_and_normalize</span><span class="p">(</span>
+    <span class="n">adata</span><span class="p">,</span>
+    <span class="n">min_counts</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">layers_normalize</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;labeled&quot;</span><span class="p">,</span> <span class="s2">&quot;unlabeled&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="s2">&quot;unspliced&quot;</span><span class="p">,</span> <span class="s2">&quot;spliced&quot;</span><span class="p">],</span>
+    <span class="n">n_top_genes</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">adata</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Filtered out 736 genes that are detected 50 counts (spliced).
+Normalized count data: X, labeled, unlabeled, total, unspliced, spliced.
+Extracted 2000 highly variable genes.
+Logarithmized X.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 3452 × 2000
+    obs: &#39;experiment&#39;, &#39;labeling_time&#39;, &#39;cell_type&#39;, &#39;well_id&#39;, &#39;batch_id&#39;, &#39;log10_gfp&#39;, &#39;som_cluster_id&#39;, &#39;monocle_branch_id&#39;, &#39;monocle_pseudotime&#39;, &#39;cell_type_merged&#39;, &#39;initial_size_unspliced&#39;, &#39;initial_size_spliced&#39;, &#39;initial_size&#39;, &#39;n_counts&#39;
+    var: &#39;ensum_id&#39;, &#39;gene_count_corr&#39;, &#39;means&#39;, &#39;dispersions&#39;, &#39;dispersions_norm&#39;, &#39;highly_variable&#39;
+    uns: &#39;cell_type_colors&#39;
+    obsm: &#39;X_umap_paper&#39;, &#39;X_umap&#39;
+    layers: &#39;labeled&#39;, &#39;labeled_spliced&#39;, &#39;labeled_unspliced&#39;, &#39;total&#39;, &#39;unlabeled&#39;, &#39;unlabeled_spliced&#39;, &#39;unlabeled_unspliced&#39;, &#39;unspliced&#39;, &#39;spliced&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">svd_solver</span><span class="o">=</span><span class="s2">&quot;arpack&quot;</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">n_pcs</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="n">scv</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">moments</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_pcs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing PCA
+    on highly variable genes
+    with n_comps=50
+    finished (0:00:02)
+computing neighbors
+    using &#39;X_pca&#39; with n_pcs = 30
+    finished: added to `.uns[&#39;neighbors&#39;]`
+    `.obsp[&#39;distances&#39;]`, distances for each pair of neighbors
+    `.obsp[&#39;connectivities&#39;]`, weighted adjacency matrix (0:00:00)
+computing moments based on connectivities
+    finished (0:00:01) --&gt; added 
+    &#39;Ms&#39; and &#39;Mu&#39;, moments of un/spliced abundances (adata.layers)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/d6805831ea77d0a5814934fbeb0fb37fa9c70922592a4e9f0e67cbc05ca74725.png" src="../../_images/d6805831ea77d0a5814934fbeb0fb37fa9c70922592a4e9f0e67cbc05ca74725.png" />
+</div>
+</div>
+</section>
+<section id="parameter-inference">
+<h2>Parameter inference<a class="headerlink" href="#parameter-inference" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">recover_dynamics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">N_JOBS</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>recovering dynamics (using 8/14 cores)
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fe3f2a08199b42998bf685d35d127290", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
+[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[0]PETSC ERROR: or see https://petsc.org/release/faq/#valgrind and https://petsc.org/release/faq/
+[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[0]PETSC ERROR: to get more information on the crash.
+Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 59) - process 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    finished (0:00:20) --&gt; added 
+    &#39;fit_pars&#39;, fitted parameters for splicing dynamics (adata.var)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/philipp/code/scvelo_dev/scvelo/tools/_em_model_core.py:764: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray.
+  np.array([dm.alpha, dm.beta, dm.gamma, dm.pars[:3]]) / dm.m[-1]
+/vol/storage/philipp/code/scvelo_dev/scvelo/tools/_em_model_core.py:767: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray.
+  np.array([dm.t, dm.tau, dm.t_, dm.pars[4]]) * dm.m[-1]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="velocity">
+<h2>Velocity<a class="headerlink" href="#velocity" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;dynamical&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing velocities
+    finished (0:00:00) --&gt; added 
+    &#39;velocity&#39;, velocity vectors for each individual cell (adata.layers)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="cellrank">
+<h2>CellRank<a class="headerlink" href="#cellrank" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vk</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">VelocityKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">xkey</span><span class="o">=</span><span class="s2">&quot;Ms&quot;</span><span class="p">,</span> <span class="n">vkey</span><span class="o">=</span><span class="s2">&quot;velocity&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">()</span>
+<span class="n">ck</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">ConnectivityKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">()</span>
+
+<span class="n">combined_kernel</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">vk</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">ck</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing transition matrix using `&#39;deterministic&#39;` model
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fc098ce15ebb478a96dd6aedec891397", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using `softmax_scale=11.9861`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: 
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ca44c7d70f9f4fffa25e6a378982b4f4", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:02)
+Computing transition matrix based on `adata.obsp[&#39;connectivities&#39;]`
+    Finish (0:00:00)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
+[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[0]PETSC ERROR: or see https://petsc.org/release/faq/#valgrind and https://petsc.org/release/faq/
+[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[0]PETSC ERROR: to get more information on the crash.
+Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 59) - process 0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="estimator-analysis">
+<h2>Estimator analysis<a class="headerlink" href="#estimator-analysis" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">estimators</span><span class="o">.</span><span class="n">GPCCA</span><span class="p">(</span><span class="n">combined_kernel</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_schur</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_spectrum</span><span class="p">(</span><span class="n">real_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Schur decomposition
+When computing macrostates, choose a number of states NOT in `[6, 8, 10, 12, 14, 16, 19]`
+Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
+       `.schur_vectors`
+       `.schur_matrix`
+       `.eigendecomposition`
+    Finish (0:00:00)
+</pre></div>
+</div>
+<img alt="../../_images/7a78b33d3ddac631b8cb6b9592ec3835d127a98b6138702834f24c6ba7dc5ec7.png" src="../../_images/7a78b33d3ddac631b8cb6b9592ec3835d127a98b6138702834f24c6ba7dc5ec7.png" />
+</div>
+</div>
+<section id="macrostates">
+<h3>Macrostates<a class="headerlink" href="#macrostates" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="n">n_states</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing `18` macrostates
+WARNING: The following terminal states have different number of cells than requested (30): {&#39;Stem cells_12&#39;: 28, &#39;Stem cells_6&#39;: 21}
+Adding `.macrostates`
+       `.macrostates_memberships`
+       `.coarse_T`
+       `.coarse_initial_distribution
+       `.coarse_stationary_distribution`
+       `.schur_vectors`
+       `.schur_matrix`
+       `.eigendecomposition`
+    Finish (0:01:08)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GPCCA[kernel=(0.8 * VelocityKernel[n=3452] + 0.2 * ConnectivityKernel[n=3452]), initial_states=None, terminal_states=None]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">plot_states</span><span class="p">(</span>
+        <span class="n">adata</span><span class="p">,</span>
+        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
+        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
+        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;labeling_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_cr_macrostates_scvelo.pdf&quot;</span>
+        <span class="n">plot_states</span><span class="p">(</span>
+            <span class="n">adata</span><span class="p">,</span>
+            <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+            <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
+            <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
+            <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+            <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/5d7be18afd6e985ef61f670236dc146abd79243816f8c5a81986ab5a0001a3b6.png" src="../../_images/5d7be18afd6e985ef61f670236dc146abd79243816f8c5a81986ab5a0001a3b6.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">macrostate_purity</span> <span class="o">=</span> <span class="n">get_state_purity</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span> <span class="n">obs_col</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean purity: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;labeling_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;macrostate_purity_rna_velo.pdf&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">estimator</span><span class="o">.</span><span class="n">macrostates</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">_macrostates</span><span class="o">.</span><span class="n">colors</span><span class="p">))</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">macrostates</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean purity: 0.876984126984127
+</pre></div>
+</div>
+<img alt="../../_images/3f22d77ae75b580bad27de5c704ba26469f94e9e667f538225d54cf550b0cbf8.png" src="../../_images/3f22d77ae75b580bad27de5c704ba26469f94e9e667f538225d54cf550b0cbf8.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">set_terminal_states</span><span class="p">(</span><span class="n">states</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Enterocytes&quot;</span><span class="p">,</span> <span class="s2">&quot;Paneth cells&quot;</span><span class="p">,</span> <span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">,</span> <span class="s2">&quot;Goblet cells&quot;</span><span class="p">])</span>
+<span class="n">terminal_states</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">terminal_states</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obs[&#39;term_states_fwd&#39;]`
+       `adata.obs[&#39;term_states_fwd_probs&#39;]`
+       `.terminal_states`
+       `.terminal_states_probabilities`
+       `.terminal_states_memberships
+    Finish`
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">plot_states</span><span class="p">(</span>
+        <span class="n">adata</span><span class="p">,</span>
+        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span>
+        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
+        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;labeling_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_cr_terminal_states_scvelo.pdf&quot;</span>
+        <span class="n">plot_states</span><span class="p">(</span>
+            <span class="n">adata</span><span class="p">,</span>
+            <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+            <span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span>
+            <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
+            <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+            <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/021984cc993d2a10b2ab20a3fe7795066d872099a1ecb3c833b9d0c7b02ebcfc.png" src="../../_images/021984cc993d2a10b2ab20a3fe7795066d872099a1ecb3c833b9d0c7b02ebcfc.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">terminal_state_purity</span> <span class="o">=</span> <span class="n">get_state_purity</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span> <span class="n">obs_col</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean purity: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">terminal_state_purity</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;labeling_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;terminal_state_purity_rna_velo.pdf&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">estimator</span><span class="o">.</span><span class="n">terminal_states</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">_term_states</span><span class="o">.</span><span class="n">colors</span><span class="p">))</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">terminal_states</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">terminal_state_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean purity: 0.6749999999999999
+</pre></div>
+</div>
+<img alt="../../_images/bedd88b40f6d8415eb083cdfe8900d61c1afca00bd627b03381cecac86121a09.png" src="../../_images/bedd88b40f6d8415eb083cdfe8900d61c1afca00bd627b03381cecac86121a09.png" />
+</div>
+</div>
+</section>
+<section id="fate-probabilities">
+<h3>Fate probabilities<a class="headerlink" href="#fate-probabilities" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_fate_probabilities</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing absorption probabilities
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7a5c2d389865484f84cf7e5be5000572", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
+       `.absorption_probabilities`
+    Finish (0:00:00)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_fate_probabilities</span><span class="p">(</span><span class="n">same_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/585d4f53dffb8da9af11db0b50552b32a3e3dbe8b838dda92288596603ece856.png" src="../../_images/585d4f53dffb8da9af11db0b50552b32a3e3dbe8b838dda92288596603ece856.png" />
+</div>
+</div>
+</section>
+<section id="driver-analysis">
+<h3>Driver analysis<a class="headerlink" href="#driver-analysis" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">goblet_markers</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;goblet_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">goblet_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">goblet_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">goblet_regulators</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;goblet_regulators.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">goblet_regulators</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">goblet_regulators</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">goblet_and_paneth_regulators</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;goblet_and_paneth_regulators.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">goblet_and_paneth_regulators</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">goblet_and_paneth_regulators</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">paneth_markers</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;paneth_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">paneth_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">paneth_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eec_markers</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;eec_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">eec_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">eec_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eec_progenitor_markers</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;eec_progenitor_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">eec_progenitor_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">eec_progenitor_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">enterocyte_markers</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;enterocyte_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">enterocyte_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">enterocyte_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">enterocyte_progenitor_markers</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;enterocyte_progenitor_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">enterocyte_progenitor_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">enterocyte_progenitor_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gene_ranks</span> <span class="o">=</span> <span class="p">{</span><span class="n">terminal_state</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span> <span class="k">for</span> <span class="n">terminal_state</span> <span class="ow">in</span> <span class="n">terminal_states</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">drivers</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">compute_lineage_drivers</span><span class="p">(</span>
+    <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">,</span>
+    <span class="n">lineages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">,</span> <span class="s2">&quot;Goblet cells&quot;</span><span class="p">,</span> <span class="s2">&quot;Paneth cells&quot;</span><span class="p">,</span> <span class="s2">&quot;Enterocytes&quot;</span><span class="p">],</span>
+    <span class="n">clusters</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Stem cells&quot;</span><span class="p">],</span>
+    <span class="n">return_drivers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">terminal_state</span> <span class="ow">in</span> <span class="n">terminal_states</span><span class="p">:</span>
+    <span class="n">drivers</span> <span class="o">=</span> <span class="n">drivers</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">drivers</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">_corr&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Corr. rank - </span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+        <span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">left_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
+       `.lineage_drivers`
+    Finish (0:00:00)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="goblet-cells">
+<h3>Goblet cells<a class="headerlink" href="#goblet-cells" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_df</span> <span class="o">=</span> <span class="n">get_var_ranks</span><span class="p">(</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="n">goblet_markers</span><span class="p">,</span> <span class="n">drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span> <span class="n">macrostate</span><span class="o">=</span><span class="s2">&quot;Goblet cells&quot;</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;Marker&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;EM Model&quot;</span>
+<span class="p">)</span>
+<span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Goblet cells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Goblet cells&quot;</span><span class="p">],</span> <span class="n">_df</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Marker towards Goblet cells for EM Model in top 100: 7 (out of 95)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_df</span> <span class="o">=</span> <span class="n">get_var_ranks</span><span class="p">(</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="n">goblet_and_paneth_regulators</span><span class="p">,</span>
+    <span class="n">drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span>
+    <span class="n">macrostate</span><span class="o">=</span><span class="s2">&quot;Goblet cells&quot;</span><span class="p">,</span>
+    <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;Goblet/Paneth regulator&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;EM Model&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Goblet cells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Goblet cells&quot;</span><span class="p">],</span> <span class="n">_df</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Goblet/Paneth regulator towards Goblet cells for EM Model in top 100: 0 (out of 3)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="paneth-cells">
+<h3>Paneth cells<a class="headerlink" href="#paneth-cells" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_df</span> <span class="o">=</span> <span class="n">get_var_ranks</span><span class="p">(</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="n">paneth_markers</span><span class="p">,</span> <span class="n">drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span> <span class="n">macrostate</span><span class="o">=</span><span class="s2">&quot;Paneth cells&quot;</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;Marker&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;EM Model&quot;</span>
+<span class="p">)</span>
+<span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Paneth cells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Paneth cells&quot;</span><span class="p">],</span> <span class="n">_df</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Marker towards Paneth cells for EM Model in top 100: 6 (out of 18)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_df</span> <span class="o">=</span> <span class="n">get_var_ranks</span><span class="p">(</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="n">goblet_and_paneth_regulators</span><span class="p">,</span>
+    <span class="n">drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span>
+    <span class="n">macrostate</span><span class="o">=</span><span class="s2">&quot;Paneth cells&quot;</span><span class="p">,</span>
+    <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;Goblet/Paneth regulator&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;EM Model&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Paneth cells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Paneth cells&quot;</span><span class="p">],</span> <span class="n">_df</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Goblet/Paneth regulator towards Paneth cells for EM Model in top 100: 0 (out of 3)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="enteroendocrine">
+<h3>Enteroendocrine<a class="headerlink" href="#enteroendocrine" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_df</span> <span class="o">=</span> <span class="n">get_var_ranks</span><span class="p">(</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="n">eec_markers</span><span class="p">,</span>
+    <span class="n">drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span>
+    <span class="n">macrostate</span><span class="o">=</span><span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">,</span>
+    <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;Marker&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;EM Model&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">],</span> <span class="n">_df</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Marker towards Enteroendocrine progenitors for EM Model in top 100: 12 (out of 82)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_df</span> <span class="o">=</span> <span class="n">get_var_ranks</span><span class="p">(</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="n">eec_progenitor_markers</span><span class="p">,</span>
+    <span class="n">drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span>
+    <span class="n">macrostate</span><span class="o">=</span><span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">,</span>
+    <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;Progenitor marker&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;EM Model&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">],</span> <span class="n">_df</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Progenitor marker towards Enteroendocrine progenitors for EM Model in top 100: 1 (out of 66)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="enterocytes">
+<h3>Enterocytes<a class="headerlink" href="#enterocytes" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_df</span> <span class="o">=</span> <span class="n">get_var_ranks</span><span class="p">(</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="n">enterocyte_markers</span><span class="p">,</span> <span class="n">drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span> <span class="n">macrostate</span><span class="o">=</span><span class="s2">&quot;Enterocytes&quot;</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;Marker&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;EM Model&quot;</span>
+<span class="p">)</span>
+<span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Enterocytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Enterocytes&quot;</span><span class="p">],</span> <span class="n">_df</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Marker towards Enterocytes for EM Model in top 100: 30 (out of 170)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_df</span> <span class="o">=</span> <span class="n">get_var_ranks</span><span class="p">(</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="n">enterocyte_progenitor_markers</span><span class="p">,</span>
+    <span class="n">drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span>
+    <span class="n">macrostate</span><span class="o">=</span><span class="s2">&quot;Enterocytes&quot;</span><span class="p">,</span>
+    <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;Progenitor marker&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;EM Model&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Enterocytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gene_ranks</span><span class="p">[</span><span class="s2">&quot;Enterocytes&quot;</span><span class="p">],</span> <span class="n">_df</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Progenitor marker towards Enterocytes for EM Model in top 100: 11 (out of 12)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">terminal_state</span> <span class="ow">in</span> <span class="n">gene_ranks</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span> <span class="o">=</span> <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corr. rank - </span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+        <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;gene_ranks_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">-em_model.csv&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "cr2-py38"
+        },
+        kernelOptions: {
+            name: "cr2-py38",
+            path: "./labeling_kernel/rna_velocity"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'cr2-py38'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../kinetic_rate_change.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Intestinal organoid differentiation - Kinetic rate change over (pseudo)time</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../dynamo/velo_chase_and_pulse.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Intestinal organoid differentiation - Dynamo velocity for pulse experiment</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data preprocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-inference">Parameter inference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#velocity">Velocity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank">CellRank</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimator-analysis">Estimator analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#macrostates">Macrostates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fate-probabilities">Fate probabilities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#driver-analysis">Driver analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goblet-cells">Goblet cells</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#paneth-cells">Paneth cells</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enteroendocrine">Enteroendocrine</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enterocytes">Enterocytes</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Philipp Weiler, Marius Lange, Michal Klein, Dana Pe'er, Fabian Theis
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

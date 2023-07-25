@@ -1,0 +1,688 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Diffusion pseudotime &#8212; CellRank 2 reproducibility</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cytotrace_kernel/embryoid_body/dpt';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">CellRank 2 reproducibility</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    CellRank 2’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">CytoTRACEKernel</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../benchmark/README.html">Benchmark</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../benchmark/runtime.html">CytoTRACE runtime comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../benchmark/cytotrace_vs_cr2_scores.html">CytoTRACE vs. CytoTRACEKernel benchmark</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="README.html">Embryoid body development</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RealTimeKernel</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../realtime_kernel/mef/README.html">Analysis of mouse embryonic fibroblasts</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/realtime_informed_pseudotime.html">Real-time informed pseudotime on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/dpt.html">Diffusion pseudotime on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/palantir.html">Palantir pseudotime on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/wot.html">WOT-based analysis of mouse embryonic fibroblasts</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/README.html">Analysis of pharyngeal endoderm development</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/realtimekernel_full_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/realtimekernel_subsetted_data.html">Pharyngeal endoderm development analysis with RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/wot_subsetted_data.html">Pharyngeal endoderm development analysis with WOT</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Metabolic labeling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/preprocessing.html">Intestinal organoid differentiation - Data preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/inference.html">Intestinal organoid differentiation - Parameter inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/fate_mapping.html">Intestinal organoid differentiation - Fate mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/velocity_pseudotime.html">Intestinal organoid differentiation - Velocity pseudotime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/kinetic_rate_change.html">Intestinal organoid differentiation - Kinetic rate change over (pseudo)time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/rna_velocity/em_model.html">Intestinal organoid differentiation - RNA velocity with EM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/dynamo/velo_chase_and_pulse.html">Intestinal organoid differentiation - Dynamo velocity for pulse experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/dynamo/fp_ana_chase_and_pulse.html">Fixed point analysis - Chase and pulse experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/dynamo/lap_chase_and_pulse.html">Least action path analysis with Dynamo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/method_comparison.html">Method comparsion</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/cellrank2_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/cytotrace_kernel/embryoid_body/dpt.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Diffusion pseudotime</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudotime-construction">Pseudotime construction</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="diffusion-pseudotime">
+<h1>Diffusion pseudotime<a class="headerlink" href="#diffusion-pseudotime" title="Permalink to this heading">#</a></h1>
+<section id="library-imports">
+<h2>Library imports<a class="headerlink" href="#library-imports" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;../../../&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">])</span>
+<span class="kn">from</span> <span class="nn">paths</span> <span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>  <span class="c1"># isort: skip  # noqa: E402</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Global seed set to 0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="general-settings">
+<h2>General settings<a class="headerlink" href="#general-settings" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">set_figure_params</span><span class="p">(</span><span class="s2">&quot;scvelo&quot;</span><span class="p">,</span> <span class="n">dpi_save</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-loading">
+<h2>Data loading<a class="headerlink" href="#data-loading" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body.h5ad&quot;</span><span class="p">)</span>
+<span class="n">adata</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 31029 × 19122
+    obs: &#39;stage&#39;, &#39;n_genes_by_counts&#39;, &#39;total_counts&#39;, &#39;total_counts_mt&#39;, &#39;pct_counts_mt&#39;, &#39;leiden&#39;, &#39;cell_type&#39;
+    var: &#39;n_cells&#39;, &#39;mt&#39;, &#39;n_cells_by_counts&#39;, &#39;mean_counts&#39;, &#39;pct_dropout_by_counts&#39;, &#39;total_counts&#39;, &#39;highly_variable&#39;, &#39;means&#39;, &#39;dispersions&#39;, &#39;dispersions_norm&#39;
+    uns: &#39;hvg&#39;, &#39;leiden&#39;, &#39;log1p&#39;, &#39;neighbors&#39;, &#39;pca&#39;, &#39;umap&#39;
+    obsm: &#39;X_pca&#39;, &#39;X_umap&#39;
+    varm: &#39;PCs&#39;
+    obsp: &#39;connectivities&#39;, &#39;distances&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/cfca643cc89276c90d7415d5f2f2a19f7994ca369b9350860ab1f3980b01627f.png" src="../../_images/cfca643cc89276c90d7415d5f2f2a19f7994ca369b9350860ab1f3980b01627f.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/69bb923f236258122439e083359ad5ee073ef5b3352b99560987fe44dd1eb690.png" src="../../_images/69bb923f236258122439e083359ad5ee073ef5b3352b99560987fe44dd1eb690.png" />
+</div>
+</div>
+</section>
+<section id="pseudotime-construction">
+<h2>Pseudotime construction<a class="headerlink" href="#pseudotime-construction" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">diffmap</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing Diffusion Maps using n_comps=15(=n_dcs)
+computing transitions
+    finished (0:00:00)
+    eigenvalues of transition matrix
+    [1.         0.99504757 0.99104744 0.98765516 0.98503    0.98268324
+     0.97936326 0.9733297  0.9698383  0.9653132  0.9609289  0.95480794
+     0.9547446  0.9493147  0.9468985 ]
+    finished (0:00:02)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root_idx</span> <span class="o">=</span> <span class="mi">1458</span>  <span class="c1"># adata.obsm[&#39;X_diffmap&#39;][:, 1].argmin()</span>
+<span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;diffmap&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">root_idx</span><span class="p">],</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="s2">&quot;1, 2&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/72b2bdd907d4fdec9e3eb9453aa0039bb8a98f2badffb12a26a731dcaa685462.png" src="../../_images/72b2bdd907d4fdec9e3eb9453aa0039bb8a98f2badffb12a26a731dcaa685462.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;iroot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">root_idx</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dpt_pseudotime</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">dpt</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing Diffusion Pseudotime using n_dcs=10
+    finished (0:00:00)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="n">adata</span><span class="p">,</span>
+    <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;dpt_pseudotime&quot;</span><span class="p">,</span> <span class="s2">&quot;stage&quot;</span><span class="p">],</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
+    <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+    <span class="n">color_map</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;dpt_pseudotime&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gnuplot2&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span>
+    <span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_dpt_pseudotime.eps&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/d56db866eb8540f2935dfd73ee7b32df08243a43add819a237712738a8baa7bb.png" src="../../_images/d56db866eb8540f2935dfd73ee7b32df08243a43add819a237712738a8baa7bb.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[[</span><span class="s2">&quot;dpt_pseudotime&quot;</span><span class="p">,</span> <span class="s2">&quot;stage&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;dpt_pseudotime&quot;</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;width&quot;</span><span class="p">,</span>
+    <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#440154&quot;</span><span class="p">,</span> <span class="s2">&quot;#3b528b&quot;</span><span class="p">,</span> <span class="s2">&quot;#21918c&quot;</span><span class="p">,</span> <span class="s2">&quot;#5ec962&quot;</span><span class="p">,</span> <span class="s2">&quot;#fde725&quot;</span><span class="p">],</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[])</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;dpt_vs_stage.eps&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">reset_orig</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/f60ca26c0d12bddc2ac055057348de2601b3f0915ab081ac8e2b5cce869cf199.png" src="../../_images/f60ca26c0d12bddc2ac055057348de2601b3f0915ab081ac8e2b5cce869cf199.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "cr2-py38"
+        },
+        kernelOptions: {
+            name: "cr2-py38",
+            path: "./cytotrace_kernel/embryoid_body"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'cr2-py38'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudotime-construction">Pseudotime construction</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Philipp Weiler, Marius Lange, Michal Klein, Dana Pe'er, Fabian Theis
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

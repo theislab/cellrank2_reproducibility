@@ -1,0 +1,1308 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Least action path analysis with Dynamo &#8212; CellRank 2 reproducibility</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'labeling_kernel/dynamo/lap_chase_and_pulse';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Method comparsion" href="../method_comparison.html" />
+    <link rel="prev" title="Fixed point analysis - Chase and pulse experiment" href="fp_ana_chase_and_pulse.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">CellRank 2 reproducibility</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    CellRank 2’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">CytoTRACEKernel</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../cytotrace_kernel/benchmark/README.html">Benchmark</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cytotrace_kernel/benchmark/runtime.html">CytoTRACE runtime comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cytotrace_kernel/benchmark/cytotrace_vs_cr2_scores.html">CytoTRACE vs. CytoTRACEKernel benchmark</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../cytotrace_kernel/embryoid_body/README.html">Embryoid body development</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RealTimeKernel</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../realtime_kernel/mef/README.html">Analysis of mouse embryonic fibroblasts</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/realtime_informed_pseudotime.html">Real-time informed pseudotime on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/dpt.html">Diffusion pseudotime on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/palantir.html">Palantir pseudotime on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/wot.html">WOT-based analysis of mouse embryonic fibroblasts</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/README.html">Analysis of pharyngeal endoderm development</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/realtimekernel_full_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/realtimekernel_subsetted_data.html">Pharyngeal endoderm development analysis with RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/wot_subsetted_data.html">Pharyngeal endoderm development analysis with WOT</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Metabolic labeling</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Intestinal organoid differentiation - Data preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../inference.html">Intestinal organoid differentiation - Parameter inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fate_mapping.html">Intestinal organoid differentiation - Fate mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../velocity_pseudotime.html">Intestinal organoid differentiation - Velocity pseudotime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kinetic_rate_change.html">Intestinal organoid differentiation - Kinetic rate change over (pseudo)time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rna_velocity/em_model.html">Intestinal organoid differentiation - RNA velocity with EM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="velo_chase_and_pulse.html">Intestinal organoid differentiation - Dynamo velocity for pulse experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fp_ana_chase_and_pulse.html">Fixed point analysis - Chase and pulse experiment</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Least action path analysis with Dynamo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../method_comparison.html">Method comparsion</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/cellrank2_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/labeling_kernel/dynamo/lap_chase_and_pulse.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Least action path analysis with Dynamo</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#least-action-path-analysis">Least action path analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamo-stable-fixed-points">Dynamo stable fixed points</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank-terminal-states">CellRank terminal states</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="least-action-path-analysis-with-dynamo">
+<h1>Least action path analysis with Dynamo<a class="headerlink" href="#least-action-path-analysis-with-dynamo" title="Permalink to this heading">#</a></h1>
+<p>Driver analysis on scEU-seq organoid data using Dynamo’s LAP analysis</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">dynamo</span> <span class="k">as</span> <span class="nn">dyn</span>
+<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;../../../&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">])</span>
+<span class="kn">from</span> <span class="nn">paths</span> <span class="kn">import</span> <span class="n">DATA_DIR</span>  <span class="c1"># isort: skip  # noqa: E402</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; setting visualization default mode in dynamo. Your customized matplotlib settings might be overritten.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/dynamo-py39/lib/python3.9/site-packages/nxviz/__init__.py:18: UserWarning: 
+nxviz has a new API! Version 0.7.3 onwards, the old class-based API is being
+deprecated in favour of a new API focused on advancing a grammar of network
+graphics. If your plotting code depends on the old API, please consider
+pinning nxviz at version 0.7.3, as the new API will break your old code.
+
+To check out the new API, please head over to the docs at
+https://ericmjl.github.io/nxviz/ to learn more. We hope you enjoy using it!
+
+(This deprecation message will go away in version 1.0.)
+
+  warnings.warn(
+</pre></div>
+</div>
+</div>
+</div>
+<section id="general-settings">
+<h2>General settings<a class="headerlink" href="#general-settings" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TERMINAL_STATES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Enterocytes&quot;</span><span class="p">,</span> <span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">,</span> <span class="s2">&quot;Goblet cells&quot;</span><span class="p">,</span> <span class="s2">&quot;Paneth cells&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-loading">
+<h2>Data loading<a class="headerlink" href="#data-loading" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_dynamo-chase_and_pulse-2000features.h5ad&quot;</span><span class="p">)</span>
+<span class="n">adata</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 3452 × 2000
+    obs: &#39;experiment&#39;, &#39;time&#39;, &#39;cell_type&#39;, &#39;som_cluster_id&#39;, &#39;cell_type_merged&#39;, &#39;initial_size&#39;, &#39;n_counts&#39;, &#39;pass_basic_filter&#39;, &#39;ntr&#39;
+    var: &#39;ensum_id&#39;, &#39;gene_count_corr&#39;, &#39;means&#39;, &#39;dispersions&#39;, &#39;dispersions_norm&#39;, &#39;highly_variable&#39;, &#39;pass_basic_filter&#39;, &#39;use_for_pca&#39;, &#39;ntr&#39;, &#39;alpha&#39;, &#39;a&#39;, &#39;b&#39;, &#39;alpha_a&#39;, &#39;alpha_i&#39;, &#39;beta&#39;, &#39;p_half_life&#39;, &#39;gamma&#39;, &#39;half_life&#39;, &#39;cost&#39;, &#39;logLL&#39;, &#39;use_for_dynamics&#39;
+    uns: &#39;PCs&#39;, &#39;cell_type_colors&#39;, &#39;dynamics&#39;, &#39;neighbors&#39;, &#39;pca&#39;, &#39;pca_fit&#39;, &#39;pca_mean&#39;, &#39;pp&#39;, &#39;umap&#39;
+    obsm: &#39;X_pca&#39;, &#39;X_umap&#39;, &#39;X_umap_paper&#39;
+    varm: &#39;PCs&#39;
+    layers: &#39;M_n&#39;, &#39;M_nn&#39;, &#39;M_t&#39;, &#39;M_tn&#39;, &#39;M_tt&#39;, &#39;X_new&#39;, &#39;X_total&#39;, &#39;new&#39;, &#39;total&#39;, &#39;velocity_N&#39;, &#39;velocity_T&#39;
+    obsp: &#39;connectivities&#39;, &#39;distances&#39;, &#39;moments_con&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">goblet_markers</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;goblet_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">goblet_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">goblet_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">goblet_regulators</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;goblet_regulators.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">goblet_regulators</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">goblet_regulators</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">goblet_and_paneth_regulators</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;goblet_and_paneth_regulators.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">goblet_and_paneth_regulators</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">goblet_and_paneth_regulators</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">paneth_markers</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;paneth_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">paneth_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">paneth_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eec_markers</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;eec_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">eec_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">eec_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eec_progenitor_markers</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;eec_progenitor_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">eec_progenitor_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">eec_progenitor_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">enterocyte_markers</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;enterocyte_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">enterocyte_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">enterocyte_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">enterocyte_progenitor_markers</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;enterocyte_progenitor_markers.csv&quot;</span><span class="p">)[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">enterocyte_progenitor_markers</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">enterocyte_progenitor_markers</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="preprocessing">
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">markers</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">markers</span><span class="p">[</span><span class="s2">&quot;Goblet cells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">goblet_markers</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">goblet_regulators</span><span class="p">)</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">goblet_and_paneth_regulators</span><span class="p">)</span>
+<span class="n">markers</span><span class="p">[</span><span class="s2">&quot;Paneth cells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">paneth_markers</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">goblet_and_paneth_regulators</span><span class="p">)</span>
+<span class="n">markers</span><span class="p">[</span><span class="s2">&quot;Enteroendocrine progenitors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eec_markers</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">eec_progenitor_markers</span><span class="p">)</span>
+<span class="n">markers</span><span class="p">[</span><span class="s2">&quot;Enterocytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">enterocyte_markers</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">enterocyte_progenitor_markers</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dyn</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">reduceDimension</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="s2">&quot;X_new&quot;</span><span class="p">,</span> <span class="n">enforce</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; retrive data for non-linear dimension reduction...
+|-----&gt; perform umap...
+|-----&gt; [dimension_reduction projection] in progress: 100.0000%
+|-----&gt; [dimension_reduction projection] finished [26.0535s]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="least-action-path-analysis">
+<h2>Least action path analysis<a class="headerlink" href="#least-action-path-analysis" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dyn</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">cell_velocities</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">ekey</span><span class="o">=</span><span class="s2">&quot;M_n&quot;</span><span class="p">,</span> <span class="n">vkey</span><span class="o">=</span><span class="s2">&quot;velocity_N&quot;</span><span class="p">,</span> <span class="n">enforce</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dyn</span><span class="o">.</span><span class="n">vf</span><span class="o">.</span><span class="n">VectorField</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">)</span>
+<span class="n">dyn</span><span class="o">.</span><span class="n">vf</span><span class="o">.</span><span class="n">topography</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; retrive data for non-linear dimension reduction...
+|-----? adata already have basis umap. dimension reduction umap will be skipped! 
+set enforce=True to re-performing dimension reduction.
+|-----&gt; [dimension_reduction projection] in progress: 100.0000%
+|-----&gt; [dimension_reduction projection] finished [0.0022s]
+|-----&gt; 0 genes are removed because of nan velocity values.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] finished [2.4608s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%
+|-----&gt; [projecting velocity vector to low dimensional embedding] finished [0.8680s]
+|-----&gt; VectorField reconstruction begins...
+|-----&gt; Retrieve X and V based on basis: UMAP. 
+        Vector field will be learned in the UMAP space.
+|-----&gt; Generating high dimensional grids and convert into a row matrix.
+|-----&gt; Learning vector field with method: sparsevfc.
+|-----&gt; [SparseVFC] begins...
+|-----&gt; Sampling control points based on data velocity magnitude...
+|-----&gt; [SparseVFC] in progress: 100.0000%
+|-----&gt; [SparseVFC] finished [22.5206s]
+|-----------&gt; current cosine correlation between input velocities and learned velocities is less than 0.6. Make a 1-th vector field reconstruction trial.
+|-----&gt; [SparseVFC] begins...
+|-----&gt; Sampling control points based on data velocity magnitude...
+|-----&gt; [SparseVFC] in progress: 100.0000%
+|-----&gt; [SparseVFC] finished [23.5246s]
+|-----------&gt; current cosine correlation between input velocities and learned velocities is less than 0.6. Make a 2-th vector field reconstruction trial.
+|-----&gt; [SparseVFC] begins...
+|-----&gt; Sampling control points based on data velocity magnitude...
+|-----&gt; [SparseVFC] in progress: 100.0000%
+|-----&gt; [SparseVFC] finished [23.9717s]
+|-----------&gt; current cosine correlation between input velocities and learned velocities is less than 0.6. Make a 3-th vector field reconstruction trial.
+|-----&gt; [SparseVFC] begins...
+|-----&gt; Sampling control points based on data velocity magnitude...
+|-----&gt; [SparseVFC] in progress: 100.0000%
+|-----&gt; [SparseVFC] finished [22.9951s]
+|-----------&gt; current cosine correlation between input velocities and learned velocities is less than 0.6. Make a 4-th vector field reconstruction trial.
+|-----&gt; [SparseVFC] begins...
+|-----&gt; Sampling control points based on data velocity magnitude...
+|-----&gt; [SparseVFC] in progress: 100.0000%
+|-----&gt; [SparseVFC] finished [22.1381s]
+|-----------&gt; current cosine correlation between input velocities and learned velocities is less than 0.6. Make a 5-th vector field reconstruction trial.
+|-----? Cosine correlation between input velocities and learned velocities is less than 0.6 after 5 trials of vector field reconstruction.
+|-----&gt; &lt;insert&gt; velocity_umap_SparseVFC to obsm in AnnData Object.
+|-----&gt; &lt;insert&gt; X_umap_SparseVFC to obsm in AnnData Object.
+|-----&gt; &lt;insert&gt; VecFld_umap to uns in AnnData Object.
+|-----&gt; &lt;insert&gt; control_point_umap to obs in AnnData Object.
+|-----&gt; &lt;insert&gt; inlier_prob_umap to obs in AnnData Object.
+|-----&gt; &lt;insert&gt; obs_vf_angle_umap to obs in AnnData Object.
+|-----&gt; [VectorField] in progress: 100.0000%
+|-----&gt; [VectorField] finished [115.3775s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/dynamo-py39/lib/python3.9/site-packages/scipy/optimize/_minpack_py.py:178: RuntimeWarning: The iteration is not making good progress, as measured by the 
+  improvement from the last ten iterations.
+  warnings.warn(msg, RuntimeWarning)
+/vol/storage/miniconda3/envs/dynamo-py39/lib/python3.9/site-packages/scipy/optimize/_minpack_py.py:178: RuntimeWarning: The iteration is not making good progress, as measured by the 
+  improvement from the last five Jacobian evaluations.
+  warnings.warn(msg, RuntimeWarning)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 3452 × 2000
+    obs: &#39;experiment&#39;, &#39;time&#39;, &#39;cell_type&#39;, &#39;som_cluster_id&#39;, &#39;cell_type_merged&#39;, &#39;initial_size&#39;, &#39;n_counts&#39;, &#39;pass_basic_filter&#39;, &#39;ntr&#39;, &#39;control_point_umap&#39;, &#39;inlier_prob_umap&#39;, &#39;obs_vf_angle_umap&#39;
+    var: &#39;ensum_id&#39;, &#39;gene_count_corr&#39;, &#39;means&#39;, &#39;dispersions&#39;, &#39;dispersions_norm&#39;, &#39;highly_variable&#39;, &#39;pass_basic_filter&#39;, &#39;use_for_pca&#39;, &#39;ntr&#39;, &#39;alpha&#39;, &#39;a&#39;, &#39;b&#39;, &#39;alpha_a&#39;, &#39;alpha_i&#39;, &#39;beta&#39;, &#39;p_half_life&#39;, &#39;gamma&#39;, &#39;half_life&#39;, &#39;cost&#39;, &#39;logLL&#39;, &#39;use_for_dynamics&#39;, &#39;use_for_transition&#39;
+    uns: &#39;PCs&#39;, &#39;cell_type_colors&#39;, &#39;dynamics&#39;, &#39;neighbors&#39;, &#39;pca&#39;, &#39;pca_fit&#39;, &#39;pca_mean&#39;, &#39;pp&#39;, &#39;umap&#39;, &#39;explained_variance_ratio_&#39;, &#39;pca_valid_ind&#39;, &#39;X_new_neighbors&#39;, &#39;umap_fit&#39;, &#39;grid_velocity_umap&#39;, &#39;VecFld_umap&#39;
+    obsm: &#39;X_pca&#39;, &#39;X_umap&#39;, &#39;X_umap_paper&#39;, &#39;X_new_pca&#39;, &#39;X_new_umap&#39;, &#39;velocity_umap&#39;, &#39;velocity_umap_SparseVFC&#39;, &#39;X_umap_SparseVFC&#39;
+    varm: &#39;PCs&#39;
+    layers: &#39;M_n&#39;, &#39;M_nn&#39;, &#39;M_t&#39;, &#39;M_tn&#39;, &#39;M_tt&#39;, &#39;X_new&#39;, &#39;X_total&#39;, &#39;new&#39;, &#39;total&#39;, &#39;velocity_N&#39;, &#39;velocity_T&#39;
+    obsp: &#39;connectivities&#39;, &#39;distances&#39;, &#39;moments_con&#39;, &#39;pearson_transition_matrix&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_pca_orig&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_pca&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_pca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_pca&quot;</span><span class="p">][:,</span> <span class="p">:</span><span class="mi">30</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dyn</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">cell_velocities</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">ekey</span><span class="o">=</span><span class="s2">&quot;M_n&quot;</span><span class="p">,</span> <span class="n">vkey</span><span class="o">=</span><span class="s2">&quot;velocity_N&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
+<span class="n">dyn</span><span class="o">.</span><span class="n">vf</span><span class="o">.</span><span class="n">VectorField</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; retrive data for non-linear dimension reduction...
+|-----? adata already have basis pca. dimension reduction pca will be skipped! 
+set enforce=True to re-performing dimension reduction.
+|-----&gt; [dimension_reduction projection] in progress: 100.0000%
+|-----&gt; [dimension_reduction projection] finished [0.0024s]
+|-----&gt; 0 genes are removed because of nan velocity values.
+Using existing pearson_transition_matrix found in .obsp.
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%
+|-----&gt; [projecting velocity vector to low dimensional embedding] finished [3.4971s]
+|-----&gt; VectorField reconstruction begins...
+|-----&gt; Retrieve X and V based on basis: PCA. 
+        Vector field will be learned in the PCA space.
+|-----&gt; Learning vector field with method: sparsevfc.
+|-----&gt; [SparseVFC] begins...
+|-----&gt; Sampling control points based on data velocity magnitude...
+|-----&gt; [SparseVFC] in progress: 100.0000%
+|-----&gt; [SparseVFC] finished [3.6416s]
+|-----&gt; &lt;insert&gt; velocity_pca_SparseVFC to obsm in AnnData Object.
+|-----&gt; &lt;insert&gt; X_pca_SparseVFC to obsm in AnnData Object.
+|-----&gt; &lt;insert&gt; VecFld_pca to uns in AnnData Object.
+|-----&gt; &lt;insert&gt; control_point_pca to obs in AnnData Object.
+|-----&gt; &lt;insert&gt; inlier_prob_pca to obs in AnnData Object.
+|-----&gt; &lt;insert&gt; obs_vf_angle_pca to obs in AnnData Object.
+|-----&gt; [VectorField] in progress: 100.0000%
+|-----&gt; [VectorField] finished [3.8051s]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;VecFld_umap&quot;</span><span class="p">][</span><span class="s2">&quot;Xss&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;umap_1&quot;</span><span class="p">,</span> <span class="s2">&quot;umap_2&quot;</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;fixed_point_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;VecFld_umap&quot;</span><span class="p">][</span><span class="s2">&quot;ftype&quot;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;fixed_point_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;stable&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;saddle&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;unstable&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">neighbor_idx</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">nearest_neighbors</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;umap_1&quot;</span><span class="p">,</span> <span class="s2">&quot;umap_2&quot;</span><span class="p">]],</span> <span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_new_umap&quot;</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs_names</span><span class="p">[</span><span class="n">neighbors</span><span class="p">],</span> <span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">neighbors</span> <span class="ow">in</span> <span class="n">neighbor_idx</span>
+<span class="p">]</span>
+
+<span class="n">initial_obs</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">nearest_neighbors</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;fixed_point_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;unstable&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Stem cells&quot;</span><span class="p">),</span> <span class="p">[</span><span class="s2">&quot;umap_1&quot;</span><span class="p">,</span> <span class="s2">&quot;umap_2&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_new_umap&quot;</span><span class="p">],</span>
+    <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">identified_terminal_states</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+    <span class="nb">set</span><span class="p">(</span><span class="n">TERMINAL_STATES</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;fixed_point_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;stable&quot;</span><span class="p">,</span> <span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+<span class="p">)</span>
+
+<span class="n">terminal_obs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">terminal_state</span> <span class="ow">in</span> <span class="n">identified_terminal_states</span><span class="p">:</span>
+    <span class="n">terminal_obs</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">nearest_neighbors</span><span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;fixed_point_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;stable&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">terminal_state</span><span class="p">),</span> <span class="p">[</span><span class="s2">&quot;umap_1&quot;</span><span class="p">,</span> <span class="s2">&quot;umap_2&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_new_umap&quot;</span><span class="p">],</span>
+        <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dyn</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">result_prefix</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; Start computing neighbor graph...
+|-----------&gt; X_data is None, fetching or recomputing...
+|-----&gt; fetching X data from layer:None, basis:umap
+|-----&gt; method arg is None, choosing methods automatically...
+|-----------&gt; method kd_tree selected
+|-----&gt; &lt;insert&gt; umap_connectivities to obsp in AnnData Object.
+|-----&gt; &lt;insert&gt; umap_distances to obsp in AnnData Object.
+|-----&gt; &lt;insert&gt; umap_neighbors to uns in AnnData Object.
+|-----&gt; &lt;insert&gt; umap_neighbors.indices to uns in AnnData Object.
+|-----&gt; &lt;insert&gt; umap_neighbors.params to uns in AnnData Object.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 3452 × 2000
+    obs: &#39;experiment&#39;, &#39;time&#39;, &#39;cell_type&#39;, &#39;som_cluster_id&#39;, &#39;cell_type_merged&#39;, &#39;initial_size&#39;, &#39;n_counts&#39;, &#39;pass_basic_filter&#39;, &#39;ntr&#39;, &#39;control_point_umap&#39;, &#39;inlier_prob_umap&#39;, &#39;obs_vf_angle_umap&#39;, &#39;control_point_pca&#39;, &#39;inlier_prob_pca&#39;, &#39;obs_vf_angle_pca&#39;
+    var: &#39;ensum_id&#39;, &#39;gene_count_corr&#39;, &#39;means&#39;, &#39;dispersions&#39;, &#39;dispersions_norm&#39;, &#39;highly_variable&#39;, &#39;pass_basic_filter&#39;, &#39;use_for_pca&#39;, &#39;ntr&#39;, &#39;alpha&#39;, &#39;a&#39;, &#39;b&#39;, &#39;alpha_a&#39;, &#39;alpha_i&#39;, &#39;beta&#39;, &#39;p_half_life&#39;, &#39;gamma&#39;, &#39;half_life&#39;, &#39;cost&#39;, &#39;logLL&#39;, &#39;use_for_dynamics&#39;, &#39;use_for_transition&#39;
+    uns: &#39;PCs&#39;, &#39;cell_type_colors&#39;, &#39;dynamics&#39;, &#39;neighbors&#39;, &#39;pca&#39;, &#39;pca_fit&#39;, &#39;pca_mean&#39;, &#39;pp&#39;, &#39;umap&#39;, &#39;explained_variance_ratio_&#39;, &#39;pca_valid_ind&#39;, &#39;X_new_neighbors&#39;, &#39;umap_fit&#39;, &#39;grid_velocity_umap&#39;, &#39;VecFld_umap&#39;, &#39;grid_velocity_pca&#39;, &#39;VecFld_pca&#39;, &#39;umap_neighbors&#39;
+    obsm: &#39;X_pca&#39;, &#39;X_umap&#39;, &#39;X_umap_paper&#39;, &#39;X_new_pca&#39;, &#39;X_new_umap&#39;, &#39;velocity_umap&#39;, &#39;velocity_umap_SparseVFC&#39;, &#39;X_umap_SparseVFC&#39;, &#39;X_pca_orig&#39;, &#39;velocity_pca&#39;, &#39;velocity_pca_SparseVFC&#39;, &#39;X_pca_SparseVFC&#39;
+    varm: &#39;PCs&#39;
+    layers: &#39;M_n&#39;, &#39;M_nn&#39;, &#39;M_t&#39;, &#39;M_tn&#39;, &#39;M_tt&#39;, &#39;X_new&#39;, &#39;X_total&#39;, &#39;new&#39;, &#39;total&#39;, &#39;velocity_N&#39;, &#39;velocity_T&#39;
+    obsp: &#39;connectivities&#39;, &#39;distances&#39;, &#39;moments_con&#39;, &#39;pearson_transition_matrix&#39;, &#39;umap_distances&#39;, &#39;umap_connectivities&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="dynamo-stable-fixed-points">
+<h3>Dynamo stable fixed points<a class="headerlink" href="#dynamo-stable-fixed-points" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gene_ranks</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">terminal_state</span> <span class="ow">in</span> <span class="n">terminal_obs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">rankings</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">initial_obs</span><span class="p">,</span> <span class="n">terminal_obs</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]))</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">state_tuples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="n">initial_obs_</span><span class="p">,</span> <span class="n">terminal_obs_</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">lst</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">state_tuples</span><span class="p">])</span>
+
+    <span class="n">laps</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">least_action</span><span class="p">(</span>
+        <span class="n">adata</span><span class="p">,</span>
+        <span class="n">init_cells</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">initial_obs_</span><span class="p">),</span>
+        <span class="n">target_cells</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">terminal_obs_</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">gtraj</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">GeneTrajectory</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">lap_id</span><span class="p">,</span> <span class="n">lap</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">laps</span><span class="p">):</span>
+        <span class="n">gtraj</span><span class="o">.</span><span class="n">from_pca</span><span class="p">(</span><span class="n">lap</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">lap</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">gtraj</span><span class="o">.</span><span class="n">calc_msd</span><span class="p">()</span>
+
+        <span class="n">ranking</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">vf</span><span class="o">.</span><span class="n">rank_genes</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="s2">&quot;traj_msd&quot;</span><span class="p">)</span>
+        <span class="n">ranking</span> <span class="o">=</span> <span class="n">ranking</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Corr. rank - </span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span> <span class="s2">&quot;Gene&quot;</span><span class="p">})</span>
+        <span class="n">ranking</span><span class="p">[</span><span class="s2">&quot;Algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Dynamo&quot;</span>
+        <span class="n">ranking</span><span class="p">[</span><span class="s2">&quot;Run&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lap_id</span>
+        <span class="n">rankings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ranking</span><span class="p">)</span>
+
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">rankings</span><span class="p">)</span>
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span> <span class="o">=</span> <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">][</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">markers</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">])</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; searching for the least action path...
+|-----&gt; [iterating through 10 pairs] in progress: 10.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.043242
+|-----&gt; [iterating through 10 pairs] in progress: 20.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.048698
+|-----&gt; [iterating through 10 pairs] in progress: 30.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.036693
+|-----&gt; [iterating through 10 pairs] in progress: 40.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.054641
+|-----&gt; [iterating through 10 pairs] in progress: 50.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.036684
+|-----&gt; [iterating through 10 pairs] in progress: 60.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.040760
+|-----&gt; [iterating through 10 pairs] in progress: 70.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.052475
+|-----&gt; [iterating through 10 pairs] in progress: 80.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.055767
+|-----&gt; [iterating through 10 pairs] in progress: 90.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.081662
+|-----&gt; [iterating through 10 pairs] in progress: 100.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.043740
+|-----&gt; [iterating through 10 pairs] in progress: 100.0000%
+|-----&gt; [iterating through 10 pairs] finished [378.5261s]
+|-----&gt; [least action path] in progress: 100.0000%
+|-----&gt; [least action path] finished [378.5285s]
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/dynamo-py39/lib/python3.9/site-packages/dynamo/prediction/trajectory.py:223: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  self.adata.var[save_key][self.genes_to_mask()] = msd
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">terminal_state</span> <span class="ow">in</span> <span class="n">gene_ranks</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Gene&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+        <span class="n">DATA_DIR</span>
+        <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span>
+        <span class="o">/</span> <span class="s2">&quot;results&quot;</span>
+        <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;gene_ranks_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">-chase_and_pulse-dynamo_terminal_states-dynamo.csv&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="cellrank-terminal-states">
+<h3>CellRank terminal states<a class="headerlink" href="#cellrank-terminal-states" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cr_terminal_states</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;cr_terminal_states.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s2">&quot;terminal_state&quot;</span><span class="p">]</span>
+<span class="n">terminal_obs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">terminal_state</span><span class="p">:</span> <span class="n">cr_terminal_states</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">cr_terminal_states</span> <span class="o">==</span> <span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">terminal_state</span> <span class="ow">in</span> <span class="n">cr_terminal_states</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gene_ranks</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">terminal_state</span> <span class="ow">in</span> <span class="n">terminal_obs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">rankings</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">initial_obs</span><span class="p">,</span> <span class="n">terminal_obs</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]))</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">state_tuples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="n">initial_obs_</span><span class="p">,</span> <span class="n">terminal_obs_</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">lst</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">state_tuples</span><span class="p">])</span>
+
+    <span class="n">laps</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">least_action</span><span class="p">(</span>
+        <span class="n">adata</span><span class="p">,</span>
+        <span class="n">init_cells</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">initial_obs_</span><span class="p">),</span>
+        <span class="n">target_cells</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">terminal_obs_</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">gtraj</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">GeneTrajectory</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">lap_id</span><span class="p">,</span> <span class="n">lap</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">laps</span><span class="p">):</span>
+        <span class="n">gtraj</span><span class="o">.</span><span class="n">from_pca</span><span class="p">(</span><span class="n">lap</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">lap</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">gtraj</span><span class="o">.</span><span class="n">calc_msd</span><span class="p">()</span>
+
+        <span class="n">ranking</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">vf</span><span class="o">.</span><span class="n">rank_genes</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="s2">&quot;traj_msd&quot;</span><span class="p">)</span>
+        <span class="n">ranking</span> <span class="o">=</span> <span class="n">ranking</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Corr. rank - </span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span> <span class="s2">&quot;Gene&quot;</span><span class="p">})</span>
+        <span class="n">ranking</span><span class="p">[</span><span class="s2">&quot;Algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Dynamo&quot;</span>
+        <span class="n">ranking</span><span class="p">[</span><span class="s2">&quot;Run&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lap_id</span>
+        <span class="n">rankings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ranking</span><span class="p">)</span>
+
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">rankings</span><span class="p">)</span>
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span> <span class="o">=</span> <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">][</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">markers</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">])</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; searching for the least action path...
+|-----&gt; [iterating through 10 pairs] in progress: 10.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.056222
+|-----&gt; [iterating through 10 pairs] in progress: 20.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.044589
+|-----&gt; [iterating through 10 pairs] in progress: 30.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.044448
+|-----&gt; [iterating through 10 pairs] in progress: 40.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.058033
+|-----&gt; [iterating through 10 pairs] in progress: 50.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.046548
+|-----&gt; [iterating through 10 pairs] in progress: 60.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.051713
+|-----&gt; [iterating through 10 pairs] in progress: 70.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.087245
+|-----&gt; [iterating through 10 pairs] in progress: 80.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.062437
+|-----&gt; [iterating through 10 pairs] in progress: 90.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.042019
+|-----&gt; [iterating through 10 pairs] in progress: 100.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.053537
+|-----&gt; [iterating through 10 pairs] in progress: 100.0000%
+|-----&gt; [iterating through 10 pairs] finished [356.4280s]
+|-----&gt; [least action path] in progress: 100.0000%
+|-----&gt; [least action path] finished [356.4302s]
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/dynamo-py39/lib/python3.9/site-packages/dynamo/prediction/trajectory.py:223: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  self.adata.var[save_key][self.genes_to_mask()] = msd
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; searching for the least action path...
+|-----&gt; [iterating through 10 pairs] in progress: 10.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.039659
+|-----&gt; [iterating through 10 pairs] in progress: 20.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.029670
+|-----&gt; [iterating through 10 pairs] in progress: 30.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.031246
+|-----&gt; [iterating through 10 pairs] in progress: 40.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.024404
+|-----&gt; [iterating through 10 pairs] in progress: 50.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.036357
+|-----&gt; [iterating through 10 pairs] in progress: 60.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.032059
+|-----&gt; [iterating through 10 pairs] in progress: 70.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.026341
+|-----&gt; [iterating through 10 pairs] in progress: 80.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.026243
+|-----&gt; [iterating through 10 pairs] in progress: 90.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.032776
+|-----&gt; [iterating through 10 pairs] in progress: 100.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.022523
+|-----&gt; [iterating through 10 pairs] in progress: 100.0000%
+|-----&gt; [iterating through 10 pairs] finished [265.2149s]
+|-----&gt; [least action path] in progress: 100.0000%
+|-----&gt; [least action path] finished [265.2174s]
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/dynamo-py39/lib/python3.9/site-packages/dynamo/prediction/trajectory.py:223: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  self.adata.var[save_key][self.genes_to_mask()] = msd
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; searching for the least action path...
+|-----&gt; [iterating through 10 pairs] in progress: 10.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.040390
+|-----&gt; [iterating through 10 pairs] in progress: 20.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.036268
+|-----&gt; [iterating through 10 pairs] in progress: 30.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.039184
+|-----&gt; [iterating through 10 pairs] in progress: 40.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.026063
+|-----&gt; [iterating through 10 pairs] in progress: 50.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.028168
+|-----&gt; [iterating through 10 pairs] in progress: 60.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.014053
+|-----&gt; [iterating through 10 pairs] in progress: 70.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.042330
+|-----&gt; [iterating through 10 pairs] in progress: 80.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.025680
+|-----&gt; [iterating through 10 pairs] in progress: 90.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.020968
+|-----&gt; [iterating through 10 pairs] in progress: 100.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.026264
+|-----&gt; [iterating through 10 pairs] in progress: 100.0000%
+|-----&gt; [iterating through 10 pairs] finished [236.9429s]
+|-----&gt; [least action path] in progress: 100.0000%
+|-----&gt; [least action path] finished [236.9447s]
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/dynamo-py39/lib/python3.9/site-packages/dynamo/prediction/trajectory.py:223: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  self.adata.var[save_key][self.genes_to_mask()] = msd
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; searching for the least action path...
+|-----&gt; [iterating through 10 pairs] in progress: 10.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.024865
+|-----&gt; [iterating through 10 pairs] in progress: 20.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.024610
+|-----&gt; [iterating through 10 pairs] in progress: 30.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.019792
+|-----&gt; [iterating through 10 pairs] in progress: 40.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.021137
+|-----&gt; [iterating through 10 pairs] in progress: 50.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.022025
+|-----&gt; [iterating through 10 pairs] in progress: 60.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.023605
+|-----&gt; [iterating through 10 pairs] in progress: 70.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.022567
+|-----&gt; [iterating through 10 pairs] in progress: 80.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.042867
+|-----&gt; [iterating through 10 pairs] in progress: 90.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.024776
+|-----&gt; [iterating through 10 pairs] in progress: 100.0000%|-----------&gt; initializing path with the shortest path in the graph built from the velocity transition matrix...
+|-----------&gt; optimizing for least action path...
+|-----&gt; optimal action: 0.013294
+|-----&gt; [iterating through 10 pairs] in progress: 100.0000%
+|-----&gt; [iterating through 10 pairs] finished [281.3232s]
+|-----&gt; [least action path] in progress: 100.0000%
+|-----&gt; [least action path] finished [281.3252s]
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/dynamo-py39/lib/python3.9/site-packages/dynamo/prediction/trajectory.py:223: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  self.adata.var[save_key][self.genes_to_mask()] = msd
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+|-----&gt; &lt;insert&gt; traj_msd to var in AnnData Object.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">terminal_state</span> <span class="ow">in</span> <span class="n">gene_ranks</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Gene&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+        <span class="n">DATA_DIR</span>
+        <span class="o">/</span> <span class="s2">&quot;sceu_organoid&quot;</span>
+        <span class="o">/</span> <span class="s2">&quot;results&quot;</span>
+        <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;gene_ranks_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">-chase_and_pulse-cr_terminal_states-dynamo.csv&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "dynamo-py39"
+        },
+        kernelOptions: {
+            name: "dynamo-py39",
+            path: "./labeling_kernel/dynamo"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'dynamo-py39'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="fp_ana_chase_and_pulse.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Fixed point analysis - Chase and pulse experiment</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../method_comparison.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Method comparsion</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#least-action-path-analysis">Least action path analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamo-stable-fixed-points">Dynamo stable fixed points</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank-terminal-states">CellRank terminal states</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Philipp Weiler, Marius Lange, Michal Klein, Dana Pe'er, Fabian Theis
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
