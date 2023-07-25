@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - main
-            - feat/update_docs_and_details
 
 # This job installs dependencies, build the book, and pushes it to `gh-pages`
 jobs:
