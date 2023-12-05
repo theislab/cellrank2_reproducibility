@@ -21,7 +21,11 @@ urls.Documentation = "https://todo.com"  # TODO
 urls.Source = "https://github.com/theislab/cellrank2_reproducibility.git"
 urls.Home-page = "https://github.com/theislab/cellrank2_reproducibility.git"
 dependencies = [
-    "cellrank"
+    "jupyterlab",
+    "ipywidgets",
+    "jinja2==3.0.3",
+    "wot @ git+https://github.com/broadinstitute/wot.git",
+    "dynamo-release"
 ]
 
 [project.optional-dependencies]
