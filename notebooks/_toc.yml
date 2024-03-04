@@ -5,6 +5,7 @@ parts:
       chapters:
           - file: pseudotime_kernel/hematopoiesis/dpt
           - file: pseudotime_kernel/hematopoiesis/rna_velocity
+          - file: pseudotime_kernel/hematopoiesis/cbc_ptk_vs_vk
     - caption: CytoTRACEKernel
       chapters:
           - file: cytotrace_kernel/benchmark/README
