@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Hematopoiesis - DPT &#8212; CellRank 2 reproducibility</title>
   
@@ -19,49 +18,45 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../../_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'pseudotime_kernel/hematopoiesis/dpt';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -76,10 +71,9 @@ const thebe_selector_output = ".output, .cell_output"
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -120,11 +114,14 @@ const thebe_selector_output = ".output, .cell_output"
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -152,7 +149,18 @@ const thebe_selector_output = ".output, .cell_output"
     <p class="title logo__title">CellRank 2 reproducibility</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -166,6 +174,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Hematopoiesis - DPT</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rna_velocity.html">Hematopoiesis - RNA velocity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cbc_ptk_vs_vk.html">Cross boundary correctness score</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">CytoTRACEKernel</span></p>
 <ul class="nav bd-sidenav">
@@ -392,10 +401,10 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="hematopoiesis-dpt">
-<h1>Hematopoiesis - DPT<a class="headerlink" href="#hematopoiesis-dpt" title="Permalink to this heading">#</a></h1>
+<h1>Hematopoiesis - DPT<a class="headerlink" href="#hematopoiesis-dpt" title="Link to this heading">#</a></h1>
 <p>Construct diffusion pseudotime on NeurIPS 2021 hematopoiesis data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -406,11 +415,13 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">mplscience</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
 <span class="kn">import</span> <span class="nn">cellrank</span> <span class="k">as</span> <span class="nn">cr</span>
 <span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
 <span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
+<span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
 
 <span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">get_state_purity</span><span class="p">,</span> <span class="n">plot_state_purity</span><span class="p">,</span> <span class="n">plot_states</span><span class="p">,</span> <span class="n">running_in_notebook</span>
 
@@ -426,7 +437,7 @@ document.write(`
 </div>
 </div>
 <section id="general-settings">
-<h2>General settings<a class="headerlink" href="#general-settings" title="Permalink to this heading">#</a></h2>
+<h2>General settings<a class="headerlink" href="#general-settings" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span>
@@ -448,13 +459,21 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">FIGURE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="constants">
-<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this heading">#</a></h2>
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CELLTYPES_TO_KEEP</span> <span class="o">=</span> <span class="p">[</span>
@@ -474,7 +493,7 @@ document.write(`
 </div>
 </section>
 <section id="data-loading">
-<h2>Data loading<a class="headerlink" href="#data-loading" title="Permalink to this heading">#</a></h2>
+<h2>Data loading<a class="headerlink" href="#data-loading" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;gex_preprocessed.h5ad&quot;</span><span class="p">)</span>
@@ -519,7 +538,7 @@ document.write(`
 </div>
 </section>
 <section id="data-preprocessing">
-<h2>Data preprocessing<a class="headerlink" href="#data-preprocessing" title="Permalink to this heading">#</a></h2>
+<h2>Data preprocessing<a class="headerlink" href="#data-preprocessing" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;l2_cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">CELLTYPES_TO_KEEP</span><span class="p">),</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -550,7 +569,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing neighbors
     finished (0:02:26)
 computing UMAP
-    finished (0:00:11)
+    finished (0:00:10)
 </pre></div>
 </div>
 </div>
@@ -610,7 +629,7 @@ computing UMAP
 </div>
 </section>
 <section id="diffusion-pseudotime">
-<h2>Diffusion pseudotime<a class="headerlink" href="#diffusion-pseudotime" title="Permalink to this heading">#</a></h2>
+<h2>Diffusion pseudotime<a class="headerlink" href="#diffusion-pseudotime" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">diffmap</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_comps</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
@@ -885,9 +904,9 @@ computing transitions
 </div>
 </section>
 <section id="cellrank">
-<h2>CellRank<a class="headerlink" href="#cellrank" title="Permalink to this heading">#</a></h2>
+<h2>CellRank<a class="headerlink" href="#cellrank" title="Link to this heading">#</a></h2>
 <section id="kernel">
-<h3>Kernel<a class="headerlink" href="#kernel" title="Permalink to this heading">#</a></h3>
+<h3>Kernel<a class="headerlink" href="#kernel" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ptk</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">PseudotimeKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">time_key</span><span class="o">=</span><span class="s2">&quot;dpt_pseudotime&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">(</span><span class="n">threshold_scheme</span><span class="o">=</span><span class="s2">&quot;soft&quot;</span><span class="p">)</span>
@@ -898,7 +917,7 @@ computing transitions
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing transition matrix based on pseudotime
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "31e1d1cbcd9146e0853c8ae4c14c1c2d", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:09)
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c7d7fe51092047fcac13a89ab2454a64", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:09)
 </pre></div>
 </div>
 </div>
@@ -942,11 +961,11 @@ Adding `adata.obsm[&#39;T_fwd_umap&#39;]`
 </div>
 </section>
 <section id="estimator">
-<h3>Estimator<a class="headerlink" href="#estimator" title="Permalink to this heading">#</a></h3>
+<h3>Estimator<a class="headerlink" href="#estimator" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">estimators</span><span class="o">.</span><span class="n">GPCCA</span><span class="p">(</span><span class="n">ptk</span><span class="p">)</span>
-<span class="n">estimator</span><span class="o">.</span><span class="n">compute_schur</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">compute_schur</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">estimator</span><span class="o">.</span><span class="n">plot_spectrum</span><span class="p">(</span><span class="n">real_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -958,10 +977,10 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:00:00)
+    Finish (0:00:01)
 </pre></div>
 </div>
-<img alt="../../_images/5bb8584a5eb7f2231867c9ce51d7a59f037e66d49dadfe87a336363548c5c56c.png" src="../../_images/5bb8584a5eb7f2231867c9ce51d7a59f037e66d49dadfe87a336363548c5c56c.png" />
+<img alt="../../_images/249864c0add30b1b21435ed1436fe2d178a38f97dfb24628a19405113fd01bc1.png" src="../../_images/249864c0add30b1b21435ed1436fe2d178a38f97dfb24628a19405113fd01bc1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -997,6 +1016,53 @@ Adding `.macrostates`
 </pre></div>
 </div>
 <img alt="../../_images/58ac440e98427c1c873391af5f08088890461d0b4905125884fa784fff1f62b0.png" src="../../_images/58ac440e98427c1c873391af5f08088890461d0b4905125884fa784fff1f62b0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">terminal_states</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CD14+ Mono&quot;</span><span class="p">,</span> <span class="s2">&quot;Normoblast&quot;</span><span class="p">,</span> <span class="s2">&quot;cDC2&quot;</span><span class="p">,</span> <span class="s2">&quot;pDC&quot;</span><span class="p">]</span>
+<span class="n">cluster_key</span> <span class="o">=</span> <span class="s2">&quot;l2_cell_type&quot;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-ptk.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+    <span class="n">tsi_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-ptk.csv&quot;</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">_tsi</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">tsi_df</span><span class="p">,</span> <span class="n">uns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">:</span> <span class="n">terminal_states</span><span class="p">,</span> <span class="s2">&quot;cluster_key&quot;</span><span class="p">:</span> <span class="n">cluster_key</span><span class="p">})</span>
+    <span class="n">tsi_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">tsi</span><span class="p">(</span><span class="n">n_macrostates</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">terminal_states</span><span class="o">=</span><span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="n">cluster_key</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">tsi_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">tsi</span><span class="p">(</span><span class="n">n_macrostates</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">terminal_states</span><span class="o">=</span><span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="n">cluster_key</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">_tsi</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-ptk.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TSI score: </span><span class="si">{</span><span class="n">tsi_score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TSI score: 0.91
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/cr2-py38/lib/python3.8/site-packages/anndata/_core/anndata.py:121: ImplicitModificationWarning: Transforming to str index.
+  warnings.warn(&quot;Transforming to str index.&quot;, ImplicitModificationWarning)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">palette</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PseudotimeKernel&quot;</span><span class="p">:</span> <span class="s2">&quot;#DE8F05&quot;</span><span class="p">,</span> <span class="s2">&quot;Optimal identification&quot;</span><span class="p">:</span> <span class="s2">&quot;#000000&quot;</span><span class="p">}</span>
+
+<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;tsi-dpt.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">with</span> <span class="n">mplscience</span><span class="o">.</span><span class="n">style_context</span><span class="p">():</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_tsi</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fname</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/130955cc5974910c6fcbb236d0898922ddfbe4afe91e0f0a64453b0ca838af58.png" src="../../_images/130955cc5974910c6fcbb236d0898922ddfbe4afe91e0f0a64453b0ca838af58.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1190,18 +1256,9 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
 DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` core(s) with no preconditioner and `tol=1e-07`
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7046b9cfb0cb44ddbb6017a8ad735406", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1bdcd86ef4494ceeb8f85d7eca27822c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
        `.fate_probabilities`
     Finish (0:00:00)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
-[0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
-[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
-[0]PETSC ERROR: or see https://petsc.org/release/faq/#valgrind and https://petsc.org/release/faq/
-[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
-[0]PETSC ERROR: to get more information on the crash.
-Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 59) - process 0
 </pre></div>
 </div>
 <img alt="../../_images/47ee97039f38282dbffb1be33a23ef5446a7ccb2cf11ab6fc0ea79abca11b8e7.png" src="../../_images/47ee97039f38282dbffb1be33a23ef5446a7ccb2cf11ab6fc0ea79abca11b8e7.png" />
@@ -1233,7 +1290,7 @@ Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WO
 </section>
 </section>
 <section id="driver-analysis">
-<h2>Driver analysis<a class="headerlink" href="#driver-analysis" title="Permalink to this heading">#</a></h2>
+<h2>Driver analysis<a class="headerlink" href="#driver-analysis" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">drivers</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">compute_lineage_drivers</span><span class="p">(</span>
@@ -1301,7 +1358,7 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing trends using `1` core(s)
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "af8e9838cede4a229052a7a1331cbf1c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:01)
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6f8710d0ea1443f9bfc59e7d21ceb36b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:00)
 Plotting trends
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
@@ -1323,13 +1380,22 @@ Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WO
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing trends using `1` core(s)
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "31d43c66b18642bea2122dd8ce060c9f", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:01)
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "355b66a2b2d84ab1b3aacd82fea44791", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:01)
 Plotting trends
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
+[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[0]PETSC ERROR: or see https://petsc.org/release/faq/#valgrind and https://petsc.org/release/faq/
+[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[0]PETSC ERROR: to get more information on the crash.
+Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 59) - process 0
 </pre></div>
 </div>
 <img alt="../../_images/e38cd8181e95ab1c7b97badea8031d9e5a6ef6a2a6403e60967234696375d635.png" src="../../_images/e38cd8181e95ab1c7b97badea8031d9e5a6ef6a2a6403e60967234696375d635.png" />
@@ -1395,6 +1461,7 @@ DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
@@ -1436,7 +1503,7 @@ By Philipp Weiler, Marius Lange, Michal Klein, Dana Pe'er, Fabian Theis
 
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>
@@ -1460,8 +1527,8 @@ By Philipp Weiler, Marius Lange, Michal Klein, Dana Pe'er, Fabian Theis
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
   </footer>
