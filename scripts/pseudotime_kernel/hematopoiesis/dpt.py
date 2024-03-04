@@ -11,11 +11,13 @@ import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
+import mplscience
 import seaborn as sns
 
 import cellrank as cr
 import scanpy as sc
 import scvelo as scv
+from anndata import AnnData
 
 from cr2 import get_state_purity, plot_state_purity, plot_states, running_in_notebook
 
@@ -37,6 +39,10 @@ scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True,
 SAVE_FIGURES = False
 if SAVE_FIGURES:
     os.makedirs(FIG_DIR / "pseudotime_kernel" / "hematopoiesis", exist_ok=True)
+FIGURE_FORMAT = "pdf"
+
+# %%
+os.makedirs(DATA_DIR / "hematopoiesis" / "results", exist_ok=True)
 
 # %% [markdown]
 # ## Constants
@@ -373,7 +379,7 @@ if running_in_notebook():
 
 # %%
 estimator = cr.estimators.GPCCA(ptk)
-estimator.compute_schur(n_components=10)
+estimator.compute_schur(n_components=20)
 estimator.plot_spectrum(real_only=True)
 plt.show()
 
@@ -390,6 +396,33 @@ if running_in_notebook():
         title="",
         size=100,
     )
+
+# %%
+terminal_states = ["CD14+ Mono", "Normoblast", "cDC2", "pDC"]
+cluster_key = "l2_cell_type"
+
+if (DATA_DIR / "hematopoiesis" / "results" / "tsi-ptk.csv").is_file():
+    tsi_df = pd.read_csv(DATA_DIR / "hematopoiesis" / "results" / "tsi-ptk.csv")
+    estimator._tsi = AnnData(tsi_df, uns={"terminal_states": terminal_states, "cluster_key": cluster_key})
+    tsi_score = estimator.tsi(n_macrostates=7, terminal_states=terminal_states, cluster_key=cluster_key)
+else:
+    tsi_score = estimator.tsi(n_macrostates=7, terminal_states=terminal_states, cluster_key=cluster_key)
+    estimator._tsi.to_df().to_csv(DATA_DIR / "hematopoiesis" / "results" / "tsi-ptk.csv", index=False)
+
+print(f"TSI score: {tsi_score:.2f}")
+
+# %%
+palette = {"PseudotimeKernel": "#DE8F05", "Optimal identification": "#000000"}
+
+if SAVE_FIGURES:
+    fname = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"tsi-dpt.{FIGURE_FORMAT}"
+else:
+    fname = None
+
+with mplscience.style_context():
+    sns.set_style(style="whitegrid")
+    estimator.plot_tsi(palette=palette, save=fname)
+    plt.show()
 
 # %%
 estimator.compute_macrostates(6, cluster_key="l2_cell_type")
@@ -582,5 +615,3 @@ cr.pl.gene_trends(
     save=save,
 )
 plt.show()
-
-# %%
