@@ -5,20 +5,22 @@
 # ## Import packages
 
 # %%
-import os
 import sys
 
 import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
+import mplscience
+import seaborn as sns
 
 import cellrank as cr
 import scanpy as sc
 import scvelo as scv
 import wot
+from anndata import AnnData
 
-from cr2 import get_state_purity, plot_state_purity, plot_states, running_in_notebook
+from cr2 import get_state_purity, plot_state_purity, running_in_notebook
 
 sys.path.extend(["../../../", "."])
 from paths import DATA_DIR, FIG_DIR  # isort: skip  # noqa: E402
@@ -37,8 +39,9 @@ scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True,
 # %%
 SAVE_FIGURES = False
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm", exist_ok=True)
+    (FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm").mkdir(parents=True, exist_ok=True)
 
+FIGURE_FORMAT = "pdf"
 SHOW_COLORBAR = not SAVE_FIGURES
 
 # %%
@@ -109,6 +112,9 @@ sc.pp.neighbors(adata, n_pcs=30, n_neighbors=30)
 
 # %%
 sc.tl.umap(adata)
+pd.DataFrame(adata.obsm["X_umap"], index=adata.obs_names, columns=["umap_1", "umap_2"]).to_csv(
+    DATA_DIR / "pharyngeal_endoderm" / "processed" / "umap_subsetted_data.csv"
+)
 
 # %%
 if running_in_notebook():
@@ -120,8 +126,11 @@ if SAVE_FIGURES:
     fig, ax = plt.subplots(figsize=(6, 4))
     scv.pl.scatter(adata, basis="umap", c="cluster_name", legend_loc=False, title="", ax=ax)
     fig.savefig(
-        FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "umap_colored_by_cell_type_subsetted_data.eps",
-        format="eps",
+        FIG_DIR
+        / "realtime_kernel"
+        / "pharyngeal_endoderm"
+        / f"umap_colored_by_cell_type_subsetted_data.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -129,8 +138,8 @@ if SAVE_FIGURES:
     fig, ax = plt.subplots(figsize=(6, 4))
     scv.pl.scatter(adata, basis="umap", c="day", legend_loc=False, colorbar=SHOW_COLORBAR, title="", ax=ax)
     fig.savefig(
-        FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "umap_colored_by_day_subsetted_data.eps",
-        format="eps",
+        FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / f"umap_colored_by_day_subsetted_data.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -153,8 +162,30 @@ rtk.compute_transition_matrix(
     growth_iters=3, growth_rate_key="growth_rate_init", self_transitions="all", conn_weight=0.1
 )
 
+# %%
+rtk.plot_random_walks(
+    n_sims=500,
+    max_iter=1000,
+    start_ixs={"day": 9.5},
+    basis="umap",
+    seed=0,
+    dpi=150,
+    size=30,
+    n_jobs=5,
+)
+
 # %% [markdown]
 # ### Estimator
+
+# %%
+adata.obs["cluster_name_full"] = (
+    adata.obs["cluster_name"]
+    .astype(str)
+    .astype("category")
+    .cat.rename_categories({"nan": "progenitors"})
+    .cat.reorder_categories(["progenitors"] + adata.obs["cluster_name"].cat.categories.tolist())
+)
+adata.uns["cluster_name_full_colors"] = ["#dedede"] + adata.uns["cluster_name_colors"]
 
 # %%
 estimator = cr.estimators.GPCCA(rtk)
@@ -163,32 +194,46 @@ estimator.plot_spectrum(real_only=True)
 plt.show()
 
 # %%
-estimator.compute_macrostates(n_states=4, cluster_key="cluster_name")
+terminal_states = ["parathyroid", "ubb", "cTEC", "mTEC"]
+cluster_key = "cluster_name"
 
-if running_in_notebook():
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="macrostates",
-        basis="umap",
-        legend_loc="right",
-        title="",
-        size=100,
+if (DATA_DIR / "pharyngeal_endoderm" / "results" / "tsi-subsetted_data-rtk.csv").is_file():
+    tsi_df = pd.read_csv(DATA_DIR / "pharyngeal_endoderm" / "results" / "tsi-subsetted_data-rtk.csv")
+    estimator._tsi = AnnData(tsi_df, uns={"terminal_states": terminal_states, "cluster_key": cluster_key})
+    tsi_score = estimator.tsi(n_macrostates=10, terminal_states=terminal_states, cluster_key=cluster_key)
+else:
+    tsi_score = estimator.tsi(n_macrostates=10, terminal_states=terminal_states, cluster_key=cluster_key)
+    estimator._tsi.to_df().to_csv(
+        DATA_DIR / "pharyngeal_endoderm" / "results" / "tsi-subsetted_data-rtk.csv", index=False
     )
+
+print(f"TSI score: {tsi_score:.2f}")
+
+# %%
+palette = {"RealTimeKernel": "#DE8F05", "Optimal identification": "#000000"}
 
 if SAVE_FIGURES:
-    fpath = FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "umap_colored_by_macrostates_subsetted_data.pdf"
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="macrostates",
-        basis="umap",
-        legend_loc=False,
-        title="",
-        size=100,
-        fpath=fpath,
-        format="pdf",
-    )
+    fpath = FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / f"tsi-subsetted_data-rtk.{FIGURE_FORMAT}"
+else:
+    fpath = None
+
+with mplscience.style_context():
+    sns.set_style(style="whitegrid")
+    estimator.plot_tsi(palette=palette, save=fpath)
+    plt.show()
+
+# %%
+estimator.compute_macrostates(n_states=4, cluster_key="cluster_name")
+if running_in_notebook():
+    estimator.plot_macrostates(which="all", basis="umap", title="", legend_loc="right", size=100)
+    if SAVE_FIGURES:
+        fpath = (
+            FIG_DIR
+            / "realtime_kernel"
+            / "pharyngeal_endoderm"
+            / f"umap_colored_by_macrostates_subsetted_data.{FIGURE_FORMAT}"
+        )
+        estimator.plot_macrostates(which="all", basis="umap", title="", legend_loc=False, size=100, save=fpath)
 
 # %%
 macrostate_purity = get_state_purity(adata, estimator, states="macrostates", obs_col="cluster_name")
@@ -196,43 +241,30 @@ print(f"Mean purity: {np.mean(list(macrostate_purity.values()))}")
 
 if running_in_notebook():
     if SAVE_FIGURES:
-        fpath = FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "macrostate_purity_subsetted_data.eps"
+        fpath = (
+            FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / f"macrostate_purity_subsetted_data.{FIGURE_FORMAT}"
+        )
     else:
         fpath = None
 
     palette = dict(zip(estimator.macrostates.cat.categories, estimator._macrostates.colors))
 
-    plot_state_purity(macrostate_purity, palette=palette, fpath=fpath, format="eps")
+    plot_state_purity(macrostate_purity, palette=palette, fpath=fpath, format=FIGURE_FORMAT)
     plt.show()
 
 # %%
 estimator.set_terminal_states(["parathyroid", "cTEC", "mTEC", "ubb"])
 
 if running_in_notebook():
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="terminal_states",
-        basis="umap",
-        legend_loc="right",
-        title="",
-        size=100,
-        fpath=fpath,
-    )
-
-if SAVE_FIGURES:
-    fpath = FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "umap_colored_by_terminal_states_subsetted_data.pdf"
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="terminal_states",
-        basis="umap",
-        legend_loc=False,
-        title="",
-        size=100,
-        fpath=fpath,
-        format="pdf",
-    )
+    estimator.plot_macrostates(which="terminal", basis="umap", title="", legend_loc="right", size=100)
+    if SAVE_FIGURES:
+        fpath = (
+            FIG_DIR
+            / "realtime_kernel"
+            / "pharyngeal_endoderm"
+            / f"umap_colored_by_terminal_states_subsetted_data.{FIGURE_FORMAT}"
+        )
+        estimator.plot_macrostates(which="terminal", basis="umap", title="", legend_loc=False, size=100, save=fpath)
 
 # %%
 macrostate_purity = get_state_purity(adata, estimator, states="terminal_states", obs_col="cluster_name")
@@ -240,13 +272,18 @@ print(f"Mean purity: {np.mean(list(macrostate_purity.values()))}")
 
 if running_in_notebook():
     if SAVE_FIGURES:
-        fpath = FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "terminal_states_purity_subsetted_data.eps"
+        fpath = (
+            FIG_DIR
+            / "realtime_kernel"
+            / "pharyngeal_endoderm"
+            / f"terminal_states_purity_subsetted_data.{FIGURE_FORMAT}"
+        )
     else:
         fpath = None
 
     palette = dict(zip(estimator.terminal_states.cat.categories, estimator._term_states.colors))
 
-    plot_state_purity(macrostate_purity, palette=palette, fpath=fpath, format="eps")
+    plot_state_purity(macrostate_purity, palette=palette, fpath=fpath, format=FIGURE_FORMAT)
     plt.show()
 
 # %%
@@ -274,8 +311,11 @@ if SAVE_FIGURES:
             )
 
             fig.savefig(
-                FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / f"fate_prob_{terminal_state}_subsetted_data.eps",
-                format="eps",
+                FIG_DIR
+                / "realtime_kernel"
+                / "pharyngeal_endoderm"
+                / f"fate_prob_{terminal_state}_subsetted_data.{FIGURE_FORMAT}",
+                format=FIGURE_FORMAT,
                 transparent=True,
                 bbox_inches="tight",
             )
@@ -306,8 +346,8 @@ if SAVE_FIGURES:
                 FIG_DIR
                 / "realtime_kernel"
                 / "pharyngeal_endoderm"
-                / f"fate_prob_{terminal_state}_clipped_subsetted_data.eps",
-                format="eps",
+                / f"fate_prob_{terminal_state}_clipped_subsetted_data.{FIGURE_FORMAT}",
+                format=FIGURE_FORMAT,
                 transparent=True,
                 bbox_inches="tight",
             )
@@ -329,8 +369,8 @@ if running_in_notebook():
     )
     if SAVE_FIGURES:
         fig.savefig(
-            FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "mtec_fate_probs_subsetted_data.eps",
-            format="eps",
+            FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / f"mtec_fate_probs_subsetted_data.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
         )
@@ -355,8 +395,11 @@ if running_in_notebook():
     )
     if SAVE_FIGURES:
         fig.savefig(
-            FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "mtec_fate_probs_clipped_subsetted_data.eps",
-            format="eps",
+            FIG_DIR
+            / "realtime_kernel"
+            / "pharyngeal_endoderm"
+            / f"mtec_fate_probs_clipped_subsetted_data.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
         )
@@ -427,8 +470,8 @@ if running_in_notebook():
 
     if SAVE_FIGURES:
         fig.savefig(
-            FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "genes_ranked_by_correlation.eps",
-            format="eps",
+            FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / f"genes_ranked_by_correlation.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
         )
@@ -487,8 +530,11 @@ if running_in_notebook():
             ax=ax,
         )
         fig.savefig(
-            FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "umap_mtec_progenitors_subsetted_data.pdf",
-            format="pdf",
+            FIG_DIR
+            / "realtime_kernel"
+            / "pharyngeal_endoderm"
+            / f"umap_mtec_progenitors_subsetted_data.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
             dpi=400,
@@ -554,8 +600,8 @@ if running_in_notebook():
 
     if SAVE_FIGURES:
         fig.savefig(
-            FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / "genes_ranked_by_de.eps",
-            format="eps",
+            FIG_DIR / "realtime_kernel" / "pharyngeal_endoderm" / f"genes_ranked_by_de.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
         )
