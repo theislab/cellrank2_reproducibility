@@ -5,7 +5,6 @@
 # ## Library imports
 
 # %%
-import os
 import sys
 
 import numpy as np
@@ -14,12 +13,14 @@ from scipy.sparse import load_npz
 from scipy.stats import spearmanr
 
 import matplotlib.pyplot as plt
+import mplscience
 import seaborn as sns
 from mpl_toolkits.axisartist.axislines import AxesZero
 
 import cellrank as cr
 import scanpy as sc
 import scvelo as scv
+from anndata import AnnData
 from scanpy.tools._dpt import DPT
 
 sys.path.extend(["../../../", "."])
@@ -41,8 +42,13 @@ scv.settings.plot_prefix = ""
 # %%
 SAVE_FIGURES = False
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "realtime_kernel" / "mef", exist_ok=True)
+    (FIG_DIR / "realtime_kernel" / "mef").mkdir(parents=True, exist_ok=True)
 
+FIGURE_FORMAT = "pdf"
+
+
+# %%
+(DATA_DIR / "mef" / "results").mkdir(parents=True, exist_ok=True)
 
 # %% [markdown]
 # ## Function definitions
@@ -126,21 +132,24 @@ sc.tl.dpt(adata)
 scv.pl.scatter(adata, basis="force_directed", c=["day", "dpt_pseudotime"], legend_loc="none", cmap="viridis")
 
 # %%
-sns.set_style(style="whitegrid")
-fig, ax = plt.subplots(figsize=(12, 4))
-sc.pl.violin(adata, keys=["dpt_pseudotime"], groupby="day", rotation=90, ax=ax, title="", legend_loc="none")
+with mplscience.style_context():
+    sns.set_style(style="whitegrid")
+    fig, ax = plt.subplots(figsize=(12, 4))
+    sc.pl.violin(adata, keys=["dpt_pseudotime"], groupby="day", rotation=90, ax=ax, title="", legend_loc="none")
+    plt.show()
 
-if SAVE_FIGURES:
-    ax.hlines([0, 0.25, 0.5, 0.75, 1], xmin=-0.75, xmax=39, linestyles="solid", colors="black", zorder=0)
-    ax.axis("off")
-    fig.savefig(
-        FIG_DIR / "realtime_kernel" / "mef" / "real_time_informed_pseudotime_vs_time_point_labeled.eps",
-        format="eps",
-        transparent=True,
-        bbox_inches="tight",
-    )
-
-sns.reset_orig()
+    if SAVE_FIGURES:
+        ax.hlines([0, 0.25, 0.5, 0.75, 1], xmin=-0.75, xmax=39, linestyles="solid", colors="black", zorder=0)
+        ax.axis("off")
+        fig.savefig(
+            FIG_DIR
+            / "realtime_kernel"
+            / "mef"
+            / f"real_time_informed_pseudotime_vs_time_point_labeled.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
+            transparent=True,
+            bbox_inches="tight",
+        )
 
 # %%
 spearmanr(adata.obs["dpt_pseudotime"].values, adata.obs["day"].astype(float).values)
@@ -149,28 +158,55 @@ spearmanr(adata.obs["dpt_pseudotime"].values, adata.obs["day"].astype(float).val
 # ## Terminal state estimation
 
 # %%
-g = cr.estimators.GPCCA(rtk)
+estimator = cr.estimators.GPCCA(rtk)
 
 # %%
-g.compute_schur(n_components=10)
-g.plot_spectrum(real_only=True)
+estimator.compute_schur(n_components=10)
+estimator.plot_spectrum(real_only=True)
 
 # %%
-g.compute_macrostates(n_states=4, cluster_key="cell_sets")
-g.plot_macrostates(which="all", basis="force_directed", legend_loc="right", s=100)
+terminal_states = ["Neural", "IPS", "Trophoblast", "Stromal"]
+cluster_key = "cell_sets"
+
+if (DATA_DIR / "mef" / "results" / "tsi-rtk.csv").is_file():
+    tsi_df = pd.read_csv(DATA_DIR / "mef" / "results" / "tsi-rtk.csv")
+    estimator._tsi = AnnData(tsi_df, uns={"terminal_states": terminal_states, "cluster_key": cluster_key})
+    tsi_score = estimator.tsi(n_macrostates=10, terminal_states=terminal_states, cluster_key=cluster_key)
+else:
+    tsi_score = estimator.tsi(n_macrostates=10, terminal_states=terminal_states, cluster_key=cluster_key)
+    estimator._tsi.to_df().to_csv(DATA_DIR / "mef" / "results" / "tsi-rtk.csv", index=False)
+
+print(f"TSI score: {tsi_score:.2f}")
 
 # %%
-g.set_terminal_states(states=["IPS", "Neural", "Trophoblast", "Stromal"])
+palette = {"RealTimeKernel": "#DE8F05", "Optimal identification": "#000000"}
+
+if SAVE_FIGURES:
+    fpath = FIG_DIR / "realtime_kernel" / "mef" / f"tsi-rtk.{FIGURE_FORMAT}"
+else:
+    fpath = None
+
+with mplscience.style_context():
+    sns.set_style(style="whitegrid")
+    estimator.plot_tsi(palette=palette, save=fpath)
+    plt.show()
 
 # %%
-g.compute_fate_probabilities()
-g.plot_fate_probabilities(basis="force_directed", same_plot=False)
+estimator.compute_macrostates(n_states=4, cluster_key="cell_sets")
+estimator.plot_macrostates(which="all", basis="force_directed", legend_loc="right", s=100)
+
+# %%
+estimator.set_terminal_states(states=["IPS", "Neural", "Trophoblast", "Stromal"])
+
+# %%
+estimator.compute_fate_probabilities()
+estimator.plot_fate_probabilities(basis="force_directed", same_plot=False)
 
 # %%
 palette = dict(zip(adata.obs["cell_sets"].cat.categories, adata.uns["cell_sets_colors"]))
 median_pt = adata.obs[["day", "dpt_pseudotime"]].groupby("day").median()["dpt_pseudotime"].values
 
-for terminal_state in g.terminal_states.cat.categories:
+for terminal_state in estimator.terminal_states.cat.categories:
     fate_prob = adata.obsm["lineages_fwd"][terminal_state].X.squeeze()
     ref_fate_prob = 1 - fate_prob
     log_odds = np.log(np.divide(fate_prob, 1 - fate_prob, where=fate_prob != 1, out=np.zeros_like(fate_prob)) + 1e-12)
@@ -242,8 +278,11 @@ for terminal_state in g.terminal_states.cat.categories:
         ax.set(xlabel=None, ylabel=None)
 
         fig.savefig(
-            FIG_DIR / "realtime_kernel" / "mef" / f"rtk_log_odds_vs_pt-{terminal_state.lower()}_lineage.pdf",
-            format="pdf",
+            FIG_DIR
+            / "realtime_kernel"
+            / "mef"
+            / f"rtk_log_odds_vs_pt-{terminal_state.lower()}_lineage.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
             pad_inches=0.2,
