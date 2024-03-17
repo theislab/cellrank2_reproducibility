@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Pharyngeal endoderm development analysis with the RealTimeKernel &#8212; CellRank 2 reproducibility</title>
+    <title>Initial state identification on full pharyngeal endoderm development data &#8212; CellRank 2 reproducibility</title>
   
   
   
@@ -57,11 +57,11 @@
     <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'realtime_kernel/pharyngeal_endoderm/velocitykernel_subsetted_data';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'realtime_kernel/pharyngeal_endoderm/initial_state_full_data';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="VelocityKernel vs. RealTimeKernel - TSI" href="cr1_vs_cr2.html" />
-    <link rel="prev" title="Pharyngeal endoderm development analysis with the RealTimeKernel" href="velocitykernel_full_data.html" />
+    <link rel="next" title="Pharyngeal endoderm development analysis with RealTimeKernel" href="realtimekernel_subsetted_data.html" />
+    <link rel="prev" title="Pharyngeal endoderm development analysis with the RealTimeKernel" href="realtimekernel_full_data.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -207,12 +207,12 @@
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="README.html">Analysis of pharyngeal endoderm development</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="realtimekernel_full_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="initial_state_full_data.html">Initial state identification on full pharyngeal endoderm development data</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Initial state identification on full pharyngeal endoderm development data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="realtimekernel_subsetted_data.html">Pharyngeal endoderm development analysis with RealTimeKernel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="initial_state_subsetted_data.html">Initial state identification on subsetted pharyngeal endoderm development data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wot_subsetted_data.html">Pharyngeal endoderm development analysis with WOT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="velocitykernel_full_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="velocitykernel_subsetted_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cr1_vs_cr2.html">VelocityKernel vs. RealTimeKernel - TSI</a></li>
 </ul>
 </li>
@@ -299,7 +299,7 @@
       
       
       
-      <li><a href="../../_sources/realtime_kernel/pharyngeal_endoderm/velocitykernel_subsetted_data.ipynb" target="_blank"
+      <li><a href="../../_sources/realtime_kernel/pharyngeal_endoderm/initial_state_full_data.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -383,7 +383,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Pharyngeal endoderm development analysis with the RealTimeKernel</h1>
+    <h1>Initial state identification on full pharyngeal endoderm development data</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -398,12 +398,11 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data preprocessing</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rna-velocity-inference">RNA velocity inference</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank-analysis">CellRank analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank">CellRank</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimator">Estimator</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimator">Estimator</a></li>
 </ul>
             </nav>
         </div>
@@ -415,24 +414,20 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="pharyngeal-endoderm-development-analysis-with-the-realtimekernel">
-<h1>Pharyngeal endoderm development analysis with the RealTimeKernel<a class="headerlink" href="#pharyngeal-endoderm-development-analysis-with-the-realtimekernel" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="initial-state-identification-on-full-pharyngeal-endoderm-development-data">
+<h1>Initial state identification on full pharyngeal endoderm development data<a class="headerlink" href="#initial-state-identification-on-full-pharyngeal-endoderm-development-data" title="Link to this heading">#</a></h1>
 <section id="import-packages">
 <h2>Import packages<a class="headerlink" href="#import-packages" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">mplscience</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
 <span class="kn">import</span> <span class="nn">cellrank</span> <span class="k">as</span> <span class="nn">cr</span>
 <span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
 <span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
-<span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
+<span class="kn">import</span> <span class="nn">wot</span>
 
 <span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">running_in_notebook</span>
 
@@ -484,32 +479,44 @@ document.write(`
 </div>
 </div>
 </div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N_JOBS</span> <span class="o">=</span> <span class="mi">8</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># fmt: off</span>
+<span class="n">S_GENES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Mcm5&quot;</span><span class="p">,</span> <span class="s2">&quot;Pcna&quot;</span><span class="p">,</span> <span class="s2">&quot;Tyms&quot;</span><span class="p">,</span> <span class="s2">&quot;Fen1&quot;</span><span class="p">,</span> <span class="s2">&quot;Mcm2&quot;</span><span class="p">,</span> <span class="s2">&quot;Mcm4&quot;</span><span class="p">,</span> <span class="s2">&quot;Rrm1&quot;</span><span class="p">,</span> <span class="s2">&quot;Ung&quot;</span><span class="p">,</span> <span class="s2">&quot;Gins2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Mcm6&quot;</span><span class="p">,</span> <span class="s2">&quot;Cdca7&quot;</span><span class="p">,</span> <span class="s2">&quot;Dtl&quot;</span><span class="p">,</span> <span class="s2">&quot;Prim1&quot;</span><span class="p">,</span> <span class="s2">&quot;Uhrf1&quot;</span><span class="p">,</span> <span class="s2">&quot;Mlf1ip&quot;</span><span class="p">,</span> <span class="s2">&quot;Hells&quot;</span><span class="p">,</span> <span class="s2">&quot;Rfc2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Rpa2&quot;</span><span class="p">,</span> <span class="s2">&quot;Nasp&quot;</span><span class="p">,</span> <span class="s2">&quot;Rad51ap1&quot;</span><span class="p">,</span> <span class="s2">&quot;Gmnn&quot;</span><span class="p">,</span> <span class="s2">&quot;Wdr76&quot;</span><span class="p">,</span> <span class="s2">&quot;Slbp&quot;</span><span class="p">,</span> <span class="s2">&quot;Ccne2&quot;</span><span class="p">,</span> <span class="s2">&quot;Ubr7&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Pold3&quot;</span><span class="p">,</span> <span class="s2">&quot;Msh2&quot;</span><span class="p">,</span> <span class="s2">&quot;Atad2&quot;</span><span class="p">,</span> <span class="s2">&quot;Rad51&quot;</span><span class="p">,</span> <span class="s2">&quot;Rrm2&quot;</span><span class="p">,</span> <span class="s2">&quot;Cdc45&quot;</span><span class="p">,</span> <span class="s2">&quot;Cdc6&quot;</span><span class="p">,</span> <span class="s2">&quot;Exo1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Tipin&quot;</span><span class="p">,</span> <span class="s2">&quot;Dscc1&quot;</span><span class="p">,</span> <span class="s2">&quot;Blm&quot;</span><span class="p">,</span> <span class="s2">&quot;Casp8ap2&quot;</span><span class="p">,</span> <span class="s2">&quot;Usp1&quot;</span><span class="p">,</span> <span class="s2">&quot;Clspn&quot;</span><span class="p">,</span> <span class="s2">&quot;Pola1&quot;</span><span class="p">,</span> <span class="s2">&quot;Chaf1b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Brip1&quot;</span><span class="p">,</span> <span class="s2">&quot;E2f8&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">G2M_GENES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Hmgb2&quot;</span><span class="p">,</span> <span class="s2">&quot;Cdk1&quot;</span><span class="p">,</span> <span class="s2">&quot;Nusap1&quot;</span><span class="p">,</span> <span class="s2">&quot;Ube2c&quot;</span><span class="p">,</span> <span class="s2">&quot;Birc5&quot;</span><span class="p">,</span> <span class="s2">&quot;Tpx2&quot;</span><span class="p">,</span> <span class="s2">&quot;Top2a&quot;</span><span class="p">,</span> <span class="s2">&quot;Ndc80&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Cks2&quot;</span><span class="p">,</span> <span class="s2">&quot;Nuf2&quot;</span><span class="p">,</span> <span class="s2">&quot;Cks1b&quot;</span><span class="p">,</span> <span class="s2">&quot;Mki67&quot;</span><span class="p">,</span> <span class="s2">&quot;Tmpo&quot;</span><span class="p">,</span> <span class="s2">&quot;Cenpf&quot;</span><span class="p">,</span> <span class="s2">&quot;Tacc3&quot;</span><span class="p">,</span> <span class="s2">&quot;Fam64a&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Smc4&quot;</span><span class="p">,</span> <span class="s2">&quot;Ccnb2&quot;</span><span class="p">,</span> <span class="s2">&quot;Ckap2l&quot;</span><span class="p">,</span> <span class="s2">&quot;Ckap2&quot;</span><span class="p">,</span> <span class="s2">&quot;Aurkb&quot;</span><span class="p">,</span> <span class="s2">&quot;Bub1&quot;</span><span class="p">,</span> <span class="s2">&quot;Kif11&quot;</span><span class="p">,</span> <span class="s2">&quot;Anp32e&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Tubb4b&quot;</span><span class="p">,</span> <span class="s2">&quot;Gtse1&quot;</span><span class="p">,</span> <span class="s2">&quot;Kif20b&quot;</span><span class="p">,</span> <span class="s2">&quot;Hjurp&quot;</span><span class="p">,</span> <span class="s2">&quot;Cdca3&quot;</span><span class="p">,</span> <span class="s2">&quot;Hn1&quot;</span><span class="p">,</span> <span class="s2">&quot;Cdc20&quot;</span><span class="p">,</span> <span class="s2">&quot;Ttk&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Cdc25c&quot;</span><span class="p">,</span> <span class="s2">&quot;Kif2c&quot;</span><span class="p">,</span> <span class="s2">&quot;Rangap1&quot;</span><span class="p">,</span> <span class="s2">&quot;Ncapd2&quot;</span><span class="p">,</span> <span class="s2">&quot;Dlgap5&quot;</span><span class="p">,</span> <span class="s2">&quot;Cdca2&quot;</span><span class="p">,</span> <span class="s2">&quot;Cdca8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Ect2&quot;</span><span class="p">,</span> <span class="s2">&quot;Kif23&quot;</span><span class="p">,</span> <span class="s2">&quot;Hmmr&quot;</span><span class="p">,</span> <span class="s2">&quot;Aurka&quot;</span><span class="p">,</span> <span class="s2">&quot;Psrc1&quot;</span><span class="p">,</span> <span class="s2">&quot;Anln&quot;</span><span class="p">,</span> <span class="s2">&quot;Lbr&quot;</span><span class="p">,</span> <span class="s2">&quot;Ckap5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Cenpe&quot;</span><span class="p">,</span> <span class="s2">&quot;Ctcf&quot;</span><span class="p">,</span> <span class="s2">&quot;Nek2&quot;</span><span class="p">,</span> <span class="s2">&quot;G2e3&quot;</span><span class="p">,</span> <span class="s2">&quot;Gas2l3&quot;</span><span class="p">,</span> <span class="s2">&quot;Cbx5&quot;</span><span class="p">,</span> <span class="s2">&quot;Cenpa&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="c1"># fmt: on</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="constants">
-<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
-</section>
 <section id="data-loading">
 <h2>Data loading<a class="headerlink" href="#data-loading" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_velo.h5ad&quot;</span><span class="p">)</span>
-
-<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster_fine&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;raw&quot;</span> <span class="o">/</span> <span class="s2">&quot;cluster_data.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs_names</span><span class="p">,</span> <span class="s2">&quot;res.1&quot;</span><span class="p">]</span>
-    <span class="o">.</span><span class="n">values</span>
-<span class="p">)</span>
-<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster_fine&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster_fine&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
-
-<span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster_fine&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="s2">&quot;9&quot;</span><span class="p">,</span> <span class="s2">&quot;12&quot;</span><span class="p">,</span> <span class="s2">&quot;25&quot;</span><span class="p">,</span> <span class="s2">&quot;26&quot;</span><span class="p">]),</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;cluster_name_colors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#023fa5&quot;</span><span class="p">,</span> <span class="s2">&quot;#bec1d4&quot;</span><span class="p">,</span> <span class="s2">&quot;#b5bbe3&quot;</span><span class="p">,</span> <span class="s2">&quot;#e07b91&quot;</span><span class="p">,</span> <span class="s2">&quot;#11c638&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;raw&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_pharynx.h5ad&quot;</span><span class="p">)</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_umap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[[</span><span class="s2">&quot;UMAP1&quot;</span><span class="p">,</span> <span class="s2">&quot;UMAP2&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;day_str&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[[</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">,</span> <span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="s2">&quot;is_doublet&quot;</span><span class="p">]]</span>
 
 <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">]</span>
@@ -518,24 +525,32 @@ document.write(`
     <span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">rename_categories</span><span class="p">({</span><span class="s2">&quot;nan&quot;</span><span class="p">:</span> <span class="s2">&quot;progenitors&quot;</span><span class="p">})</span>
     <span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">reorder_categories</span><span class="p">([</span><span class="s2">&quot;progenitors&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
 <span class="p">)</span>
-<span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;cluster_name_colors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#dedede&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;#023fa5&quot;</span><span class="p">,</span> <span class="s2">&quot;#bec1d4&quot;</span><span class="p">,</span> <span class="s2">&quot;#b5bbe3&quot;</span><span class="p">,</span> <span class="s2">&quot;#e07b91&quot;</span><span class="p">,</span> <span class="s2">&quot;#11c638&quot;</span><span class="p">]</span>
-
-<span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_umap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_subsetted_data.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs_names</span><span class="p">,</span> <span class="p">:]</span>
-    <span class="o">.</span><span class="n">values</span>
-<span class="p">)</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;cluster_name_colors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;#dedede&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#023fa5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#7d87b9&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#bec1d4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#d6bcc0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#bb7784&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#8e063b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#4a6fe3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#8595e1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#b5bbe3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#e6afb9&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#e07b91&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#d33f6a&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;#11c638&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 <span class="n">adata</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 11073 × 27998
-    obs: &#39;cluster_name&#39;, &#39;day&#39;, &#39;is_doublet&#39;, &#39;cluster_fine&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 54044 × 27998
+    obs: &#39;cluster_name&#39;, &#39;day&#39;, &#39;is_doublet&#39;
     uns: &#39;cluster_name_colors&#39;
     obsm: &#39;X_umap&#39;
-    layers: &#39;ambiguous&#39;, &#39;matrix&#39;, &#39;spliced&#39;, &#39;unspliced&#39;
 </pre></div>
 </div>
 </div>
@@ -545,29 +560,21 @@ document.write(`
 <h2>Data preprocessing<a class="headerlink" href="#data-preprocessing" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_and_normalize</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">min_counts</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_top_genes</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">highly_variable_genes</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Filtered out 13377 genes that are detected 20 counts (spliced).
-Normalized count data: X, spliced, unspliced.
-Extracted 2000 highly variable genes.
-Logarithmized X.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/philipp/code/scvelo_dev/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
-  log1p(adata)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>extracting highly variable genes
+    finished (0:00:15)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="n">scv</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">moments</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_pcs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_pcs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -575,13 +582,10 @@ Logarithmized X.
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing PCA
     on highly variable genes
     with n_comps=50
-    finished (0:00:07)
+    finished (0:00:03)
 computing neighbors
-    using &#39;X_pca&#39; with n_pcs = 50
-    finished (0:02:33)
-computing moments based on connectivities
-    finished (0:00:00) --&gt; added 
-    &#39;Ms&#39; and &#39;Mu&#39;, moments of un/spliced abundances (adata.layers)
+    using &#39;X_pca&#39; with n_pcs = 30
+    finished (0:02:38)
 </pre></div>
 </div>
 </div>
@@ -596,135 +600,134 @@ computing moments based on connectivities
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/fc1fc0f4db482a0034a3b532457a7e4e39305102c8033e6c385ccce80be4fc43.png" src="../../_images/fc1fc0f4db482a0034a3b532457a7e4e39305102c8033e6c385ccce80be4fc43.png" />
+<img alt="../../_images/5d965c106f22360bdbde668fec6112729600c9086c6ecf8eec4a84547fe1ee0a.png" src="../../_images/5d965c106f22360bdbde668fec6112729600c9086c6ecf8eec4a84547fe1ee0a.png" />
 </div>
 </div>
 </section>
-<section id="rna-velocity-inference">
-<h2>RNA velocity inference<a class="headerlink" href="#rna-velocity-inference" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_velo_fit-subsetted_data.h5ad&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-    <span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_velo_fit-subsetted_data.h5ad&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">scv</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">recover_dynamics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">N_JOBS</span><span class="p">)</span>
-    <span class="n">scv</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;dynamical&quot;</span><span class="p">)</span>
-    <span class="n">adata</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_velo_fit-subsetted_data.h5ad&quot;</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;gzip&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="cellrank-analysis">
-<h2>CellRank analysis<a class="headerlink" href="#cellrank-analysis" title="Link to this heading">#</a></h2>
+<section id="cellrank">
+<h2>CellRank<a class="headerlink" href="#cellrank" title="Link to this heading">#</a></h2>
 <section id="kernel">
 <h3>Kernel<a class="headerlink" href="#kernel" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vk</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">VelocityKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">()</span>
-<span class="n">ck</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">ConnectivityKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;tmaps_full_data&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="n">ot_model</span> <span class="o">=</span> <span class="n">wot</span><span class="o">.</span><span class="n">ot</span><span class="o">.</span><span class="n">OTModel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+    <span class="n">ot_model</span><span class="o">.</span><span class="n">compute_all_transport_maps</span><span class="p">(</span><span class="n">tmap_out</span><span class="o">=</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;tmaps_full_data&quot;</span> <span class="o">/</span> <span class="s2">&quot;tmaps&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
 
-<span class="n">combined_kernel</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">vk</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">ck</span>
+<span class="n">rtk</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">RealTimeKernel</span><span class="o">.</span><span class="n">from_wot</span><span class="p">(</span>
+    <span class="n">adata</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;tmaps_full_data&quot;</span><span class="p">,</span> <span class="n">time_key</span><span class="o">=</span><span class="s2">&quot;day&quot;</span>
+<span class="p">)</span>
+<span class="n">rtk</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">(</span>
+    <span class="n">growth_iters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">growth_rate_key</span><span class="o">=</span><span class="s2">&quot;growth_rate_init&quot;</span><span class="p">,</span> <span class="n">self_transitions</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">conn_weight</span><span class="o">=</span><span class="mf">0.1</span>
+<span class="p">)</span>
+<span class="n">rtk</span><span class="o">.</span><span class="n">transition_matrix</span> <span class="o">=</span> <span class="n">rtk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="o">.</span><span class="n">T</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing transition matrix using `&#39;deterministic&#39;` model
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Your filename has more than two extensions: [&#39;.5_11&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_11&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_12&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_12&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_10&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_10&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0f69a7df6431427abb41c8374fbd0b47", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using `softmax_scale=2.9151`
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "90953c7db6a54af2812c7717a2776fe7", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using automatic `threshold=0.0022490203846246004`
+computing neighbors
+    using &#39;X_pca&#39; with n_pcs = 50
+    finished (0:00:02)
+computing neighbors
+    using &#39;X_pca&#39; with n_pcs = 50
+    finished (0:00:02)
+computing neighbors
+    using &#39;X_pca&#39; with n_pcs = 50
+    finished (0:00:02)
+computing neighbors
+    using &#39;X_pca&#39; with n_pcs = 50
+    finished (0:00:01)
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "30ea6193dbf94456af504220148f8a57", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:28)
-Computing transition matrix based on `adata.obsp[&#39;connectivities&#39;]`
-DEBUG: Density normalizing the transition matrix
-    Finish (0:00:00)
-</pre></div>
 </div>
 </div>
-</div>
-</section>
 </section>
 <section id="estimator">
-<h2>Estimator<a class="headerlink" href="#estimator" title="Link to this heading">#</a></h2>
+<h3>Estimator<a class="headerlink" href="#estimator" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">estimators</span><span class="o">.</span><span class="n">GPCCA</span><span class="p">(</span><span class="n">combined_kernel</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_schur</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">estimators</span><span class="o">.</span><span class="n">GPCCA</span><span class="p">(</span><span class="n">rtk</span><span class="p">)</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">compute_schur</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">estimator</span><span class="o">.</span><span class="n">plot_spectrum</span><span class="p">(</span><span class="n">real_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Schur decomposition
-When computing macrostates, choose a number of states NOT in `[8]`
 Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:00:01)
+    Finish (0:00:02)
 </pre></div>
 </div>
-<img alt="../../_images/630b04441082eff3c27dff148b208a8fe60f454402d58f9e548604d1f7e09984.png" src="../../_images/630b04441082eff3c27dff148b208a8fe60f454402d58f9e548604d1f7e09984.png" />
+<img alt="../../_images/0ef87a1bb73e93d435884910d1519429b1936e46397d729e3f503c26a8473d7f.png" src="../../_images/0ef87a1bb73e93d435884910d1519429b1936e46397d729e3f503c26a8473d7f.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">terminal_states</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;parathyroid&quot;</span><span class="p">,</span> <span class="s2">&quot;ubb&quot;</span><span class="p">,</span> <span class="s2">&quot;cTEC&quot;</span><span class="p">,</span> <span class="s2">&quot;mTEC&quot;</span><span class="p">]</span>
-<span class="n">cluster_key</span> <span class="o">=</span> <span class="s2">&quot;cluster_name&quot;</span>
-
-<span class="k">if</span> <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-subsetted_data-vk.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-    <span class="n">tsi_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-subsetted_data-vk.csv&quot;</span><span class="p">)</span>
-    <span class="n">estimator</span><span class="o">.</span><span class="n">_tsi</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">tsi_df</span><span class="p">,</span> <span class="n">uns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">:</span> <span class="n">terminal_states</span><span class="p">,</span> <span class="s2">&quot;cluster_key&quot;</span><span class="p">:</span> <span class="n">cluster_key</span><span class="p">})</span>
-    <span class="n">tsi_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">tsi</span><span class="p">(</span><span class="n">n_macrostates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">terminal_states</span><span class="o">=</span><span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="n">cluster_key</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">tsi_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">tsi</span><span class="p">(</span><span class="n">n_macrostates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">terminal_states</span><span class="o">=</span><span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="n">cluster_key</span><span class="p">)</span>
-    <span class="n">estimator</span><span class="o">.</span><span class="n">_tsi</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-        <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-subsetted_data-vk.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
-    <span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TSI score: </span><span class="si">{</span><span class="n">tsi_score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="n">n_states</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">FIG_DIR</span>
+            <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span>
+            <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span>
+            <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_macrostates_full_data-initial_state.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TSI score: 0.91
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>For 1 macrostate, stationary distribution is computed
+Computing eigendecomposition of the transition matrix
+DEBUG: Computing top `20` eigenvalues of a sparse matrix
+DEBUG: Sorting eigenvalues by their real part
+Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
+       `.eigendecomposition`
+    Finish (0:00:06)
+DEBUG: Setting the macrostates using macrostates memberships
+DEBUG: Raising an exception if there are less than `6` cells.
+Adding `.macrostates`
+       `.macrostates_memberships`
+       `.coarse_T`
+       `.coarse_initial_distribution
+       `.coarse_stationary_distribution`
+       `.schur_vectors`
+       `.schur_matrix`
+       `.eigendecomposition`
+    Finish (0:00:06)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/cr2-py38/lib/python3.8/site-packages/anndata/_core/anndata.py:121: ImplicitModificationWarning: Transforming to str index.
-  warnings.warn(&quot;Transforming to str index.&quot;, ImplicitModificationWarning)
-</pre></div>
+<img alt="../../_images/87b71d6fa08c4a040f6fd0ff85fe3bc63a8511a5f08936cedc0860464d9c0ce3.png" src="../../_images/87b71d6fa08c4a040f6fd0ff85fe3bc63a8511a5f08936cedc0860464d9c0ce3.png" />
 </div>
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For nice name in figure legend</span>
-<span class="n">estimator</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;VelocityKernel&quot;</span>
-<span class="n">palette</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;VelocityKernel&quot;</span><span class="p">:</span> <span class="s2">&quot;#0173b2&quot;</span><span class="p">,</span> <span class="s2">&quot;Optimal identification&quot;</span><span class="p">:</span> <span class="s2">&quot;#000000&quot;</span><span class="p">}</span>
-
-<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;tsi-subsetted_data-vk.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="k">with</span> <span class="n">mplscience</span><span class="o">.</span><span class="n">style_context</span><span class="p">():</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
-    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_tsi</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../../_images/bddecd40c893f2d38828ead7e6df08eef7630f20444c19f872103db7f7635f19.png" src="../../_images/bddecd40c893f2d38828ead7e6df08eef7630f20444c19f872103db7f7635f19.png" />
-</div>
-</div>
+</section>
 </section>
 </section>
 
@@ -759,7 +762,7 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="velocitykernel_full_data.html"
+       href="realtimekernel_full_data.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
@@ -768,11 +771,11 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
       </div>
     </a>
     <a class="right-next"
-       href="cr1_vs_cr2.html"
+       href="realtimekernel_subsetted_data.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">VelocityKernel vs. RealTimeKernel - TSI</p>
+        <p class="prev-next-title">Pharyngeal endoderm development analysis with RealTimeKernel</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -797,12 +800,11 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data preprocessing</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rna-velocity-inference">RNA velocity inference</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank-analysis">CellRank analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank">CellRank</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimator">Estimator</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimator">Estimator</a></li>
 </ul>
   </nav></div>
 

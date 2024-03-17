@@ -60,8 +60,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'realtime_kernel/pharyngeal_endoderm/realtimekernel_subsetted_data';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Pharyngeal endoderm development analysis with WOT" href="wot_subsetted_data.html" />
-    <link rel="prev" title="Pharyngeal endoderm development analysis with the RealTimeKernel" href="realtimekernel_full_data.html" />
+    <link rel="next" title="Initial state identification on subsetted pharyngeal endoderm development data" href="initial_state_subsetted_data.html" />
+    <link rel="prev" title="Initial state identification on full pharyngeal endoderm development data" href="initial_state_full_data.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -173,6 +173,7 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">PseudotimeKernel</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../pseudotime_kernel/hematopoiesis/dpt.html">Hematopoiesis - DPT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pseudotime_kernel/hematopoiesis/initial_state.html">Hematopoiesis - Initial state identification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pseudotime_kernel/hematopoiesis/rna_velocity.html">Hematopoiesis - RNA velocity</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pseudotime_kernel/hematopoiesis/cr1_vs_cr2.html">VelocityKernel vs. PseudotimeKernel - TSI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pseudotime_kernel/hematopoiesis/cbc_ptk_vs_vk.html">Cross boundary correctness score</a></li>
@@ -186,6 +187,7 @@
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../cytotrace_kernel/embryoid_body/README.html">Embryoid body development</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../cytotrace_kernel/embryoid_body/cytotrace.html">Embryoid body development - CytoTRACE-based analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cytotrace_kernel/embryoid_body/initial_state.html">Embryoid body development - Initial state identification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cytotrace_kernel/embryoid_body/dpt.html">Diffusion pseudotime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cytotrace_kernel/embryoid_body/palantir.html">Palantir pseudotime</a></li>
 </ul>
@@ -195,6 +197,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../mef/README.html">Analysis of mouse embryonic fibroblasts</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../mef/realtime_informed_pseudotime.html">Real-time informed pseudotime on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mef/initial_state.html">Initial state identification for mouse embryonic fibroblasts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../mef/dpt.html">Diffusion pseudotime on mouse embryonic fibroblasts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../mef/palantir.html">Palantir pseudotime on mouse embryonic fibroblasts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../mef/wot.html">WOT-based analysis of mouse embryonic fibroblasts</a></li>
@@ -204,7 +207,9 @@
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="README.html">Analysis of pharyngeal endoderm development</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="realtimekernel_full_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="initial_state_full_data.html">Initial state identification on full pharyngeal endoderm development data</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Pharyngeal endoderm development analysis with RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="initial_state_subsetted_data.html">Initial state identification on subsetted pharyngeal endoderm development data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wot_subsetted_data.html">Pharyngeal endoderm development analysis with WOT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="velocitykernel_full_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="velocitykernel_subsetted_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
@@ -1428,20 +1433,20 @@ Percentage of genes that CR ranks strictly higher than classical DE: 66.67%
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="realtimekernel_full_data.html"
+       href="initial_state_full_data.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Pharyngeal endoderm development analysis with the RealTimeKernel</p>
+        <p class="prev-next-title">Initial state identification on full pharyngeal endoderm development data</p>
       </div>
     </a>
     <a class="right-next"
-       href="wot_subsetted_data.html"
+       href="initial_state_subsetted_data.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Pharyngeal endoderm development analysis with WOT</p>
+        <p class="prev-next-title">Initial state identification on subsetted pharyngeal endoderm development data</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

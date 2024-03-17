@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Palantir pseudotime &#8212; CellRank 2 reproducibility</title>
+    <title>Embryoid body development - Initial state identification &#8212; CellRank 2 reproducibility</title>
   
   
   
@@ -57,11 +57,11 @@
     <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'cytotrace_kernel/embryoid_body/palantir';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cytotrace_kernel/embryoid_body/initial_state';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Analysis of mouse embryonic fibroblasts" href="../../realtime_kernel/mef/README.html" />
-    <link rel="prev" title="Diffusion pseudotime" href="dpt.html" />
+    <link rel="next" title="Diffusion pseudotime" href="dpt.html" />
+    <link rel="prev" title="Embryoid body development - CytoTRACE-based analysis" href="cytotrace.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -187,9 +187,9 @@
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="README.html">Embryoid body development</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="cytotrace.html">Embryoid body development - CytoTRACE-based analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="initial_state.html">Embryoid body development - Initial state identification</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Embryoid body development - Initial state identification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dpt.html">Diffusion pseudotime</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Palantir pseudotime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="palantir.html">Palantir pseudotime</a></li>
 </ul>
 </li>
 </ul>
@@ -299,7 +299,7 @@
       
       
       
-      <li><a href="../../_sources/cytotrace_kernel/embryoid_body/palantir.ipynb" target="_blank"
+      <li><a href="../../_sources/cytotrace_kernel/embryoid_body/initial_state.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -383,7 +383,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Palantir pseudotime</h1>
+    <h1>Embryoid body development - Initial state identification</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -396,7 +396,12 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudotime-construction">Pseudotime construction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data preprocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank">CellRank</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimator">Estimator</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -408,23 +413,23 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="palantir-pseudotime">
-<h1>Palantir pseudotime<a class="headerlink" href="#palantir-pseudotime" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="embryoid-body-development-initial-state-identification">
+<h1>Embryoid body development - Initial state identification<a class="headerlink" href="#embryoid-body-development-initial-state-identification" title="Link to this heading">#</a></h1>
+<p>Construct CytoTRACE score for embryoid body development and analyse data with the <em>CytoTRACEKernel</em>.</p>
 <section id="library-imports">
 <h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
-<span class="kn">import</span> <span class="nn">palantir</span>
+<span class="kn">import</span> <span class="nn">cellrank</span> <span class="k">as</span> <span class="nn">cr</span>
 <span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
 <span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
+
+<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">running_in_notebook</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;../../../&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">])</span>
 <span class="kn">from</span> <span class="nn">paths</span> <span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>  <span class="c1"># isort: skip  # noqa: E402</span>
@@ -432,9 +437,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-Global seed set to 0
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Global seed set to 0
 </pre></div>
 </div>
 </div>
@@ -445,18 +448,8 @@ Global seed set to 0
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">cr</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">3</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;module://matplotlib_inline.backend_inline&quot;</span><span class="p">)</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;backend&quot;</span><span class="p">]</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.family&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sans-serif&quot;</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.sans-serif&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Arial&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -503,193 +496,202 @@ Global seed set to 0
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/3419a9437d40938096e86e66e3aabcc1748346aecb23260550792d07fb456d8e.png" src="../../_images/3419a9437d40938096e86e66e3aabcc1748346aecb23260550792d07fb456d8e.png" />
+<img alt="../../_images/cfca643cc89276c90d7415d5f2f2a19f7994ca369b9350860ab1f3980b01627f.png" src="../../_images/cfca643cc89276c90d7415d5f2f2a19f7994ca369b9350860ab1f3980b01627f.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/3eb24b4860d48f985b18da15b4c99432a124c6912e6df591e88965e782682420.png" src="../../_images/3eb24b4860d48f985b18da15b4c99432a124c6912e6df591e88965e782682420.png" />
+<img alt="../../_images/69bb923f236258122439e083359ad5ee073ef5b3352b99560987fe44dd1eb690.png" src="../../_images/69bb923f236258122439e083359ad5ee073ef5b3352b99560987fe44dd1eb690.png" />
 </div>
 </div>
 </section>
-<section id="pseudotime-construction">
-<h2>Pseudotime construction<a class="headerlink" href="#pseudotime-construction" title="Link to this heading">#</a></h2>
+<section id="data-preprocessing">
+<h2>Data preprocessing<a class="headerlink" href="#data-preprocessing" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pc_projection</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_pca&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">index</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">obs_names</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diff_maps</span> <span class="o">=</span> <span class="n">palantir</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">run_diffusion_maps</span><span class="p">(</span><span class="n">pc_projection</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Determing nearest neighbor graph...
-computing neighbors
-    finished (0:02:35)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multiscale_space</span> <span class="o">=</span> <span class="n">palantir</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">determine_multiscale_space</span><span class="p">(</span><span class="n">diff_maps</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">magic_imputed</span> <span class="o">=</span> <span class="n">palantir</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">run_magic_imputation</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">diff_maps</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># See DPT notebook for root cell identification</span>
-<span class="n">root_idx</span> <span class="o">=</span> <span class="mi">1458</span>
-<span class="n">palantir_res</span> <span class="o">=</span> <span class="n">palantir</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">run_palantir</span><span class="p">(</span>
-    <span class="n">multiscale_space</span><span class="p">,</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs_names</span><span class="p">[</span><span class="n">root_idx</span><span class="p">],</span> <span class="n">use_early_cell_as_start</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_waypoints</span><span class="o">=</span><span class="mi">500</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling and flocking waypoints...
-Time for determining waypoints: 0.08258782227834066 minutes
-Determining pseudotime...
-Shortest path distances using 30-nearest neighbor graph...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Raleway&#39;] not found. Falling back to DejaVu Sans.
-findfont: Font family [&#39;Lato&#39;] not found. Falling back to DejaVu Sans.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time for shortest paths: 0.5515306274096171 minutes
-Iteratively refining the pseudotime...
-Correlation at iteration 1: 1.0000
-Entropy and branch probabilities...
-Markov chain construction...
-Identification of terminal states...
-Computing fundamental matrix and absorption probabilities...
-Project results to all cells...
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;palantir_pseudotime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">palantir_res</span><span class="o">.</span><span class="n">pseudotime</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-    <span class="n">adata</span><span class="p">,</span>
-    <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;palantir_pseudotime&quot;</span><span class="p">,</span> <span class="s2">&quot;stage&quot;</span><span class="p">],</span>
-    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-    <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-    <span class="n">color_map</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;spliced&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">X</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;unspliced&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">X</span>
 
-<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">scv</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">moments</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_pcs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing moments based on connectivities
+    finished (0:00:37) --&gt; added 
+    &#39;Ms&#39; and &#39;Mu&#39;, moments of un/spliced abundances (adata.layers)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="cellrank">
+<h2>CellRank<a class="headerlink" href="#cellrank" title="Link to this heading">#</a></h2>
+<section id="kernel">
+<h3>Kernel<a class="headerlink" href="#kernel" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ctk</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">CytoTRACEKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">ctk</span><span class="o">.</span><span class="n">compute_cytotrace</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing CytoTRACE score with `19122` genes
+DEBUG: Correlating all genes with number of genes expressed per cell
+Adding `adata.obs[&#39;ct_score&#39;]`
+       `adata.obs[&#39;ct_pseudotime&#39;]`
+       `adata.obs[&#39;ct_num_exp_genes&#39;]`
+       `adata.var[&#39;ct_gene_corr&#39;]`
+       `adata.var[&#39;ct_correlates&#39;]`
+       `adata.uns[&#39;ct_params&#39;]`
+    Finish (0:00:01)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CytoTRACEKernel[n=31029]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;palantir_pseudotime&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gnuplot2&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span>
-    <span class="p">)</span>
-
-    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_palantir_pseudotime.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
-        <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
+        <span class="n">adata</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ct_pseudotime&quot;</span><span class="p">,</span> <span class="s2">&quot;stage&quot;</span><span class="p">],</span>
+        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
+        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+        <span class="n">color_map</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/0fb09e1f764cac9adf2fa52ea5b0519e74ef03ca60ba73715a309cc10ec71378.png" src="../../_images/0fb09e1f764cac9adf2fa52ea5b0519e74ef03ca60ba73715a309cc10ec71378.png" />
+<img alt="../../_images/315f1cfe0edbb89b1068bba9080b0ebca55773bd558092279e586ff9596274cd.png" src="../../_images/315f1cfe0edbb89b1068bba9080b0ebca55773bd558092279e586ff9596274cd.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[[</span><span class="s2">&quot;palantir_pseudotime&quot;</span><span class="p">,</span> <span class="s2">&quot;stage&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[[</span><span class="s2">&quot;ct_pseudotime&quot;</span><span class="p">,</span> <span class="s2">&quot;stage&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;palantir_pseudotime&quot;</span><span class="p">,</span>
-    <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;width&quot;</span><span class="p">,</span>
-    <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#440154&quot;</span><span class="p">,</span> <span class="s2">&quot;#3b528b&quot;</span><span class="p">,</span> <span class="s2">&quot;#21918c&quot;</span><span class="p">,</span> <span class="s2">&quot;#5ec962&quot;</span><span class="p">,</span> <span class="s2">&quot;#fde725&quot;</span><span class="p">],</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[])</span>
-
-    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;palantir_vs_stage.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
-        <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
+<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="s2">&quot;ct_pseudotime&quot;</span><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;width&quot;</span><span class="p">,</span>
+        <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#440154&quot;</span><span class="p">,</span> <span class="s2">&quot;#3b528b&quot;</span><span class="p">,</span> <span class="s2">&quot;#21918c&quot;</span><span class="p">,</span> <span class="s2">&quot;#5ec962&quot;</span><span class="p">,</span> <span class="s2">&quot;#fde725&quot;</span><span class="p">],</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
     <span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">reset_orig</span><span class="p">()</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">reset_orig</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/748911f190fc5faace3c705aa656ac3fd594e49d8d1b3847d00830cd3309ad85.png" src="../../_images/748911f190fc5faace3c705aa656ac3fd594e49d8d1b3847d00830cd3309ad85.png" />
+<img alt="../../_images/67e708e5ccb42bad26a396795b8df5d4361682649a84866e5d3b92d5e4f5a423.png" src="../../_images/67e708e5ccb42bad26a396795b8df5d4361682649a84866e5d3b92d5e4f5a423.png" />
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ctk</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">(</span><span class="n">threshold_scheme</span><span class="o">=</span><span class="s2">&quot;soft&quot;</span><span class="p">,</span> <span class="n">nu</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ctk</span><span class="o">.</span><span class="n">transition_matrix</span> <span class="o">=</span> <span class="n">ctk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing transition matrix based on pseudotime
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f181697a54c440a89f28536ae121d24c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:20)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="estimator">
+<h3>Estimator<a class="headerlink" href="#estimator" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">estimators</span><span class="o">.</span><span class="n">GPCCA</span><span class="p">(</span><span class="n">ctk</span><span class="p">)</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">compute_schur</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_spectrum</span><span class="p">(</span><span class="n">real_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Schur decomposition
+Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
+       `.schur_vectors`
+       `.schur_matrix`
+       `.eigendecomposition`
+    Finish (0:00:00)
+</pre></div>
+</div>
+<img alt="../../_images/508f7a7cf31d7664a61d053e4c85874d1d28dd95deabecc5cf9e229dbfaeeb6c.png" src="../../_images/508f7a7cf31d7664a61d053e4c85874d1d28dd95deabecc5cf9e229dbfaeeb6c.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">FIG_DIR</span>
+            <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span>
+            <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span>
+            <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_cytotrace_macrostates-initial_states.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>For 1 macrostate, stationary distribution is computed
+Computing eigendecomposition of the transition matrix
+DEBUG: Computing top `20` eigenvalues of a sparse matrix
+DEBUG: Sorting eigenvalues by their real part
+Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
+       `.eigendecomposition`
+    Finish (0:00:02)
+DEBUG: Setting the macrostates using macrostates memberships
+DEBUG: Raising an exception if there are less than `6` cells.
+Adding `.macrostates`
+       `.macrostates_memberships`
+       `.coarse_T`
+       `.coarse_initial_distribution
+       `.coarse_stationary_distribution`
+       `.schur_vectors`
+       `.schur_matrix`
+       `.eigendecomposition`
+    Finish (0:00:02)
+</pre></div>
+</div>
+<img alt="../../_images/ebb2a78ddc4c9de1b00d40081f3747889c0d220536fa4e79f77a8a08e14178af.png" src="../../_images/ebb2a78ddc4c9de1b00d40081f3747889c0d220536fa4e79f77a8a08e14178af.png" />
+</div>
+</div>
+</section>
 </section>
 </section>
 
@@ -724,20 +726,20 @@ Project results to all cells...
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="dpt.html"
+       href="cytotrace.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Diffusion pseudotime</p>
+        <p class="prev-next-title">Embryoid body development - CytoTRACE-based analysis</p>
       </div>
     </a>
     <a class="right-next"
-       href="../../realtime_kernel/mef/README.html"
+       href="dpt.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Analysis of mouse embryonic fibroblasts</p>
+        <p class="prev-next-title">Diffusion pseudotime</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -760,7 +762,12 @@ Project results to all cells...
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudotime-construction">Pseudotime construction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data preprocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank">CellRank</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimator">Estimator</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

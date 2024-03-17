@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>RNA velocity analysis on mouse embryonic fibroblasts &#8212; CellRank 2 reproducibility</title>
+    <title>Initial state identification for mouse embryonic fibroblasts &#8212; CellRank 2 reproducibility</title>
   
   
   
@@ -57,11 +57,11 @@
     <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'realtime_kernel/mef/rna_velocity';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'realtime_kernel/mef/initial_state';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="VelocityKernel vs. RealTimeKernel - TSI" href="cr1_vs_cr2.html" />
-    <link rel="prev" title="WOT-based analysis of mouse embryonic fibroblasts" href="wot.html" />
+    <link rel="next" title="Diffusion pseudotime on mouse embryonic fibroblasts" href="dpt.html" />
+    <link rel="prev" title="Real-time informed pseudotime on mouse embryonic fibroblasts" href="realtime_informed_pseudotime.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -197,11 +197,11 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="README.html">Analysis of mouse embryonic fibroblasts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="realtime_informed_pseudotime.html">Real-time informed pseudotime on mouse embryonic fibroblasts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="initial_state.html">Initial state identification for mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Initial state identification for mouse embryonic fibroblasts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dpt.html">Diffusion pseudotime on mouse embryonic fibroblasts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="palantir.html">Palantir pseudotime on mouse embryonic fibroblasts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wot.html">WOT-based analysis of mouse embryonic fibroblasts</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">RNA velocity analysis on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rna_velocity.html">RNA velocity analysis on mouse embryonic fibroblasts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cr1_vs_cr2.html">VelocityKernel vs. RealTimeKernel - TSI</a></li>
 </ul>
 </li>
@@ -299,7 +299,7 @@
       
       
       
-      <li><a href="../../_sources/realtime_kernel/mef/rna_velocity.ipynb" target="_blank"
+      <li><a href="../../_sources/realtime_kernel/mef/initial_state.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -383,7 +383,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>RNA velocity analysis on mouse embryonic fibroblasts</h1>
+    <h1>Initial state identification for mouse embryonic fibroblasts</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -397,12 +397,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-definitions">Function definitions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-pre-processing-and-rna-velocity-inference">Data pre-processing and RNA velocity inference</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank-analysis">CellRank analysis</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimator">Estimator</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-pre-processing">Data pre-processing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudotime-construction">Pseudotime construction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#terminal-state-estimation">Terminal state estimation</a></li>
 </ul>
             </nav>
         </div>
@@ -414,26 +411,21 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="rna-velocity-analysis-on-mouse-embryonic-fibroblasts">
-<h1>RNA velocity analysis on mouse embryonic fibroblasts<a class="headerlink" href="#rna-velocity-analysis-on-mouse-embryonic-fibroblasts" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="initial-state-identification-for-mouse-embryonic-fibroblasts">
+<h1>Initial state identification for mouse embryonic fibroblasts<a class="headerlink" href="#initial-state-identification-for-mouse-embryonic-fibroblasts" title="Link to this heading">#</a></h1>
 <section id="library-imports">
 <h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">load_npz</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">mplscience</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
 <span class="kn">import</span> <span class="nn">cellrank</span> <span class="k">as</span> <span class="nn">cr</span>
 <span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
 <span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
-<span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
-
-<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">running_in_notebook</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;../../../&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">])</span>
 <span class="kn">from</span> <span class="nn">paths</span> <span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>  <span class="c1"># isort: skip  # noqa: E402</span>
@@ -485,13 +477,6 @@ document.write(`
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N_JOBS</span> <span class="o">=</span> <span class="mi">8</span>
-</pre></div>
-</div>
-</div>
-</div>
 </section>
 <section id="function-definitions">
 <h2>Function definitions<a class="headerlink" href="#function-definitions" title="Link to this heading">#</a></h2>
@@ -500,35 +485,32 @@ document.write(`
 <h2>Data loading<a class="headerlink" href="#data-loading" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;mef_velo.h5ad&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">reprogramming_schiebinger</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="s2">&quot;reprogramming_schiebinger.h5ad&quot;</span><span class="p">)</span>
+<span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;serum&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;True&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;cell_sets_colors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_hex</span><span class="p">()[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_sets&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">)]</span>
+
 <span class="n">adata</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 236285 × 27998
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DEBUG: Loading dataset from `&#39;/vol/storage/philipp/code/cellrank2_reproducibility/data/mef/reprogramming_schiebinger.h5ad&#39;`
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 165892 × 19089
     obs: &#39;day&#39;, &#39;MEF.identity&#39;, &#39;Pluripotency&#39;, &#39;Cell.cycle&#39;, &#39;ER.stress&#39;, &#39;Epithelial.identity&#39;, &#39;ECM.rearrangement&#39;, &#39;Apoptosis&#39;, &#39;SASP&#39;, &#39;Neural.identity&#39;, &#39;Placental.identity&#39;, &#39;X.reactivation&#39;, &#39;XEN&#39;, &#39;Trophoblast&#39;, &#39;Trophoblast progenitors&#39;, &#39;Spiral Artery Trophpblast Giant Cells&#39;, &#39;Spongiotrophoblasts&#39;, &#39;Oligodendrocyte precursor cells (OPC)&#39;, &#39;Astrocytes&#39;, &#39;Cortical Neurons&#39;, &#39;RadialGlia-Id3&#39;, &#39;RadialGlia-Gdf10&#39;, &#39;RadialGlia-Neurog2&#39;, &#39;Long-term MEFs&#39;, &#39;Embryonic mesenchyme&#39;, &#39;Cxcl12 co-expressed&#39;, &#39;Ifitm1 co-expressed&#39;, &#39;Matn4 co-expressed&#39;, &#39;2-cell&#39;, &#39;4-cell&#39;, &#39;8-cell&#39;, &#39;16-cell&#39;, &#39;32-cell&#39;, &#39;cell_growth_rate&#39;, &#39;serum&#39;, &#39;2i&#39;, &#39;major_cell_sets&#39;, &#39;cell_sets&#39;, &#39;batch&#39;
+    var: &#39;highly_variable&#39;, &#39;TF&#39;
     uns: &#39;batch_colors&#39;, &#39;cell_sets_colors&#39;, &#39;day_colors&#39;, &#39;major_cell_sets_colors&#39;
     obsm: &#39;X_force_directed&#39;
-    layers: &#39;ambiguous&#39;, &#39;matrix&#39;, &#39;spliced&#39;, &#39;unspliced&#39;
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;serum&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;True&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-<span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;cell_sets_colors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_hex</span><span class="p">()[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_sets&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">)]</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;force_directed&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="s2">&quot;cell_sets&quot;</span><span class="p">],</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gnuplot&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;force_directed&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="s2">&quot;cell_sets&quot;</span><span class="p">],</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gnuplot&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -537,134 +519,270 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="data-pre-processing-and-rna-velocity-inference">
-<h2>Data pre-processing and RNA velocity inference<a class="headerlink" href="#data-pre-processing-and-rna-velocity-inference" title="Link to this heading">#</a></h2>
+<section id="data-pre-processing">
+<h2>Data pre-processing<a class="headerlink" href="#data-pre-processing" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_velo_fit.h5ad&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-    <span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_velo_fit.h5ad&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">scv</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_and_normalize</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">min_counts</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_top_genes</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
-
-    <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
-    <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="n">scv</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">moments</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_pcs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-
-    <span class="n">scv</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">recover_dynamics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">N_JOBS</span><span class="p">)</span>
-    <span class="n">scv</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;dynamical&quot;</span><span class="p">)</span>
-    <span class="n">adata</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_velo_fit.h5ad&quot;</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;gzip&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="cellrank-analysis">
-<h2>CellRank analysis<a class="headerlink" href="#cellrank-analysis" title="Link to this heading">#</a></h2>
-<section id="kernel">
-<h3>Kernel<a class="headerlink" href="#kernel" title="Link to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vk</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">VelocityKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">()</span>
-<span class="n">ck</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">ConnectivityKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">()</span>
-
-<span class="n">combined_kernel</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">vk</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">ck</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing transition matrix using `&#39;deterministic&#39;` model
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "98941a7dbb8f4e82b3aea05a2a83e204", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using `softmax_scale=4.4299`
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1dfeb59fc35f4cd2afcb9c648785203b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:01:29)
-Computing transition matrix based on `adata.obsp[&#39;connectivities&#39;]`
-DEBUG: Density normalizing the transition matrix
-    Finish (0:00:00)
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="estimator">
-<h2>Estimator<a class="headerlink" href="#estimator" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">estimators</span><span class="o">.</span><span class="n">GPCCA</span><span class="p">(</span><span class="n">combined_kernel</span><span class="p">)</span>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing PCA
+    on highly variable genes
+    with n_comps=50
+    finished (0:00:20)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_schur</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing neighbors
+    using &#39;X_pca&#39; with n_pcs = 50
+    finished (0:02:54)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="pseudotime-construction">
+<h2>Pseudotime construction<a class="headerlink" href="#pseudotime-construction" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rtk</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">RealTimeKernel</span><span class="o">.</span><span class="n">from_wot</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="s2">&quot;wot_tmaps&quot;</span><span class="p">,</span> <span class="n">time_key</span><span class="o">=</span><span class="s2">&quot;day&quot;</span><span class="p">)</span>
+<span class="n">rtk</span><span class="o">.</span><span class="n">transition_matrix</span> <span class="o">=</span> <span class="n">load_npz</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="s2">&quot;transition_matrices&quot;</span> <span class="o">/</span> <span class="s2">&quot;all_connectivities.npz&quot;</span><span class="p">)</span>
+<span class="n">rtk</span><span class="o">.</span><span class="n">transition_matrix</span> <span class="o">=</span> <span class="n">rtk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Your filename has more than two extensions: [&#39;.5_3&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_3&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_16&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_16&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_13&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_13&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_2&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_2&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_7&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_7&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_12&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_12&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_14&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_14&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_15&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_15&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_10&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_10&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_13&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_13&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_1&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_1&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_0&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_0&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_1&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_1&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_5&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_5&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_4&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_4&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_12&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_12&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_15&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_15&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_17&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_17&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_14&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_14&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_18&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_18&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_10&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_10&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_8&#39;, &#39;.75&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.75&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_8&#39;, &#39;.75&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.75&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_7&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_7&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_4&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_4&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.75_9&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.75_9&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_16&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_16&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_6&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_6&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_8&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_8&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_3&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_3&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_11&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_11&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_9&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_9&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_2&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_2&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_17&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_17&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_6&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_6&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_5&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.5_5&#39;, &#39;.0&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.0&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.25_8&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.25_8&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_11&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_11&#39;, &#39;.5&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_8&#39;, &#39;.25&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.25&#39;, &#39;.h5ad&#39;].
+WARNING: Your filename has more than two extensions: [&#39;.0_8&#39;, &#39;.25&#39;, &#39;.h5ad&#39;].
+Only considering the two last: [&#39;.25&#39;, &#39;.h5ad&#39;].
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="terminal-state-estimation">
+<h2>Terminal state estimation<a class="headerlink" href="#terminal-state-estimation" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">estimators</span><span class="o">.</span><span class="n">GPCCA</span><span class="p">(</span><span class="n">rtk</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_schur</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">estimator</span><span class="o">.</span><span class="n">plot_spectrum</span><span class="p">(</span><span class="n">real_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Schur decomposition
-When computing macrostates, choose a number of states NOT in `[6, 13]`
 Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:00:11)
+    Finish (0:00:10)
 </pre></div>
 </div>
-<img alt="../../_images/88b0075704724472fb64e1bc42ed59e10b86ed5f2c75ca1c0fa2fa3be34263ce.png" src="../../_images/88b0075704724472fb64e1bc42ed59e10b86ed5f2c75ca1c0fa2fa3be34263ce.png" />
+<img alt="../../_images/385014fbcf096d63293a9d00bf33c8eb73c4ced41fb85abf46a40f901da936d1.png" src="../../_images/385014fbcf096d63293a9d00bf33c8eb73c4ced41fb85abf46a40f901da936d1.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">terminal_states</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Neural&quot;</span><span class="p">,</span> <span class="s2">&quot;IPS&quot;</span><span class="p">,</span> <span class="s2">&quot;Trophoblast&quot;</span><span class="p">,</span> <span class="s2">&quot;Stromal&quot;</span><span class="p">]</span>
-<span class="n">cluster_key</span> <span class="o">=</span> <span class="s2">&quot;cell_sets&quot;</span>
-
-<span class="k">if</span> <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-vk.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-    <span class="n">tsi_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-vk.csv&quot;</span><span class="p">)</span>
-    <span class="n">estimator</span><span class="o">.</span><span class="n">_tsi</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">tsi_df</span><span class="p">,</span> <span class="n">uns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">:</span> <span class="n">terminal_states</span><span class="p">,</span> <span class="s2">&quot;cluster_key&quot;</span><span class="p">:</span> <span class="n">cluster_key</span><span class="p">})</span>
-    <span class="n">tsi_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">tsi</span><span class="p">(</span><span class="n">n_macrostates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">terminal_states</span><span class="o">=</span><span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="n">cluster_key</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">tsi_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">tsi</span><span class="p">(</span><span class="n">n_macrostates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">terminal_states</span><span class="o">=</span><span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="n">cluster_key</span><span class="p">)</span>
-    <span class="n">estimator</span><span class="o">.</span><span class="n">_tsi</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-vk.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TSI score: </span><span class="si">{</span><span class="n">tsi_score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="n">n_states</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;cell_sets&quot;</span><span class="p">)</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;force_directed&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TSI score: 0.79
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>For 1 macrostate, stationary distribution is computed
+Computing eigendecomposition of the transition matrix
+DEBUG: Computing top `20` eigenvalues of a sparse matrix
+DEBUG: Sorting eigenvalues by their real part
+Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
+       `.eigendecomposition`
+    Finish (0:01:09)
+DEBUG: Setting the macrostates using macrostates memberships
+DEBUG: Raising an exception if there are less than `6` cells.
+Adding `.macrostates`
+       `.macrostates_memberships`
+       `.coarse_T`
+       `.coarse_initial_distribution
+       `.coarse_stationary_distribution`
+       `.schur_vectors`
+       `.schur_matrix`
+       `.eigendecomposition`
+    Finish (0:01:09)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/cr2-py38/lib/python3.8/site-packages/anndata/_core/anndata.py:121: ImplicitModificationWarning: Transforming to str index.
-  warnings.warn(&quot;Transforming to str index.&quot;, ImplicitModificationWarning)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For nice name in figure legend</span>
-<span class="n">estimator</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;VelocityKernel&quot;</span>
-<span class="n">palette</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;VelocityKernel&quot;</span><span class="p">:</span> <span class="s2">&quot;#0173b2&quot;</span><span class="p">,</span> <span class="s2">&quot;Optimal identification&quot;</span><span class="p">:</span> <span class="s2">&quot;#000000&quot;</span><span class="p">}</span>
-
-<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;mef&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;tsi-vk.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="k">with</span> <span class="n">mplscience</span><span class="o">.</span><span class="n">style_context</span><span class="p">():</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
-    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_tsi</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../../_images/af7838c272b029612c709f12ca2d749ec585b6b57a7b93ec4f9f5c4d57b1aa45.png" src="../../_images/af7838c272b029612c709f12ca2d749ec585b6b57a7b93ec4f9f5c4d57b1aa45.png" />
+<img alt="../../_images/56d5c8f5b8eb912b328c5d506750a4fc43bf3254a21f523afff83db1e6b60a8e.png" src="../../_images/56d5c8f5b8eb912b328c5d506750a4fc43bf3254a21f523afff83db1e6b60a8e.png" />
 </div>
 </div>
 </section>
@@ -701,20 +819,20 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="wot.html"
+       href="realtime_informed_pseudotime.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">WOT-based analysis of mouse embryonic fibroblasts</p>
+        <p class="prev-next-title">Real-time informed pseudotime on mouse embryonic fibroblasts</p>
       </div>
     </a>
     <a class="right-next"
-       href="cr1_vs_cr2.html"
+       href="dpt.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">VelocityKernel vs. RealTimeKernel - TSI</p>
+        <p class="prev-next-title">Diffusion pseudotime on mouse embryonic fibroblasts</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -738,12 +856,9 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-definitions">Function definitions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-pre-processing-and-rna-velocity-inference">Data pre-processing and RNA velocity inference</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cellrank-analysis">CellRank analysis</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimator">Estimator</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-pre-processing">Data pre-processing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudotime-construction">Pseudotime construction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#terminal-state-estimation">Terminal state estimation</a></li>
 </ul>
   </nav></div>
 
