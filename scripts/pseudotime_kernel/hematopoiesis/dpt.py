@@ -4,7 +4,6 @@
 # Construct diffusion pseudotime on NeurIPS 2021 hematopoiesis data.
 
 # %%
-import os
 import sys
 
 import numpy as np
@@ -19,7 +18,7 @@ import scanpy as sc
 import scvelo as scv
 from anndata import AnnData
 
-from cr2 import get_state_purity, plot_state_purity, plot_states, running_in_notebook
+from cr2 import get_state_purity, plot_state_purity, running_in_notebook
 
 sys.path.extend(["../../../", "."])
 from paths import DATA_DIR, FIG_DIR  # isort: skip  # noqa: E402
@@ -38,11 +37,12 @@ scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True,
 # %%
 SAVE_FIGURES = False
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "pseudotime_kernel" / "hematopoiesis", exist_ok=True)
+    (FIG_DIR / "pseudotime_kernel" / "hematopoiesis").mkdir(parents=True, exist_ok=True)
+
 FIGURE_FORMAT = "pdf"
 
 # %%
-os.makedirs(DATA_DIR / "hematopoiesis" / "results", exist_ok=True)
+(DATA_DIR / "hematopoiesis" / "results").mkdir(parents=True, exist_ok=True)
 
 # %% [markdown]
 # ## Constants
@@ -77,8 +77,8 @@ if SAVE_FIGURES:
     scv.pl.scatter(adata, basis="X_umap", c="l2_cell_type", legend_loc="none", title="", ax=ax)
 
     fig.savefig(
-        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "umap_colored_by_l2_cell_type_full_data.eps",
-        format="eps",
+        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"umap_colored_by_l2_cell_type_full_data.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -111,8 +111,11 @@ if SAVE_FIGURES:
     scv.pl.scatter(adata, basis="X_umap", c="l2_cell_type", legend_loc="none", title="", ax=ax)
 
     fig.savefig(
-        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "umap_colored_by_l2_cell_type_subsetted_data.eps",
-        format="eps",
+        FIG_DIR
+        / "pseudotime_kernel"
+        / "hematopoiesis"
+        / f"umap_colored_by_l2_cell_type_subsetted_data.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -126,8 +129,8 @@ if running_in_notebook():
 
 if SAVE_FIGURES:
     fig.savefig(
-        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "umap_with_knn_graph.pdf",
-        format="pdf",
+        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"umap_with_knn_graph.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
         dpi=400,
@@ -153,8 +156,8 @@ if running_in_notebook():
         )
 
         fig.savefig(
-            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "diffmap_dc4_vs_dc5_colored_by_celltype.eps",
-            format="eps",
+            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"diffmap_dc4_vs_dc5_colored_by_celltype.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
         )
@@ -210,8 +213,8 @@ if SAVE_FIGURES:
     )
 
     fig.savefig(
-        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "diffmap_dc4_vs_dc5_hsc_outlined.pdf",
-        format="pdf",
+        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"diffmap_dc4_vs_dc5_hsc_outlined.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
         dpi=400,
@@ -240,8 +243,8 @@ if running_in_notebook():
 
     if SAVE_FIGURES:
         fig.savefig(
-            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "diffmap_dc4_vs_dc5_pseudotime_root_id.eps",
-            format="pdf",
+            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"diffmap_dc4_vs_dc5_pseudotime_root_id.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
         )
@@ -257,8 +260,8 @@ if running_in_notebook():
 
     if SAVE_FIGURES:
         fig.savefig(
-            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "umap_pseudotime_root_id.eps",
-            format="eps",
+            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"umap_pseudotime_root_id.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
         )
@@ -273,8 +276,8 @@ if SAVE_FIGURES:
     scv.pl.scatter(adata, basis="umap", color="dpt_pseudotime", title="", color_map="viridis", colorbar=False, ax=ax)
 
     fig.savefig(
-        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "umap_colored_by_dpt_pseudotime.eps",
-        format="eps",
+        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"umap_colored_by_dpt_pseudotime.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -334,8 +337,8 @@ if SAVE_FIGURES:
     sns.reset_orig()
 
     fig.savefig(
-        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "dpt_per_cell_type.eps",
-        format="eps",
+        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"dpt_per_cell_type.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -367,8 +370,8 @@ if running_in_notebook():
         )
 
         fig.savefig(
-            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "dpt_stream.png",
-            format="png",
+            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"dpt_stream.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
             dpi=400,
@@ -385,17 +388,8 @@ plt.show()
 
 # %%
 estimator.compute_macrostates(3, cluster_key="l2_cell_type")
-
 if running_in_notebook():
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="macrostates",
-        basis="umap",
-        legend_loc="right",
-        title="",
-        size=100,
-    )
+    estimator.plot_macrostates(which="all", basis="umap", title="", legend_loc="right", size=100)
 
 # %%
 terminal_states = ["CD14+ Mono", "Normoblast", "cDC2", "pDC"]
@@ -426,31 +420,11 @@ with mplscience.style_context():
 
 # %%
 estimator.compute_macrostates(6, cluster_key="l2_cell_type")
-
 if running_in_notebook():
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="macrostates",
-        basis="umap",
-        legend_loc="right",
-        title="",
-        size=100,
-    )
-
-if SAVE_FIGURES:
-    fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "umap_colored_by_cr_dpt_macrostates.pdf"
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="macrostates",
-        basis="umap",
-        legend_loc=False,
-        title="",
-        size=100,
-        fpath=fpath,
-        format="pdf",
-    )
+    estimator.plot_macrostates(which="all", basis="umap", title="", legend_loc="right", size=100)
+    if SAVE_FIGURES:
+        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"umap_colored_by_cr_dpt_macrostates.{FIGURE_FORMAT}"
+        estimator.plot_macrostates(which="all", basis="umap", title="", legend_loc=False, size=100, save=fpath)
 
 # %%
 macrostate_purity = get_state_purity(adata, estimator, states="macrostates", obs_col="l2_cell_type")
@@ -458,44 +432,24 @@ print(f"Mean purity: {np.mean(list(macrostate_purity.values()))}")
 
 if running_in_notebook():
     if SAVE_FIGURES:
-        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "dpt_macrostate_purity.pdf"
+        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"dpt_macrostate_purity.{FIGURE_FORMAT}"
     else:
         fpath = None
 
     palette = dict(zip(estimator.macrostates.cat.categories, estimator._macrostates.colors))
 
-    plot_state_purity(macrostate_purity, palette=palette, fpath=fpath, format="eps")
+    plot_state_purity(macrostate_purity, palette=palette, fpath=fpath, format=FIGURE_FORMAT)
     plt.show()
 
 # %%
 estimator.set_terminal_states(["pDC", "cDC2", "CD14+ Mono", "Normoblast"])
-
 if running_in_notebook():
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="terminal_states",
-        basis="umap",
-        legend_loc="right",
-        title="",
-        size=100,
-        fpath=fpath,
-        format="pdf",
-    )
-
-if SAVE_FIGURES:
-    fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "umap_colored_by_cr_dpt_terminal_states.pdf"
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="terminal_states",
-        basis="umap",
-        legend_loc=False,
-        title="",
-        size=100,
-        fpath=fpath,
-        format="pdf",
-    )
+    estimator.plot_macrostates(which="terminal", basis="umap", title="", legend_loc="right", size=100)
+    if SAVE_FIGURES:
+        fpath = (
+            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"umap_colored_by_cr_dpt_terminal_states.{FIGURE_FORMAT}"
+        )
+        estimator.plot_macrostates(which="terminal", basis="umap", title="", legend_loc=False, size=100, save=fpath)
 
 # %%
 terminal_state_purity = get_state_purity(adata, estimator, states="terminal_states", obs_col="l2_cell_type")
@@ -503,7 +457,7 @@ print(f"Mean purity: {np.mean(list(macrostate_purity.values()))}")
 
 if running_in_notebook():
     if SAVE_FIGURES:
-        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "dpt_terminal_states_purity.pdf"
+        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"dpt_terminal_states_purity.{FIGURE_FORMAT}"
     else:
         fpath = None
 
@@ -514,7 +468,7 @@ if running_in_notebook():
         palette=palette,
         order=["pDC", "cDC2", "CD14+ Mono", "Normoblast"],
         fpath=fpath,
-        format="eps",
+        format=FIGURE_FORMAT,
     )
     plt.show()
 
@@ -544,8 +498,8 @@ if SAVE_FIGURES:
             )
 
             fig.savefig(
-                FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"dpt_fate_prob_{terminal_state}.eps",
-                format="eps",
+                FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"dpt_fate_prob_{terminal_state}.{FIGURE_FORMAT}",
+                format=FIGURE_FORMAT,
                 transparent=True,
                 bbox_inches="tight",
             )
@@ -553,7 +507,7 @@ if SAVE_FIGURES:
 # %%
 if running_in_notebook():
     if SAVE_FIGURES:
-        fname = f"{FIG_DIR}/pseudotime_kernel/hematopoiesis/umap_colored_by_dpt_fate.pdf"
+        fname = f"{FIG_DIR}/pseudotime_kernel/hematopoiesis/umap_colored_by_dpt_fate.{FIGURE_FORMAT}"
     else:
         fname = False
     fig, ax = plt.subplots(figsize=(6, 4))
@@ -582,7 +536,7 @@ if running_in_notebook():
 model = cr.models.GAM(adata)
 
 if SAVE_FIGURES:
-    save = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "gene_trend_runx2.pdf"
+    save = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"gene_trend_runx2.{FIGURE_FORMAT}"
 else:
     save = None
 cr.pl.gene_trends(
@@ -600,7 +554,7 @@ plt.show()
 
 
 if SAVE_FIGURES:
-    save = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "gene_trend_tcf4.pdf"
+    save = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"gene_trend_tcf4.{FIGURE_FORMAT}"
 else:
     save = None
 cr.pl.gene_trends(
