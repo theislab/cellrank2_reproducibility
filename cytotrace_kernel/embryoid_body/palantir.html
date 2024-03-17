@@ -402,8 +402,7 @@ document.write(`
 <h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -461,7 +460,9 @@ Global seed set to 0
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">FIGURE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -629,8 +630,8 @@ Project results to all cells...
     <span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_palantir_pseudotime.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_palantir_pseudotime.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -664,8 +665,8 @@ Project results to all cells...
     <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[])</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;palantir_vs_stage.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;palantir_vs_stage.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>

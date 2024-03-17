@@ -409,8 +409,7 @@ document.write(`
 <h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -422,7 +421,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
 <span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
 
-<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">get_state_purity</span><span class="p">,</span> <span class="n">plot_state_purity</span><span class="p">,</span> <span class="n">plot_states</span><span class="p">,</span> <span class="n">running_in_notebook</span>
+<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">get_state_purity</span><span class="p">,</span> <span class="n">plot_state_purity</span><span class="p">,</span> <span class="n">running_in_notebook</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;../../../&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">])</span>
 <span class="kn">from</span> <span class="nn">paths</span> <span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>  <span class="c1"># isort: skip  # noqa: E402</span>
@@ -458,7 +457,9 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">FIGURE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -494,8 +495,8 @@ document.write(`
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
     <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_stage.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_stage.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -515,8 +516,8 @@ document.write(`
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
     <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_cell_type.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_cell_type.</span><span class="si">{FIGURE_FORMAT}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -541,7 +542,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing moments based on connectivities
-    finished (0:00:37) --&gt; added 
+    finished (0:00:38) --&gt; added 
     &#39;Ms&#39; and &#39;Mu&#39;, moments of un/spliced abundances (adata.layers)
 </pre></div>
 </div>
@@ -594,8 +595,8 @@ Adding `adata.obs[&#39;ct_score&#39;]`
     <span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_ct_pseudotime.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_ct_pseudotime.</span><span class="si">{FIGURE_FORMAT}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -641,8 +642,8 @@ Adding `adata.obs[&#39;ct_score&#39;]`
     <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[])</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_vs_stage.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;cytotrace_vs_stage.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -664,7 +665,7 @@ Adding `adata.obs[&#39;ct_score&#39;]`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing transition matrix based on pseudotime
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8352c580bc0d45faaf87687e986ba13e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:19)
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "46be63ff573340b98f559d94418b3b3e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:20)
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CytoTRACEKernel[n=31029, dnorm=False, scheme=&#39;soft&#39;, b=10.0, nu=0.5]
@@ -691,7 +692,7 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:00:02)
+    Finish (0:00:01)
 </pre></div>
 </div>
 <img alt="../../_images/dce1da19125619180a796478740f8a0afc9ad98daae294c6aad51c8fb01f8a1b.png" src="../../_images/dce1da19125619180a796478740f8a0afc9ad98daae294c6aad51c8fb01f8a1b.png" />
@@ -702,29 +703,12 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_cytotrace_macrostates.pdf&quot;</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_cytotrace_macrostates.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -740,10 +724,10 @@ Adding `.macrostates`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:07:40)
+    Finish (0:08:27)
 </pre></div>
 </div>
-<img alt="../../_images/1044227d82e41b65ea07dfc64bee32356c38d240c0aedcfc0cfde81eaa0c9bdd.png" src="../../_images/1044227d82e41b65ea07dfc64bee32356c38d240c0aedcfc0cfde81eaa0c9bdd.png" />
+<img alt="../../_images/344da473ef0c9bc0ae392e1c319f7fc85ba3329457b27198ed4f7638aafd30af.png" src="../../_images/344da473ef0c9bc0ae392e1c319f7fc85ba3329457b27198ed4f7638aafd30af.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -753,13 +737,13 @@ Adding `.macrostates`
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_macrostate_purity.pdf&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;cytotrace_macrostate_purity.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">estimator</span><span class="o">.</span><span class="n">macrostates</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">_macrostates</span><span class="o">.</span><span class="n">colors</span><span class="p">))</span>
 
-    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">)</span>
+    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -790,31 +774,15 @@ Adding `.macrostates`
 <span class="p">)</span>
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_cytotrace_terminal_states.pdf&quot;</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">FIG_DIR</span>
+            <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span>
+            <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span>
+            <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_cytotrace_terminal_states.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -828,7 +796,7 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
     Finish`
 </pre></div>
 </div>
-<img alt="../../_images/dd794b586a63685434f5ccee8a782aeb23eb905205018ceca62a390f66198ed6.png" src="../../_images/dd794b586a63685434f5ccee8a782aeb23eb905205018ceca62a390f66198ed6.png" />
+<img alt="../../_images/a62fa720eb885496b12078a9ee34598f087d641f4ff691981a7d5426290093e5.png" src="../../_images/a62fa720eb885496b12078a9ee34598f087d641f4ff691981a7d5426290093e5.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -838,7 +806,7 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_terminal_states_purity.pdf&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;cytotrace_terminal_states_purity.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -849,7 +817,7 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
         <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span>
         <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;EN-1_1&quot;</span><span class="p">,</span> <span class="s2">&quot;Posterior EN_1&quot;</span><span class="p">,</span> <span class="s2">&quot;NC&quot;</span><span class="p">,</span> <span class="s2">&quot;NS-1&quot;</span><span class="p">,</span> <span class="s2">&quot;NS-2&quot;</span><span class="p">,</span> <span class="s2">&quot;NS-3&quot;</span><span class="p">,</span> <span class="s2">&quot;NE-1/NS-5&quot;</span><span class="p">,</span> <span class="s2">&quot;SMPs_1&quot;</span><span class="p">,</span> <span class="s2">&quot;EPs&quot;</span><span class="p">,</span> <span class="s2">&quot;Hemangioblast&quot;</span><span class="p">],</span>
         <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -885,8 +853,11 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
             <span class="p">)</span>
 
             <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-                <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_fate_prob_</span><span class="si">{terminal_state}</span><span class="s2">.eps&quot;</span><span class="p">,</span>
-                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+                <span class="n">FIG_DIR</span>
+                <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span>
+                <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span>
+                <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;cytotrace_fate_prob_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
                 <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
             <span class="p">)</span>
@@ -898,18 +869,14 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
 DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` core(s) with no preconditioner and `tol=1e-07`
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a3e2f101a90e4c1f929e22aada4bfb83", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "60a57f1740ee489c9e50558a58bd4e68", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
        `.fate_probabilities`
     Finish (0:00:02)
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
 [0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
-[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
-[0]PETSC ERROR: or see https://petsc.org/release/faq/#valgrind and https://petsc.org/release/faq/
-[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
-[0]PETSC ERROR: to get more information on the crash.
-Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 59) - process 0
+[0]PETSC ERROR: 
 </pre></div>
 </div>
 <img alt="../../_images/60e41183b07fb26067644b68b4a3e69e7681a2b3d651624c6c95773b345a7988.png" src="../../_images/60e41183b07fb26067644b68b4a3e69e7681a2b3d651624c6c95773b345a7988.png" />
@@ -948,8 +915,8 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
         <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">var_name</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_</span><span class="si">{</span><span class="n">var_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">.eps&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_</span><span class="si">{</span><span class="n">var_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="p">)</span>
@@ -984,7 +951,7 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">GAM</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">save</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="s2">&quot;heatmap_en_1_lineage.pdf&quot;</span>
+    <span class="n">save</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;cytotrace_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;embryoid_body&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;heatmap_en_1_lineage.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">save</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1007,12 +974,17 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing trends using `1` core(s)
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "efc4c16bc24b4890aea73c5d9b5325c0", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:11)
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f79322b1fb0845f8a9863066c50173ba", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:11)
 DEBUG: Plotting `&#39;lineages&#39;` heatmap
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
 [0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
+[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[0]PETSC ERROR: or see https://petsc.org/release/faq/#valgrind and https://petsc.org/release/faq/
+[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[0]PETSC ERROR: to get more information on the crash.
+Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 59) - process 0
 </pre></div>
 </div>
 <img alt="../../_images/af29b205d7e3597648c67f5fc27c324b6f81b5dbef9ddb331132e6215142f1bf.png" src="../../_images/af29b205d7e3597648c67f5fc27c324b6f81b5dbef9ddb331132e6215142f1bf.png" />
