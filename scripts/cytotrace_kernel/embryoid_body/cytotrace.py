@@ -7,7 +7,6 @@
 # ## Library imports
 
 # %%
-import os
 import sys
 
 import numpy as np
@@ -20,7 +19,7 @@ import cellrank as cr
 import scanpy as sc
 import scvelo as scv
 
-from cr2 import get_state_purity, plot_state_purity, plot_states, running_in_notebook
+from cr2 import get_state_purity, plot_state_purity, running_in_notebook
 
 sys.path.extend(["../../../", "."])
 from paths import DATA_DIR, FIG_DIR  # isort: skip  # noqa: E402
@@ -39,7 +38,9 @@ scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True,
 # %%
 SAVE_FIGURES = False
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "cytotrace_kernel" / "embryoid_body", exist_ok=True)
+    (FIG_DIR / "cytotrace_kernel" / "embryoid_body").mkdir(parents=True, exist_ok=True)
+
+FIGURE_FORMAT = "pdf"
 
 # %% [markdown]
 # ## Data loading
@@ -56,8 +57,8 @@ if SAVE_FIGURES:
     fig, ax = plt.subplots(figsize=(6, 4))
     scv.pl.scatter(adata, basis="umap", c="stage", title="", legend_loc=False, palette="viridis", ax=ax)
     fig.savefig(
-        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "umap_colored_by_stage.eps",
-        format="eps",
+        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / f"umap_colored_by_stage.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -70,8 +71,8 @@ if SAVE_FIGURES:
     fig, ax = plt.subplots(figsize=(6, 4))
     scv.pl.scatter(adata, basis="umap", c="cell_type", title="", legend_loc=False, ax=ax)
     fig.savefig(
-        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "umap_colored_by_cell_type.eps",
-        format="eps",
+        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "umap_colored_by_cell_type.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -112,8 +113,8 @@ if SAVE_FIGURES:
     )
 
     fig.savefig(
-        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "umap_colored_by_ct_pseudotime.eps",
-        format="eps",
+        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "umap_colored_by_ct_pseudotime.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -152,8 +153,8 @@ if SAVE_FIGURES:
     ax.set(xlabel=None, xticklabels=[], ylabel=None, yticklabels=[])
 
     fig.savefig(
-        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "cytotrace_vs_stage.eps",
-        format="eps",
+        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / f"cytotrace_vs_stage.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -176,29 +177,12 @@ if running_in_notebook():
 estimator.compute_macrostates(20, cluster_key="cell_type")
 
 if running_in_notebook():
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="macrostates",
-        basis="umap",
-        legend_loc="right",
-        title="",
-        size=100,
-    )
-
-if SAVE_FIGURES:
-    fpath = FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "umap_colored_by_cytotrace_macrostates.pdf"
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="macrostates",
-        basis="umap",
-        legend_loc=False,
-        title="",
-        size=100,
-        fpath=fpath,
-        format="pdf",
-    )
+    estimator.plot_macrostates(which="all", basis="umap", legend_loc="right", title="", size=100)
+    if SAVE_FIGURES:
+        fpath = (
+            FIG_DIR / "cytotrace_kernel" / "embryoid_body" / f"umap_colored_by_cytotrace_macrostates.{FIGURE_FORMAT}"
+        )
+        estimator.plot_macrostates(which="all", basis="umap", title="", legend_loc=False, size=100, save=fpath)
 
 # %%
 macrostate_purity = get_state_purity(adata, estimator, states="macrostates", obs_col="cell_type")
@@ -206,13 +190,13 @@ print(f"Mean purity: {np.mean(list(macrostate_purity.values()))}")
 
 if running_in_notebook():
     if SAVE_FIGURES:
-        fpath = FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "cytotrace_macrostate_purity.pdf"
+        fpath = FIG_DIR / "cytotrace_kernel" / "embryoid_body" / f"cytotrace_macrostate_purity.{FIGURE_FORMAT}"
     else:
         fpath = None
 
     palette = dict(zip(estimator.macrostates.cat.categories, estimator._macrostates.colors))
 
-    plot_state_purity(macrostate_purity, palette=palette, fpath=fpath, format="eps")
+    plot_state_purity(macrostate_purity, palette=palette, fpath=fpath, format=FIGURE_FORMAT)
     plt.show()
 
 # %%
@@ -233,31 +217,15 @@ estimator.set_terminal_states(
 )
 
 if running_in_notebook():
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="terminal_states",
-        basis="umap",
-        legend_loc="right",
-        title="",
-        size=100,
-        fpath=fpath,
-        format="pdf",
-    )
-
-if SAVE_FIGURES:
-    fpath = FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "umap_colored_by_cytotrace_terminal_states.pdf"
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="terminal_states",
-        basis="umap",
-        legend_loc=False,
-        title="",
-        size=100,
-        fpath=fpath,
-        format="pdf",
-    )
+    estimator.plot_macrostates(which="terminal", basis="umap", legend_loc="right", title="", size=100)
+    if SAVE_FIGURES:
+        fpath = (
+            FIG_DIR
+            / "cytotrace_kernel"
+            / "embryoid_body"
+            / f"umap_colored_by_cytotrace_terminal_states.{FIGURE_FORMAT}"
+        )
+        estimator.plot_macrostates(which="terminal", basis="umap", title="", legend_loc=False, size=100, save=fpath)
 
 # %%
 macrostate_purity = get_state_purity(adata, estimator, states="terminal_states", obs_col="cell_type")
@@ -265,7 +233,7 @@ print(f"Mean purity: {np.mean(list(macrostate_purity.values()))}")
 
 if running_in_notebook():
     if SAVE_FIGURES:
-        fpath = FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "cytotrace_terminal_states_purity.pdf"
+        fpath = FIG_DIR / "cytotrace_kernel" / "embryoid_body" / f"cytotrace_terminal_states_purity.{FIGURE_FORMAT}"
     else:
         fpath = None
 
@@ -276,7 +244,7 @@ if running_in_notebook():
         palette=palette,
         order=["EN-1_1", "Posterior EN_1", "NC", "NS-1", "NS-2", "NS-3", "NE-1/NS-5", "SMPs_1", "EPs", "Hemangioblast"],
         fpath=fpath,
-        format="eps",
+        format=FIGURE_FORMAT,
     )
     plt.show()
 
@@ -302,8 +270,11 @@ if SAVE_FIGURES:
             )
 
             fig.savefig(
-                FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "cytotrace_fate_prob_{terminal_state}.eps",
-                format="eps",
+                FIG_DIR
+                / "cytotrace_kernel"
+                / "embryoid_body"
+                / f"cytotrace_fate_prob_{terminal_state}.{FIGURE_FORMAT}",
+                format=FIGURE_FORMAT,
                 transparent=True,
                 bbox_inches="tight",
             )
@@ -327,8 +298,8 @@ if SAVE_FIGURES:
         scv.pl.scatter(adata, basis="umap", color=var_name, ax=ax)
 
         fig.savefig(
-            FIG_DIR / "cytotrace_kernel" / "embryoid_body" / f"umap_colored_by_{var_name.lower()}.eps",
-            format="eps",
+            FIG_DIR / "cytotrace_kernel" / "embryoid_body" / f"umap_colored_by_{var_name.lower()}.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
         )
@@ -350,7 +321,7 @@ print(f"Number of TFs in top 50 genes: {n_top_genes_tfs}")
 model = cr.models.GAM(adata)
 
 if SAVE_FIGURES:
-    save = FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "heatmap_en_1_lineage.pdf"
+    save = FIG_DIR / "cytotrace_kernel" / "embryoid_body" / f"heatmap_en_1_lineage.{FIGURE_FORMAT}"
 else:
     save = None
 
