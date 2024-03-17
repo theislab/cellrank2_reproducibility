@@ -5,7 +5,6 @@
 # ## Library imports
 
 # %%
-import os
 import sys
 
 import matplotlib.pyplot as plt
@@ -30,7 +29,9 @@ scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True,
 # %%
 SAVE_FIGURES = False
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "cytotrace_kernel" / "embryoid_body", exist_ok=True)
+    (FIG_DIR / "cytotrace_kernel" / "embryoid_body").mkdir(parents=True, exist_ok=True)
+
+FIGURE_FORMAT = "pdf"
 
 # %% [markdown]
 # ## Data loading
@@ -77,8 +78,8 @@ if SAVE_FIGURES:
     )
 
     fig.savefig(
-        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "umap_colored_by_dpt_pseudotime.eps",
-        format="eps",
+        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / f"umap_colored_by_dpt_pseudotime.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
@@ -105,8 +106,8 @@ if SAVE_FIGURES:
     ax.set(xlabel=None, xticklabels=[], ylabel=None, yticklabels=[])
 
     fig.savefig(
-        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / "dpt_vs_stage.eps",
-        format="eps",
+        FIG_DIR / "cytotrace_kernel" / "embryoid_body" / f"dpt_vs_stage.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
     )
