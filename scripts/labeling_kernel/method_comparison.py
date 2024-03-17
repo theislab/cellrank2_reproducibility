@@ -8,6 +8,7 @@
 import os
 import sys
 from itertools import chain, product
+from typing import Dict, Optional
 
 import numpy as np
 import pandas as pd
@@ -108,11 +109,19 @@ def get_gene_ranks():
             .drop_duplicates(subset=["Gene", "Algorithm"])[["Gene", f"Corr. rank - {terminal_state}", "Algorithm"]]
         )
 
-        gene_ranks[terminal_state].replace({"EM Model": "scVelo"}, inplace=True)
+        # gene_ranks[terminal_state].replace({"EM Model": "scVelo"}, inplace=True)
+        gene_ranks[terminal_state].replace(
+            {"CR2": "CellRank 2 (transcription rate)", "CR2 - GEX": "CellRank 2 (GEX)", "EM Model": "CellRank 1"},
+            inplace=True,
+        )
 
         # Random rank assignment
         np.random.seed(0)
-        var_names = gene_ranks[terminal_state].loc[gene_ranks[terminal_state]["Algorithm"] == "CR2", "Gene"].unique()
+        var_names = (
+            gene_ranks[terminal_state]
+            .loc[gene_ranks[terminal_state]["Algorithm"] == "CellRank 2 (transcription rate)", "Gene"]
+            .unique()
+        )
         random_ranking = pd.DataFrame(
             {
                 "Gene": var_names,
@@ -168,15 +177,16 @@ def get_rank_threshold(gene_ranks, n_methods):
 
 
 # %%
-def plot_gene_ranking(rank_threshold, methods, fname: str = ""):
+def plot_gene_ranking(rank_threshold, methods, fname: str = "", palette: Optional[Dict[str, str]] = None):
     """Plots number of ranked genes below a specified threshold."""
     _n_methods = list(map(len, methods.values()))
     _argmax_n_methods = np.argmax(_n_methods)
     _methods = list(methods.values())[_argmax_n_methods]
     _n_methods = _n_methods[_argmax_n_methods]
 
-    palette = dict(zip(_methods, sns.color_palette("colorblind").as_hex()[:_n_methods]))
-    palette["Optimal assignment"] = "#000000"
+    if palette is None:
+        palette = dict(zip(_methods, sns.color_palette("colorblind").as_hex()[:_n_methods]))
+        palette["Optimal assignment"] = "#000000"
 
     with mplscience.style_context():
         sns.set_style(style="whitegrid")
@@ -240,7 +250,7 @@ def plot_gene_ranking(rank_threshold, methods, fname: str = ""):
 # %%
 def get_aucs(gene_ranking_dfs, optimal_aucs, methods):
     """Computes area under the ranking threshold curve."""
-    all_methods = set(chain(*methods.values()))
+    all_methods = list(set(chain(*methods.values())))
 
     # Absolute AUC
     auc_df = pd.DataFrame(index=all_methods, columns=TERMINAL_STATES, dtype=float)
@@ -321,7 +331,16 @@ for terminal_state in TERMINAL_STATES:
 dfs = get_rank_threshold(gene_ranks=gene_ranks, n_methods=n_methods)
 
 # %%
-plot_gene_ranking(rank_threshold=dfs, methods=methods, fname="rank_analysis")
+palette = {
+    "CellRank 2 (transcription rate)": "#0173b2",
+    "CellRank 2 (GEX)": "#de8f05",
+    "CellRank 1": "#029e73",
+    "Dynamo": "#cc78bc",
+    "Random assignment": "#949494",
+    "Optimal assignment": "#000000",
+}
+
+plot_gene_ranking(rank_threshold=dfs, methods=methods, fname="rank_analysis", palette=palette)
 
 # %%
 optimal_aucs = {}
@@ -383,7 +402,16 @@ for terminal_state in TERMINAL_STATES:
 dfs = get_rank_threshold(gene_ranks=gene_ranks, n_methods=n_methods)
 
 # %%
-plot_gene_ranking(rank_threshold=dfs, methods=methods, fname="rank_analysis_w_cr_terminal_states")
+palette = {
+    "CellRank 2 (transcription rate)": "#0173b2",
+    "CellRank 2 (GEX)": "#de8f05",
+    "CellRank 1": "#029e73",
+    "Dynamo": "#cc78bc",
+    "Random assignment": "#949494",
+    "Optimal assignment": "#000000",
+}
+
+plot_gene_ranking(rank_threshold=dfs, methods=methods, fname="rank_analysis_w_cr_terminal_states", palette=palette)
 
 # %%
 optimal_aucs = {}
@@ -400,3 +428,5 @@ for terminal_state in TERMINAL_STATES:
 # %%
 _, auc_rel_df = get_aucs(gene_ranking_dfs=dfs, optimal_aucs=optimal_aucs, methods=methods)
 auc_rel_df
+
+# %%
