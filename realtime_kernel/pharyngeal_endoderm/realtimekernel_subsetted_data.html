@@ -409,20 +409,22 @@ document.write(`
 <h2>Import packages<a class="headerlink" href="#import-packages" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">mplscience</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
 <span class="kn">import</span> <span class="nn">cellrank</span> <span class="k">as</span> <span class="nn">cr</span>
 <span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
 <span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
 <span class="kn">import</span> <span class="nn">wot</span>
+<span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
 
-<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">get_state_purity</span><span class="p">,</span> <span class="n">plot_state_purity</span><span class="p">,</span> <span class="n">plot_states</span><span class="p">,</span> <span class="n">running_in_notebook</span>
+<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">get_state_purity</span><span class="p">,</span> <span class="n">plot_state_purity</span><span class="p">,</span> <span class="n">running_in_notebook</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;../../../&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">])</span>
 <span class="kn">from</span> <span class="nn">paths</span> <span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>  <span class="c1"># isort: skip  # noqa: E402</span>
@@ -458,8 +460,9 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+<span class="n">FIGURE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>
 <span class="n">SHOW_COLORBAR</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">SAVE_FIGURES</span>
 </pre></div>
 </div>
@@ -572,10 +575,10 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing PCA
     on highly variable genes
     with n_comps=50
-    finished (0:00:00)
+    finished (0:00:01)
 computing neighbors
     using &#39;X_pca&#39; with n_pcs = 30
-    finished (0:02:27)
+    finished (0:03:01)
 </pre></div>
 </div>
 </div>
@@ -583,12 +586,15 @@ computing neighbors
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">umap</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_umap&quot;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">obs_names</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;umap_1&quot;</span><span class="p">,</span> <span class="s2">&quot;umap_2&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+    <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_subsetted_data.csv&quot;</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing UMAP
-    finished (0:00:06)
+    finished (0:00:18)
 </pre></div>
 </div>
 </div>
@@ -604,8 +610,11 @@ computing neighbors
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
     <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_cell_type_subsetted_data.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span>
+        <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span>
+        <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span>
+        <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_cell_type_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -613,8 +622,8 @@ computing neighbors
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
     <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="n">SHOW_COLORBAR</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_day_subsetted_data.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_day_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -665,20 +674,20 @@ WARNING: Your filename has more than two extensions: [&#39;.5_10&#39;, &#39;.5&#
 Only considering the two last: [&#39;.5&#39;, &#39;.h5ad&#39;].
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "994f77816abd463798f1e761ce03f1a1", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using automatic `threshold=0.002242638496682048`
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "23b100a687ca4fd3be3266448ab272ad", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using automatic `threshold=0.002242638496682048`
+computing neighbors
+    using &#39;X_pca&#39; with n_pcs = 50
+    finished (0:00:02)
 computing neighbors
     using &#39;X_pca&#39; with n_pcs = 50
     finished (0:00:01)
-computing neighbors
-    using &#39;X_pca&#39; with n_pcs = 50
-    finished (0:00:00)
 computing neighbors
 WARNING: n_obs too small: adjusting to `n_neighbors = 4`
     using &#39;X_pca&#39; with n_pcs = 50
     finished (0:00:00)
 computing neighbors
     using &#39;X_pca&#39; with n_pcs = 50
-    finished (0:00:00)
+    finished (0:00:01)
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RealTimeKernel[n=11073, growth_iters=3, growth_rate_key=&#39;growth_rate_init&#39;, threshold=&#39;auto&#39;, self_transitions=&#39;all&#39;]
@@ -686,8 +695,55 @@ computing neighbors
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rtk</span><span class="o">.</span><span class="n">plot_random_walks</span><span class="p">(</span>
+    <span class="n">n_sims</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">start_ixs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;day&quot;</span><span class="p">:</span> <span class="mf">9.5</span><span class="p">},</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">n_jobs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Simulating `500` random walks of maximum length `1000`
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9a96e291e7af4ab29c91b05b045a0cd1", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Global seed set to 0
+Global seed set to 0
+Global seed set to 0
+Global seed set to 0
+Global seed set to 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:53)
+Plotting random walks
+</pre></div>
+</div>
+<img alt="../../_images/9cfdeb79b927ed0cf8ac951715eb25687cc19850257ba4f6e496cdc26f093f82.png" src="../../_images/9cfdeb79b927ed0cf8ac951715eb25687cc19850257ba4f6e496cdc26f093f82.png" />
+</div>
+</div>
 <section id="estimator">
 <h3>Estimator<a class="headerlink" href="#estimator" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster_name_full&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">rename_categories</span><span class="p">({</span><span class="s2">&quot;nan&quot;</span><span class="p">:</span> <span class="s2">&quot;progenitors&quot;</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">reorder_categories</span><span class="p">([</span><span class="s2">&quot;progenitors&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="p">)</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;cluster_name_full_colors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#dedede&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;cluster_name_colors&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">estimators</span><span class="o">.</span><span class="n">GPCCA</span><span class="p">(</span><span class="n">rtk</span><span class="p">)</span>
@@ -711,32 +767,66 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="n">n_states</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">terminal_states</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;parathyroid&quot;</span><span class="p">,</span> <span class="s2">&quot;ubb&quot;</span><span class="p">,</span> <span class="s2">&quot;cTEC&quot;</span><span class="p">,</span> <span class="s2">&quot;mTEC&quot;</span><span class="p">]</span>
+<span class="n">cluster_key</span> <span class="o">=</span> <span class="s2">&quot;cluster_name&quot;</span>
 
-<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-subsetted_data-rtk.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+    <span class="n">tsi_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-subsetted_data-rtk.csv&quot;</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">_tsi</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">tsi_df</span><span class="p">,</span> <span class="n">uns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">:</span> <span class="n">terminal_states</span><span class="p">,</span> <span class="s2">&quot;cluster_key&quot;</span><span class="p">:</span> <span class="n">cluster_key</span><span class="p">})</span>
+    <span class="n">tsi_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">tsi</span><span class="p">(</span><span class="n">n_macrostates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">terminal_states</span><span class="o">=</span><span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="n">cluster_key</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">tsi_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">tsi</span><span class="p">(</span><span class="n">n_macrostates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">terminal_states</span><span class="o">=</span><span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="n">cluster_key</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">_tsi</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+        <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-subsetted_data-rtk.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TSI score: </span><span class="si">{</span><span class="n">tsi_score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TSI score: 1.00
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/cr2-py38/lib/python3.8/site-packages/anndata/_core/anndata.py:121: ImplicitModificationWarning: Transforming to str index.
+  warnings.warn(&quot;Transforming to str index.&quot;, ImplicitModificationWarning)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">palette</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RealTimeKernel&quot;</span><span class="p">:</span> <span class="s2">&quot;#DE8F05&quot;</span><span class="p">,</span> <span class="s2">&quot;Optimal identification&quot;</span><span class="p">:</span> <span class="s2">&quot;#000000&quot;</span><span class="p">}</span>
 
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_macrostates_subsetted_data.pdf&quot;</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;tsi-subsetted_data-rtk.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">with</span> <span class="n">mplscience</span><span class="o">.</span><span class="n">style_context</span><span class="p">():</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_tsi</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/e3ec918bb92ea229acfa5d201ceded43dd061859e352432bff2cb0de1364e60f.png" src="../../_images/e3ec918bb92ea229acfa5d201ceded43dd061859e352432bff2cb0de1364e60f.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="n">n_states</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">FIG_DIR</span>
+            <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span>
+            <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span>
+            <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_macrostates_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -752,7 +842,7 @@ Adding `.macrostates`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:00:00)
+    Finish (0:00:01)
 </pre></div>
 </div>
 <img alt="../../_images/320b7375c1531bb1f628e2ead7df1746ef6543dc5e31fa8f2618cfd5c7280388.png" src="../../_images/320b7375c1531bb1f628e2ead7df1746ef6543dc5e31fa8f2618cfd5c7280388.png" />
@@ -765,13 +855,15 @@ Adding `.macrostates`
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;macrostate_purity_subsetted_data.eps&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;macrostate_purity_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">estimator</span><span class="o">.</span><span class="n">macrostates</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">_macrostates</span><span class="o">.</span><span class="n">colors</span><span class="p">))</span>
 
-    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">)</span>
+    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -788,30 +880,15 @@ Adding `.macrostates`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">set_terminal_states</span><span class="p">([</span><span class="s2">&quot;parathyroid&quot;</span><span class="p">,</span> <span class="s2">&quot;cTEC&quot;</span><span class="p">,</span> <span class="s2">&quot;mTEC&quot;</span><span class="p">,</span> <span class="s2">&quot;ubb&quot;</span><span class="p">])</span>
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_terminal_states_subsetted_data.pdf&quot;</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">FIG_DIR</span>
+            <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span>
+            <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span>
+            <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_terminal_states_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -835,13 +912,18 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;terminal_states_purity_subsetted_data.eps&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">FIG_DIR</span>
+            <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span>
+            <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span>
+            <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;terminal_states_purity_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">estimator</span><span class="o">.</span><span class="n">terminal_states</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">_term_states</span><span class="o">.</span><span class="n">colors</span><span class="p">))</span>
 
-    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">)</span>
+    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -864,18 +946,9 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
 DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` core(s) with no preconditioner and `tol=1e-06`
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "deaa8d6522ce49c08d48825bbc95d1c0", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f01c8b9ba0a342bd8ac5f04cfe950995", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
        `.fate_probabilities`
     Finish (0:00:00)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
-[0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
-[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
-[0]PETSC ERROR: or see https://petsc.org/release/faq/#valgrind and https://petsc.org/release/faq/
-[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
-[0]PETSC ERROR: to get more information on the crash.
-Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 59) - process 0
 </pre></div>
 </div>
 </div>
@@ -903,8 +976,11 @@ Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WO
             <span class="p">)</span>
 
             <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-                <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;fate_prob_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">_subsetted_data.eps&quot;</span><span class="p">,</span>
-                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+                <span class="n">FIG_DIR</span>
+                <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span>
+                <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span>
+                <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;fate_prob_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
                 <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
             <span class="p">)</span>
@@ -916,13 +992,9 @@ Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WO
 DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` core(s) with no preconditioner and `tol=1e-06`
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "54f984f70dda48dda35b1f65f1b0feb2", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8c2237311c314d498793d84c75c1d892", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
        `.fate_probabilities`
     Finish (0:00:00)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
-[0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
 </pre></div>
 </div>
 <img alt="../../_images/c0a59a1ea1a9a9803b5f5cda3c903e1ea28ea90c9195a247b9034a77a076fe5a.png" src="../../_images/c0a59a1ea1a9a9803b5f5cda3c903e1ea28ea90c9195a247b9034a77a076fe5a.png" />
@@ -955,8 +1027,8 @@ DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` c
                 <span class="n">FIG_DIR</span>
                 <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span>
                 <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span>
-                <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;fate_prob_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">_clipped_subsetted_data.eps&quot;</span><span class="p">,</span>
-                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+                <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;fate_prob_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">_clipped_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
                 <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
             <span class="p">)</span>
@@ -968,17 +1040,9 @@ DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` c
 DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` core(s) with no preconditioner and `tol=1e-06`
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3f75cc2a71af49ff98fb76063668b762", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "92f7269cf2bb456f9e25a93e0490e7e6", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
        `.fate_probabilities`
     Finish (0:00:00)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
-[0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
-[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
-[0]PETSC ERROR: or see https://petsc.org/release/faq/#valgrind and https://petsc.org/release/faq/
-[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
-[0]PETSC ERROR: 
 </pre></div>
 </div>
 <img alt="../../_images/7d1655add0631610a7cc8ab1729ebbdfc6e191a0963ec97cdec2351d1b269382.png" src="../../_images/7d1655add0631610a7cc8ab1729ebbdfc6e191a0963ec97cdec2351d1b269382.png" />
@@ -1002,8 +1066,8 @@ DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` c
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;mtec_fate_probs_subsetted_data.eps&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;mtec_fate_probs_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1028,8 +1092,11 @@ DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` c
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;mtec_fate_probs_clipped_subsetted_data.eps&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span>
+            <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span>
+            <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span>
+            <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;mtec_fate_probs_clipped_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1070,7 +1137,7 @@ DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` c
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DEBUG: Computing correlations for lineages `[&#39;mTEC&#39;]` restricted to clusters `[&#39;2&#39;, &#39;9&#39;]` in layer `X` with `use_raw=False`
 Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
        `.lineage_drivers`
-    Finish (0:00:01)
+    Finish (0:00:02)
 </pre></div>
 </div>
 </div>
@@ -1128,8 +1195,8 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
 
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;genes_ranked_by_correlation.eps&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;genes_ranked_by_correlation.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1137,7 +1204,7 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/01c9f4f9617663a2ba8d9697dc4a3776f4bfb8c575695da3d28c288069be4a8e.png" src="../../_images/01c9f4f9617663a2ba8d9697dc4a3776f4bfb8c575695da3d28c288069be4a8e.png" />
+<img alt="../../_images/eaff88224a0f85fb4d26c837c7401f2573b7f0599ad0edb8c1b485b7ac0aff4f.png" src="../../_images/eaff88224a0f85fb4d26c837c7401f2573b7f0599ad0edb8c1b485b7ac0aff4f.png" />
 </div>
 </div>
 </section>
@@ -1195,8 +1262,11 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_mtec_progenitors_subsetted_data.pdf&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span>
+            <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span>
+            <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span>
+            <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_mtec_progenitors_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
             <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
@@ -1225,7 +1295,7 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Default of the method has been changed to &#39;t-test&#39; from &#39;t-test_overestim_var&#39;
 ranking genes
-    finished (0:00:00)
+    finished (0:00:01)
 </pre></div>
 </div>
 </div>
@@ -1285,8 +1355,8 @@ ranking genes
 
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="s2">&quot;genes_ranked_by_de.eps&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;realtime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;pharyngeal_endoderm&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;genes_ranked_by_de.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="p">)</span>
