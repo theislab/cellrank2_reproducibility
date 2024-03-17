@@ -60,7 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'pseudotime_kernel/hematopoiesis/rna_velocity';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Cross boundary correctness score" href="cbc_ptk_vs_vk.html" />
+    <link rel="next" title="VelocityKernel vs. PseudotimeKernel - TSI" href="cr1_vs_cr2.html" />
     <link rel="prev" title="Hematopoiesis - DPT" href="dpt.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,6 +174,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="dpt.html">Hematopoiesis - DPT</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Hematopoiesis - RNA velocity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cr1_vs_cr2.html">VelocityKernel vs. PseudotimeKernel - TSI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cbc_ptk_vs_vk.html">Cross boundary correctness score</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">CytoTRACEKernel</span></p>
@@ -197,12 +198,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/dpt.html">Diffusion pseudotime on mouse embryonic fibroblasts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/palantir.html">Palantir pseudotime on mouse embryonic fibroblasts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/wot.html">WOT-based analysis of mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/rna_velocity.html">RNA velocity analysis on mouse embryonic fibroblasts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/mef/cr1_vs_cr2.html">VelocityKernel vs. RealTimeKernel - TSI</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/README.html">Analysis of pharyngeal endoderm development</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/realtimekernel_full_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/realtimekernel_subsetted_data.html">Pharyngeal endoderm development analysis with RealTimeKernel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/wot_subsetted_data.html">Pharyngeal endoderm development analysis with WOT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/velocitykernel_full_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/velocitykernel_subsetted_data.html">Pharyngeal endoderm development analysis with the RealTimeKernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../realtime_kernel/pharyngeal_endoderm/cr1_vs_cr2.html">VelocityKernel vs. RealTimeKernel - TSI</a></li>
 </ul>
 </li>
 </ul>
@@ -214,6 +220,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/velocity_pseudotime.html">Intestinal organoid differentiation - Velocity pseudotime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/kinetic_rate_change.html">Intestinal organoid differentiation - Kinetic rate change over (pseudo)time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/rna_velocity/em_model.html">Intestinal organoid differentiation - RNA velocity with EM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/cr1_vs_cr2.html">Classical RNA velocity vs. labeling approach - TSI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/dynamo/velo_chase_and_pulse.html">Intestinal organoid differentiation - Dynamo velocity for pulse experiment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/dynamo/fp_ana_chase_and_pulse.html">Fixed point analysis - Chase and pulse experiment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../labeling_kernel/dynamo/lap_chase_and_pulse.html">Least action path analysis with Dynamo</a></li>
@@ -382,7 +389,6 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">General settings</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data preprocessing</a></li>
@@ -408,18 +414,21 @@ document.write(`
 <p>Infer RNA velocity on NeurIPS 2021 hematopoiesis data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">mplscience</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
 <span class="kn">import</span> <span class="nn">cellrank</span> <span class="k">as</span> <span class="nn">cr</span>
 <span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
 <span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
+<span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
 
-<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">get_state_purity</span><span class="p">,</span> <span class="n">plot_state_purity</span><span class="p">,</span> <span class="n">plot_states</span><span class="p">,</span> <span class="n">running_in_notebook</span>
+<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">get_state_purity</span><span class="p">,</span> <span class="n">plot_state_purity</span><span class="p">,</span> <span class="n">running_in_notebook</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;../../../&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">])</span>
 <span class="kn">from</span> <span class="nn">paths</span> <span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>  <span class="c1"># isort: skip  # noqa: E402</span>
@@ -454,35 +463,16 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="id1">
-<h2>General settings<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">cr</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">FIGURE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">set_figure_params</span><span class="p">(</span><span class="s2">&quot;scvelo&quot;</span><span class="p">,</span> <span class="n">dpi_save</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -593,9 +583,9 @@ Normalized count data: spliced, unspliced.
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing neighbors
-    finished (0:02:26)
+    finished (0:02:27)
 computing UMAP
-    finished (0:00:11)
+    finished (0:00:10)
 </pre></div>
 </div>
 </div>
@@ -641,8 +631,8 @@ computing UMAP
 
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;phase_portrait_</span><span class="si">{</span><span class="n">gene</span><span class="si">}</span><span class="s2">.eps&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;phase_portrait_</span><span class="si">{</span><span class="n">gene</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="p">)</span>
@@ -674,7 +664,7 @@ computing UMAP
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>recovering dynamics (using 8/14 cores)
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "914e6140d7384d179141e30d01bdfb50", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Global seed set to 0
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "82f8fa98be2541e784e7722e9d26775e", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Global seed set to 0
 Global seed set to 0
 Global seed set to 0
 Global seed set to 0
@@ -684,7 +674,7 @@ Global seed set to 0
 Global seed set to 0
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    finished (0:03:32) --&gt; added 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    finished (0:03:30) --&gt; added 
     &#39;fit_pars&#39;, fitted parameters for splicing dynamics (adata.var)
 </pre></div>
 </div>
@@ -722,10 +712,10 @@ Global seed set to 0
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing transition matrix using `&#39;deterministic&#39;` model
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6c0521392c344282a71cb235283e81a8", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using `softmax_scale=10.3350`
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e0c75a90426245fe949a2e886da983f7", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using `softmax_scale=10.3350`
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "abeb4ee9e23e42e9bc87a8a5001ef952", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:18)
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "34928a5e2c2649d4b607adc586089969", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:20)
 Computing transition matrix based on `adata.obsp[&#39;connectivities&#39;]`
 DEBUG: Density normalizing the transition matrix
     Finish (0:00:00)
@@ -751,8 +741,8 @@ DEBUG: Density normalizing the transition matrix
     <span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;rna_velocity_stream.png&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;rna_velocity_stream.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
@@ -788,7 +778,7 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:00:01)
+    Finish (0:00:02)
 </pre></div>
 </div>
 <img alt="../../_images/c196cfed7b4c296a14b197484d400b3151ba2e2e5edba2941208748348445be1.png" src="../../_images/c196cfed7b4c296a14b197484d400b3151ba2e2e5edba2941208748348445be1.png" />
@@ -797,31 +787,12 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="n">n_states</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;l2_cell_type&quot;</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_rna_velo_three_macrostates.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_rna_velo_three_macrostates.pdf&quot;</span>
-        <span class="n">plot_states</span><span class="p">(</span>
-            <span class="n">adata</span><span class="p">,</span>
-            <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-            <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-            <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-            <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-            <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -850,13 +821,13 @@ Adding `.macrostates`
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;rna_velo_three_macrostate_purity.pdf&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;rna_velo_three_macrostate_purity.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">estimator</span><span class="o">.</span><span class="n">macrostates</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">_macrostates</span><span class="o">.</span><span class="n">colors</span><span class="p">))</span>
 
-    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">)</span>
+    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -869,32 +840,62 @@ Adding `.macrostates`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">terminal_states</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CD14+ Mono&quot;</span><span class="p">,</span> <span class="s2">&quot;Normoblast&quot;</span><span class="p">,</span> <span class="s2">&quot;cDC2&quot;</span><span class="p">,</span> <span class="s2">&quot;pDC&quot;</span><span class="p">]</span>
+<span class="n">cluster_key</span> <span class="o">=</span> <span class="s2">&quot;l2_cell_type&quot;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-vk.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+    <span class="n">tsi_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-vk.csv&quot;</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">_tsi</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">tsi_df</span><span class="p">,</span> <span class="n">uns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">:</span> <span class="n">terminal_states</span><span class="p">,</span> <span class="s2">&quot;cluster_key&quot;</span><span class="p">:</span> <span class="n">cluster_key</span><span class="p">})</span>
+    <span class="n">tsi_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">tsi</span><span class="p">(</span><span class="n">n_macrostates</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span> <span class="n">terminal_states</span><span class="o">=</span><span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="n">cluster_key</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">tsi_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">tsi</span><span class="p">(</span><span class="n">n_macrostates</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span> <span class="n">terminal_states</span><span class="o">=</span><span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="n">cluster_key</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">_tsi</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;tsi-vk.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TSI score: </span><span class="si">{</span><span class="n">tsi_score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TSI score: 0.77
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/vol/storage/miniconda3/envs/cr2-py38/lib/python3.8/site-packages/anndata/_core/anndata.py:121: ImplicitModificationWarning: Transforming to str index.
+  warnings.warn(&quot;Transforming to str index.&quot;, ImplicitModificationWarning)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For nice name in figure legend</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;VelocityKernel&quot;</span>
+<span class="n">palette</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;VelocityKernel&quot;</span><span class="p">:</span> <span class="s2">&quot;#0173b2&quot;</span><span class="p">,</span> <span class="s2">&quot;Optimal identification&quot;</span><span class="p">:</span> <span class="s2">&quot;#000000&quot;</span><span class="p">}</span>
+
+<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;tsi-vk.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">with</span> <span class="n">mplscience</span><span class="o">.</span><span class="n">style_context</span><span class="p">():</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_tsi</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/f34df4898aa240b4cc2e310e2ea96a2bce7a62ab992b10412ae91a41b10c3b1c.png" src="../../_images/f34df4898aa240b4cc2e310e2ea96a2bce7a62ab992b10412ae91a41b10c3b1c.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">set_terminal_states</span><span class="p">([</span><span class="s2">&quot;pDC&quot;</span><span class="p">,</span> <span class="s2">&quot;CD14+ Mono&quot;</span><span class="p">,</span> <span class="s2">&quot;Normoblast&quot;</span><span class="p">])</span>
-
-<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_cr_rna_velo_terminal_states.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_cr_rna_velo_terminal_states.pdf&quot;</span>
-        <span class="n">plot_states</span><span class="p">(</span>
-            <span class="n">adata</span><span class="p">,</span>
-            <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-            <span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span>
-            <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-            <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-            <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -937,8 +938,11 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
             <span class="p">)</span>
 
             <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-                <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;rna_velo_fate_prob_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">.eps&quot;</span><span class="p">,</span>
-                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+                <span class="n">FIG_DIR</span>
+                <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span>
+                <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span>
+                <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;rna_velo_fate_prob_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
                 <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
             <span class="p">)</span>
@@ -950,7 +954,7 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
 DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` core(s) with no preconditioner and `tol=1e-07`
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1735f18be036438ca17e999f299f4c8e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4c0208962f5746739055e7ebe850818c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
        `.fate_probabilities`
     Finish (0:00:00)
 </pre></div>
@@ -971,16 +975,16 @@ Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WO
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">FIG_DIR</span><span class="si">}</span><span class="s2">/pseudotime_kernel/hematopoiesis/umap_colored_by_rna_velo_fate.pdf&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">FIG_DIR</span><span class="si">}</span><span class="s2">/pseudotime_kernel/hematopoiesis/umap_colored_by_rna_velo_fate.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
     <span class="n">estimator</span><span class="o">.</span><span class="n">plot_fate_probabilities</span><span class="p">(</span>
         <span class="n">same_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
         <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">save</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span>
+        <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
         <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
     <span class="p">)</span>
 </pre></div>
@@ -993,31 +997,10 @@ Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WO
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="n">n_states</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;l2_cell_type&quot;</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_rna_velo_20_macrostates.pdf&quot;</span>
-        <span class="n">plot_states</span><span class="p">(</span>
-            <span class="n">adata</span><span class="p">,</span>
-            <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-            <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-            <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-            <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-            <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_rna_velo_20_macrostates.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1034,7 +1017,7 @@ Adding `.macrostates`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:07:56)
+    Finish (0:07:44)
 </pre></div>
 </div>
 <img alt="../../_images/5aed60f57f0f9c170d701c9571c88356933ae84067fa71d8b22874a72d0849a0.png" src="../../_images/5aed60f57f0f9c170d701c9571c88356933ae84067fa71d8b22874a72d0849a0.png" />
@@ -1047,14 +1030,14 @@ Adding `.macrostates`
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;rna_velo_20_macrostate_purity.pdf&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;rna_velo_20_macrostate_purity.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">macrostates_ordered</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">macrostates</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
     <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">estimator</span><span class="o">.</span><span class="n">macrostates</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">_macrostates</span><span class="o">.</span><span class="n">colors</span><span class="p">))</span>
 
-    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">macrostates_ordered</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">)</span>
+    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">macrostates_ordered</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1110,11 +1093,11 @@ Adding `.macrostates`
       </div>
     </a>
     <a class="right-next"
-       href="cbc_ptk_vs_vk.html"
+       href="cr1_vs_cr2.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Cross boundary correctness score</p>
+        <p class="prev-next-title">VelocityKernel vs. PseudotimeKernel - TSI</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1135,7 +1118,6 @@ Adding `.macrostates`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">General settings</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data preprocessing</a></li>
