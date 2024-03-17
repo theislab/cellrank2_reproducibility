@@ -414,6 +414,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -530,11 +531,19 @@ document.write(`
             <span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Gene&quot;</span><span class="p">,</span> <span class="s2">&quot;Algorithm&quot;</span><span class="p">])[[</span><span class="s2">&quot;Gene&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Corr. rank - </span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;Algorithm&quot;</span><span class="p">]]</span>
         <span class="p">)</span>
 
-        <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;EM Model&quot;</span><span class="p">:</span> <span class="s2">&quot;scVelo&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># gene_ranks[terminal_state].replace({&quot;EM Model&quot;: &quot;scVelo&quot;}, inplace=True)</span>
+        <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;CR2&quot;</span><span class="p">:</span> <span class="s2">&quot;CellRank 2 (transcription rate)&quot;</span><span class="p">,</span> <span class="s2">&quot;CR2 - GEX&quot;</span><span class="p">:</span> <span class="s2">&quot;CellRank 2 (GEX)&quot;</span><span class="p">,</span> <span class="s2">&quot;EM Model&quot;</span><span class="p">:</span> <span class="s2">&quot;CellRank 1&quot;</span><span class="p">},</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># Random rank assignment</span>
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">var_names</span> <span class="o">=</span> <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">][</span><span class="s2">&quot;Algorithm&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CR2&quot;</span><span class="p">,</span> <span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+        <span class="n">var_names</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gene_ranks</span><span class="p">[</span><span class="n">terminal_state</span><span class="p">][</span><span class="s2">&quot;Algorithm&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CellRank 2 (transcription rate)&quot;</span><span class="p">,</span> <span class="s2">&quot;Gene&quot;</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+        <span class="p">)</span>
         <span class="n">random_ranking</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="p">{</span>
                 <span class="s2">&quot;Gene&quot;</span><span class="p">:</span> <span class="n">var_names</span><span class="p">,</span>
@@ -596,15 +605,16 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_gene_ranking</span><span class="p">(</span><span class="n">rank_threshold</span><span class="p">,</span> <span class="n">methods</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_gene_ranking</span><span class="p">(</span><span class="n">rank_threshold</span><span class="p">,</span> <span class="n">methods</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">palette</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots number of ranked genes below a specified threshold.&quot;&quot;&quot;</span>
     <span class="n">_n_methods</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">methods</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
     <span class="n">_argmax_n_methods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">_n_methods</span><span class="p">)</span>
     <span class="n">_methods</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">methods</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="n">_argmax_n_methods</span><span class="p">]</span>
     <span class="n">_n_methods</span> <span class="o">=</span> <span class="n">_n_methods</span><span class="p">[</span><span class="n">_argmax_n_methods</span><span class="p">]</span>
 
-    <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">_methods</span><span class="p">,</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_hex</span><span class="p">()[:</span><span class="n">_n_methods</span><span class="p">]))</span>
-    <span class="n">palette</span><span class="p">[</span><span class="s2">&quot;Optimal assignment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#000000&quot;</span>
+    <span class="k">if</span> <span class="n">palette</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">_methods</span><span class="p">,</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_hex</span><span class="p">()[:</span><span class="n">_n_methods</span><span class="p">]))</span>
+        <span class="n">palette</span><span class="p">[</span><span class="s2">&quot;Optimal assignment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#000000&quot;</span>
 
     <span class="k">with</span> <span class="n">mplscience</span><span class="o">.</span><span class="n">style_context</span><span class="p">():</span>
         <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
@@ -671,7 +681,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_aucs</span><span class="p">(</span><span class="n">gene_ranking_dfs</span><span class="p">,</span> <span class="n">optimal_aucs</span><span class="p">,</span> <span class="n">methods</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes area under the ranking threshold curve.&quot;&quot;&quot;</span>
-    <span class="n">all_methods</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">methods</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="n">all_methods</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">methods</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
 
     <span class="c1"># Absolute AUC</span>
     <span class="n">auc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">all_methods</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">TERMINAL_STATES</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -771,12 +781,21 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_gene_ranking</span><span class="p">(</span><span class="n">rank_threshold</span><span class="o">=</span><span class="n">dfs</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="n">methods</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;rank_analysis&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">palette</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;CellRank 2 (transcription rate)&quot;</span><span class="p">:</span> <span class="s2">&quot;#0173b2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CellRank 2 (GEX)&quot;</span><span class="p">:</span> <span class="s2">&quot;#de8f05&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CellRank 1&quot;</span><span class="p">:</span> <span class="s2">&quot;#029e73&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Dynamo&quot;</span><span class="p">:</span> <span class="s2">&quot;#cc78bc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Random assignment&quot;</span><span class="p">:</span> <span class="s2">&quot;#949494&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Optimal assignment&quot;</span><span class="p">:</span> <span class="s2">&quot;#000000&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">plot_gene_ranking</span><span class="p">(</span><span class="n">rank_threshold</span><span class="o">=</span><span class="n">dfs</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="n">methods</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;rank_analysis&quot;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7acd18244a2cf539cc02cd669649443b41aa6a67c1a3fbdbaa22bc84f85177e3.png" src="../_images/7acd18244a2cf539cc02cd669649443b41aa6a67c1a3fbdbaa22bc84f85177e3.png" />
+<img alt="../_images/49b4eec7737f072a8f70b915bb757d942fdf2703c5db4df53b8703900ae48aff.png" src="../_images/49b4eec7737f072a8f70b915bb757d942fdf2703c5db4df53b8703900ae48aff.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -829,11 +848,18 @@ document.write(`
   </thead>
   <tbody>
     <tr>
-      <th>Dynamo</th>
-      <td>0.700409</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
+      <th>Optimal assignment</th>
+      <td>0.999737</td>
+      <td>0.999738</td>
+      <td>0.999741</td>
+      <td>0.999738</td>
+    </tr>
+    <tr>
+      <th>CellRank 2 (GEX)</th>
+      <td>0.915893</td>
+      <td>0.610649</td>
+      <td>0.801061</td>
+      <td>0.860166</td>
     </tr>
     <tr>
       <th>Random assignment</th>
@@ -843,32 +869,25 @@ document.write(`
       <td>0.435755</td>
     </tr>
     <tr>
-      <th>scVelo</th>
-      <td>0.769516</td>
-      <td>0.453206</td>
-      <td>0.599141</td>
-      <td>0.785032</td>
-    </tr>
-    <tr>
-      <th>CR2</th>
+      <th>CellRank 2 (transcription rate)</th>
       <td>0.878167</td>
       <td>0.590511</td>
       <td>0.744919</td>
       <td>0.813857</td>
     </tr>
     <tr>
-      <th>Optimal assignment</th>
-      <td>0.999737</td>
-      <td>0.999738</td>
-      <td>0.999741</td>
-      <td>0.999738</td>
+      <th>CellRank 1</th>
+      <td>0.769516</td>
+      <td>0.453206</td>
+      <td>0.599141</td>
+      <td>0.785032</td>
     </tr>
     <tr>
-      <th>CR2 - GEX</th>
-      <td>0.915893</td>
-      <td>0.610649</td>
-      <td>0.801061</td>
-      <td>0.860166</td>
+      <th>Dynamo</th>
+      <td>0.700409</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
   </tbody>
 </table>
@@ -935,12 +954,21 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_gene_ranking</span><span class="p">(</span><span class="n">rank_threshold</span><span class="o">=</span><span class="n">dfs</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="n">methods</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;rank_analysis_w_cr_terminal_states&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">palette</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;CellRank 2 (transcription rate)&quot;</span><span class="p">:</span> <span class="s2">&quot;#0173b2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CellRank 2 (GEX)&quot;</span><span class="p">:</span> <span class="s2">&quot;#de8f05&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CellRank 1&quot;</span><span class="p">:</span> <span class="s2">&quot;#029e73&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Dynamo&quot;</span><span class="p">:</span> <span class="s2">&quot;#cc78bc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Random assignment&quot;</span><span class="p">:</span> <span class="s2">&quot;#949494&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Optimal assignment&quot;</span><span class="p">:</span> <span class="s2">&quot;#000000&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">plot_gene_ranking</span><span class="p">(</span><span class="n">rank_threshold</span><span class="o">=</span><span class="n">dfs</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="n">methods</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;rank_analysis_w_cr_terminal_states&quot;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8aabf8bea248d28cf8b0b6ef9f6691265990782e323dd2a2e90d0094c00952d9.png" src="../_images/8aabf8bea248d28cf8b0b6ef9f6691265990782e323dd2a2e90d0094c00952d9.png" />
+<img alt="../_images/2ef3f8661ec43a559aee9e4ef00a863b6eaf33d56d7350e5f9c8f951cb5fbf50.png" src="../_images/2ef3f8661ec43a559aee9e4ef00a863b6eaf33d56d7350e5f9c8f951cb5fbf50.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -993,11 +1021,18 @@ document.write(`
   </thead>
   <tbody>
     <tr>
-      <th>Dynamo</th>
-      <td>0.700308</td>
-      <td>0.720271</td>
-      <td>0.578212</td>
-      <td>0.624054</td>
+      <th>Optimal assignment</th>
+      <td>0.999737</td>
+      <td>0.999738</td>
+      <td>0.999741</td>
+      <td>0.999738</td>
+    </tr>
+    <tr>
+      <th>CellRank 2 (GEX)</th>
+      <td>0.915893</td>
+      <td>0.610649</td>
+      <td>0.801061</td>
+      <td>0.860166</td>
     </tr>
     <tr>
       <th>Random assignment</th>
@@ -1007,32 +1042,25 @@ document.write(`
       <td>0.435755</td>
     </tr>
     <tr>
-      <th>scVelo</th>
-      <td>0.769516</td>
-      <td>0.453206</td>
-      <td>0.599141</td>
-      <td>0.785032</td>
-    </tr>
-    <tr>
-      <th>CR2</th>
+      <th>CellRank 2 (transcription rate)</th>
       <td>0.878167</td>
       <td>0.590511</td>
       <td>0.744919</td>
       <td>0.813857</td>
     </tr>
     <tr>
-      <th>Optimal assignment</th>
-      <td>0.999737</td>
-      <td>0.999738</td>
-      <td>0.999741</td>
-      <td>0.999738</td>
+      <th>CellRank 1</th>
+      <td>0.769516</td>
+      <td>0.453206</td>
+      <td>0.599141</td>
+      <td>0.785032</td>
     </tr>
     <tr>
-      <th>CR2 - GEX</th>
-      <td>0.915893</td>
-      <td>0.610649</td>
-      <td>0.801061</td>
-      <td>0.860166</td>
+      <th>Dynamo</th>
+      <td>0.700308</td>
+      <td>0.720271</td>
+      <td>0.578212</td>
+      <td>0.624054</td>
     </tr>
   </tbody>
 </table>
