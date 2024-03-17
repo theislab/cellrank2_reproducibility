@@ -415,8 +415,7 @@ document.write(`
 <p>Construct diffusion pseudotime on NeurIPS 2021 hematopoiesis data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -430,7 +429,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
 <span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
 
-<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">get_state_purity</span><span class="p">,</span> <span class="n">plot_state_purity</span><span class="p">,</span> <span class="n">plot_states</span><span class="p">,</span> <span class="n">running_in_notebook</span>
+<span class="kn">from</span> <span class="nn">cr2</span> <span class="kn">import</span> <span class="n">get_state_purity</span><span class="p">,</span> <span class="n">plot_state_purity</span><span class="p">,</span> <span class="n">running_in_notebook</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;../../../&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">])</span>
 <span class="kn">from</span> <span class="nn">paths</span> <span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>  <span class="c1"># isort: skip  # noqa: E402</span>
@@ -465,7 +464,8 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
 <span class="n">FIGURE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>
 </pre></div>
 </div>
@@ -473,7 +473,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -531,8 +531,8 @@ document.write(`
     <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;X_umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;l2_cell_type&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_l2_cell_type_full_data.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_l2_cell_type_full_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -574,9 +574,9 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing neighbors
-    finished (0:02:26)
+    finished (0:02:29)
 computing UMAP
-    finished (0:00:10)
+    finished (0:00:12)
 </pre></div>
 </div>
 </div>
@@ -599,8 +599,11 @@ computing UMAP
     <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;X_umap&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;l2_cell_type&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_l2_cell_type_subsetted_data.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span>
+        <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span>
+        <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span>
+        <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_l2_cell_type_subsetted_data.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -621,8 +624,8 @@ computing UMAP
 
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_with_knn_graph.pdf&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_with_knn_graph.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
@@ -651,7 +654,7 @@ computing transitions
     [1.         0.99922997 0.9977195  0.9968419  0.9955766  0.9942717
      0.9900949  0.9884704  0.9867782  0.9852537  0.9849594  0.9830871
      0.98229724 0.9809607  0.97756666]
-    finished (0:00:00)
+    finished (0:00:02)
 </pre></div>
 </div>
 </div>
@@ -671,8 +674,8 @@ computing transitions
         <span class="p">)</span>
 
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;diffmap_dc4_vs_dc5_colored_by_celltype.eps&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;diffmap_dc4_vs_dc5_colored_by_celltype.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="p">)</span>
@@ -735,8 +738,8 @@ computing transitions
     <span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;diffmap_dc4_vs_dc5_hsc_outlined.pdf&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;diffmap_dc4_vs_dc5_hsc_outlined.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
@@ -772,8 +775,8 @@ computing transitions
 
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;diffmap_dc4_vs_dc5_pseudotime_root_id.eps&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;diffmap_dc4_vs_dc5_pseudotime_root_id.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="p">)</span>
@@ -806,8 +809,8 @@ computing transitions
 
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_pseudotime_root_id.eps&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_pseudotime_root_id.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="p">)</span>
@@ -829,8 +832,8 @@ computing transitions
     <span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dpt_pseudotime&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_dpt_pseudotime.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_dpt_pseudotime.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -897,8 +900,8 @@ computing transitions
     <span class="n">sns</span><span class="o">.</span><span class="n">reset_orig</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;dpt_per_cell_type.eps&quot;</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;dpt_per_cell_type.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -924,7 +927,7 @@ computing transitions
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing transition matrix based on pseudotime
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c7d7fe51092047fcac13a89ab2454a64", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:09)
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7bd27b501c8f4657a56850a56dfdbc91", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:10)
 </pre></div>
 </div>
 </div>
@@ -948,8 +951,8 @@ computing transitions
         <span class="p">)</span>
 
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;dpt_stream.png&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;dpt_stream.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
             <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
@@ -984,7 +987,7 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:00:01)
+    Finish (0:00:05)
 </pre></div>
 </div>
 <img alt="../../_images/249864c0add30b1b21435ed1436fe2d178a38f97dfb24628a19405113fd01bc1.png" src="../../_images/249864c0add30b1b21435ed1436fe2d178a38f97dfb24628a19405113fd01bc1.png" />
@@ -993,17 +996,8 @@ Adding `adata.uns[&#39;eigendecomposition_fwd&#39;]`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;l2_cell_type&quot;</span><span class="p">)</span>
-
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1019,10 +1013,10 @@ Adding `.macrostates`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:00:00)
+    Finish (0:00:01)
 </pre></div>
 </div>
-<img alt="../../_images/58ac440e98427c1c873391af5f08088890461d0b4905125884fa784fff1f62b0.png" src="../../_images/58ac440e98427c1c873391af5f08088890461d0b4905125884fa784fff1f62b0.png" />
+<img alt="../../_images/e9bca233cb43a47612ea9933d9acd6168a03c092bd8efa636b9ebe118f6a585a.png" src="../../_images/e9bca233cb43a47612ea9933d9acd6168a03c092bd8efa636b9ebe118f6a585a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1075,31 +1069,11 @@ Adding `.macrostates`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;l2_cell_type&quot;</span><span class="p">)</span>
-
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_cr_dpt_macrostates.pdf&quot;</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;macrostates&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_cr_dpt_macrostates.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1115,10 +1089,10 @@ Adding `.macrostates`
        `.schur_vectors`
        `.schur_matrix`
        `.eigendecomposition`
-    Finish (0:00:05)
+    Finish (0:00:12)
 </pre></div>
 </div>
-<img alt="../../_images/b2e1c2df2175aaa4c6048ac7cdb5f60f3800d72ceaccdd960de0a6bfe6ae511d.png" src="../../_images/b2e1c2df2175aaa4c6048ac7cdb5f60f3800d72ceaccdd960de0a6bfe6ae511d.png" />
+<img alt="../../_images/8f581f59059056a8def3e3af4ff60ddf09b57d78ef61e82e2b9cfb2a46e485ba.png" src="../../_images/8f581f59059056a8def3e3af4ff60ddf09b57d78ef61e82e2b9cfb2a46e485ba.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1128,13 +1102,13 @@ Adding `.macrostates`
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;dpt_macrostate_purity.pdf&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;dpt_macrostate_purity.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">estimator</span><span class="o">.</span><span class="n">macrostates</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">_macrostates</span><span class="o">.</span><span class="n">colors</span><span class="p">))</span>
 
-    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">)</span>
+    <span class="n">plot_state_purity</span><span class="p">(</span><span class="n">macrostate_purity</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1149,33 +1123,13 @@ Adding `.macrostates`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">set_terminal_states</span><span class="p">([</span><span class="s2">&quot;pDC&quot;</span><span class="p">,</span> <span class="s2">&quot;cDC2&quot;</span><span class="p">,</span> <span class="s2">&quot;CD14+ Mono&quot;</span><span class="p">,</span> <span class="s2">&quot;Normoblast&quot;</span><span class="p">])</span>
-
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;umap_colored_by_cr_dpt_terminal_states.pdf&quot;</span>
-    <span class="n">plot_states</span><span class="p">(</span>
-        <span class="n">adata</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-        <span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal_states&quot;</span><span class="p">,</span>
-        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;umap_colored_by_cr_dpt_terminal_states.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">estimator</span><span class="o">.</span><span class="n">plot_macrostates</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1189,7 +1143,7 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
     Finish`
 </pre></div>
 </div>
-<img alt="../../_images/81c14594468814135baa9772bb810601ea907c47e402078dae22db098e7f24e2.png" src="../../_images/81c14594468814135baa9772bb810601ea907c47e402078dae22db098e7f24e2.png" />
+<img alt="../../_images/0b5af574b80cdc31f59ae1d965edff05df5e4728ff40ac14225518f1372c7202.png" src="../../_images/0b5af574b80cdc31f59ae1d965edff05df5e4728ff40ac14225518f1372c7202.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1199,7 +1153,7 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
 
 <span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;dpt_terminal_states_purity.pdf&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;dpt_terminal_states_purity.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1210,7 +1164,7 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
         <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span>
         <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pDC&quot;</span><span class="p">,</span> <span class="s2">&quot;cDC2&quot;</span><span class="p">,</span> <span class="s2">&quot;CD14+ Mono&quot;</span><span class="p">,</span> <span class="s2">&quot;Normoblast&quot;</span><span class="p">],</span>
         <span class="n">fpath</span><span class="o">=</span><span class="n">fpath</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -1250,8 +1204,8 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
             <span class="p">)</span>
 
             <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-                <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;dpt_fate_prob_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">.eps&quot;</span><span class="p">,</span>
-                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span>
+                <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;dpt_fate_prob_</span><span class="si">{</span><span class="n">terminal_state</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="nb">format</span><span class="o">=</span><span class="n">FIGURE_FORMAT</span><span class="p">,</span>
                 <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
             <span class="p">)</span>
@@ -1263,9 +1217,18 @@ Adding `adata.obs[&#39;term_states_fwd&#39;]`
 DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` core(s) with no preconditioner and `tol=1e-07`
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1bdcd86ef4494ceeb8f85d7eca27822c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ed0cbc77096f49f389b9b4f42e116337", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding `adata.obsm[&#39;lineages_fwd&#39;]`
        `.fate_probabilities`
     Finish (0:00:00)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
+[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[0]PETSC ERROR: or see https://petsc.org/release/faq/#valgrind and https://petsc.org/release/faq/
+[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[0]PETSC ERROR: to get more information on the crash.
+Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 59) - process 0
 </pre></div>
 </div>
 <img alt="../../_images/47ee97039f38282dbffb1be33a23ef5446a7ccb2cf11ab6fc0ea79abca11b8e7.png" src="../../_images/47ee97039f38282dbffb1be33a23ef5446a7ccb2cf11ab6fc0ea79abca11b8e7.png" />
@@ -1275,7 +1238,7 @@ DEBUG: Solving the linear system using `PETSc` solver `&#39;gmres&#39;` on `1` c
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">running_in_notebook</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">FIG_DIR</span><span class="si">}</span><span class="s2">/pseudotime_kernel/hematopoiesis/umap_colored_by_dpt_fate.pdf&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">FIG_DIR</span><span class="si">}</span><span class="s2">/pseudotime_kernel/hematopoiesis/umap_colored_by_dpt_fate.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
@@ -1325,7 +1288,7 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">GAM</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">save</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;gene_trend_runx2.pdf&quot;</span>
+    <span class="n">save</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;gene_trend_runx2.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">save</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">cr</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">gene_trends</span><span class="p">(</span>
@@ -1343,7 +1306,7 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
 
 
 <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
-    <span class="n">save</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="s2">&quot;gene_trend_tcf4.pdf&quot;</span>
+    <span class="n">save</span> <span class="o">=</span> <span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s2">&quot;pseudotime_kernel&quot;</span> <span class="o">/</span> <span class="s2">&quot;hematopoiesis&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;gene_trend_tcf4.</span><span class="si">{</span><span class="n">FIGURE_FORMAT</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">save</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">cr</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">gene_trends</span><span class="p">(</span>
@@ -1365,7 +1328,7 @@ Adding `adata.varm[&#39;terminal_lineage_drivers&#39;]`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing trends using `1` core(s)
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6f8710d0ea1443f9bfc59e7d21ceb36b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:00)
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e0f1b2791a5e442bab929f6b83e5aa58", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:00)
 Plotting trends
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
@@ -1376,18 +1339,13 @@ DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0]PETSC ERROR: ------------------------------------------------------------------------
 [0]PETSC ERROR: Caught signal number 13 Broken Pipe: Likely while reading or writing to a socket
-[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
-[0]PETSC ERROR: or see https://petsc.org/release/faq/#valgrind and https://petsc.org/release/faq/
-[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
-[0]PETSC ERROR: to get more information on the crash.
-Abort(59) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 59) - process 0
 </pre></div>
 </div>
 <img alt="../../_images/611938f2229f7c190af94f929a2c185d45b9c878d9ee43b393a5fd1ee1a958dc.png" src="../../_images/611938f2229f7c190af94f929a2c185d45b9c878d9ee43b393a5fd1ee1a958dc.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing trends using `1` core(s)
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "355b66a2b2d84ab1b3aacd82fea44791", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:01)
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "049fc038e5bc4add9c3655d9fe03cf74", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finish (0:00:01)
 Plotting trends
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
 DEBUG: Key `None` not found in `adata.obs` or `adata.var_names`. Ignoring`
