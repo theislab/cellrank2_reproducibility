@@ -4,18 +4,21 @@
 # Infer RNA velocity on NeurIPS 2021 hematopoiesis data.
 
 # %%
-import os
 import sys
 
 import numpy as np
+import pandas as pd
 
 import matplotlib.pyplot as plt
+import mplscience
+import seaborn as sns
 
 import cellrank as cr
 import scanpy as sc
 import scvelo as scv
+from anndata import AnnData
 
-from cr2 import get_state_purity, plot_state_purity, plot_states, running_in_notebook
+from cr2 import get_state_purity, plot_state_purity, running_in_notebook
 
 sys.path.extend(["../../../", "."])
 from paths import DATA_DIR, FIG_DIR  # isort: skip  # noqa: E402
@@ -34,23 +37,12 @@ scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True,
 # %%
 SAVE_FIGURES = False
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "pseudotime_kernel" / "hematopoiesis", exist_ok=True)
+    (FIG_DIR / "pseudotime_kernel" / "hematopoiesis").mkdir(parents=True, exist_ok=True)
 
-# %% [markdown]
-# ## General settings
-
-# %%
-sc.settings.verbosity = 2
-cr.settings.verbosity = 4
-scv.settings.verbosity = 3
+FIGURE_FORMAT = "pdf"
 
 # %%
-scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=20, color_map="viridis")
-
-# %%
-SAVE_FIGURES = False
-if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "pseudotime_kernel" / "hematopoiesis", exist_ok=True)
+(DATA_DIR / "hematopoiesis" / "results").mkdir(parents=True, exist_ok=True)
 
 # %% [markdown]
 # ## Constants
@@ -119,8 +111,8 @@ for gene in ["HBA2", "HBA1", "GYPC", "TFRC", "AKAP13", "ABCB10", "ANK1", "GATA1"
 
     if SAVE_FIGURES:
         fig.savefig(
-            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"phase_portrait_{gene}.eps",
-            format="eps",
+            FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"phase_portrait_{gene}.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
             transparent=True,
             bbox_inches="tight",
         )
@@ -163,8 +155,8 @@ if SAVE_FIGURES:
     )
 
     fig.savefig(
-        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "rna_velocity_stream.png",
-        format="png",
+        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"rna_velocity_stream.{FIGURE_FORMAT}",
+        format=FIGURE_FORMAT,
         transparent=True,
         bbox_inches="tight",
         dpi=400,
@@ -180,31 +172,12 @@ estimator.plot_spectrum(real_only=True)
 
 # %%
 estimator.compute_macrostates(n_states=3, cluster_key="l2_cell_type")
-
-if running_in_notebook():
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="macrostates",
-        basis="umap",
-        legend_loc="right",
-        title="",
-        size=100,
+estimator.plot_macrostates(which="all", basis="umap", legend_loc="right", title="", size=100)
+if SAVE_FIGURES:
+    fpath = (
+        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"umap_colored_by_rna_velo_three_macrostates.{FIGURE_FORMAT}"
     )
-
-    if SAVE_FIGURES:
-        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "umap_colored_by_rna_velo_three_macrostates.pdf"
-        plot_states(
-            adata,
-            estimator=estimator,
-            which="macrostates",
-            basis="umap",
-            legend_loc=False,
-            title="",
-            size=100,
-            fpath=fpath,
-            format="pdf",
-        )
+    estimator.plot_macrostates(which="all", basis="umap", title="", legend_loc=False, size=100, save=fpath)
 
 # %%
 macrostate_purity = get_state_purity(adata, estimator, states="macrostates", obs_col="l2_cell_type")
@@ -212,41 +185,51 @@ print(f"Mean purity: {np.mean(list(macrostate_purity.values()))}")
 
 if running_in_notebook():
     if SAVE_FIGURES:
-        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "rna_velo_three_macrostate_purity.pdf"
+        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"rna_velo_three_macrostate_purity.{FIGURE_FORMAT}"
     else:
         fpath = None
 
     palette = dict(zip(estimator.macrostates.cat.categories, estimator._macrostates.colors))
 
-    plot_state_purity(macrostate_purity, palette=palette, fpath=fpath, format="eps")
+    plot_state_purity(macrostate_purity, palette=palette, fpath=fpath, format=FIGURE_FORMAT)
+
+# %%
+terminal_states = ["CD14+ Mono", "Normoblast", "cDC2", "pDC"]
+cluster_key = "l2_cell_type"
+
+if (DATA_DIR / "hematopoiesis" / "results" / "tsi-vk.csv").is_file():
+    tsi_df = pd.read_csv(DATA_DIR / "hematopoiesis" / "results" / "tsi-vk.csv")
+    estimator._tsi = AnnData(tsi_df, uns={"terminal_states": terminal_states, "cluster_key": cluster_key})
+    tsi_score = estimator.tsi(n_macrostates=17, terminal_states=terminal_states, cluster_key=cluster_key)
+else:
+    tsi_score = estimator.tsi(n_macrostates=17, terminal_states=terminal_states, cluster_key=cluster_key)
+    estimator._tsi.to_df().to_csv(DATA_DIR / "hematopoiesis" / "results" / "tsi-vk.csv", index=False)
+
+print(f"TSI score: {tsi_score:.2f}")
+
+# %%
+# For nice name in figure legend
+estimator.kernel.__class__.__name__ = "VelocityKernel"
+palette = {"VelocityKernel": "#0173b2", "Optimal identification": "#000000"}
+
+if SAVE_FIGURES:
+    fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"tsi-vk.{FIGURE_FORMAT}"
+else:
+    fpath = None
+
+with mplscience.style_context():
+    sns.set_style(style="whitegrid")
+    estimator.plot_tsi(palette=palette, save=fpath)
+    plt.show()
 
 # %%
 estimator.set_terminal_states(["pDC", "CD14+ Mono", "Normoblast"])
-
-if running_in_notebook():
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="terminal_states",
-        basis="umap",
-        legend_loc="right",
-        title="",
-        size=100,
+estimator.plot_macrostates(which="terminal", basis="umap", title="", legend_loc="right", size=100)
+if SAVE_FIGURES:
+    fpath = (
+        FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"umap_colored_by_cr_rna_velo_terminal_states.{FIGURE_FORMAT}"
     )
-
-    if SAVE_FIGURES:
-        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "umap_colored_by_cr_rna_velo_terminal_states.pdf"
-        plot_states(
-            adata,
-            estimator=estimator,
-            which="terminal_states",
-            basis="umap",
-            legend_loc=False,
-            title="",
-            size=100,
-            fpath=fpath,
-            format="pdf",
-        )
+    estimator.plot_macrostates(which="terminal", basis="umap", title="", legend_loc=False, size=100, save=fpath)
 
 # %%
 estimator.compute_fate_probabilities(tol=1e-7)
@@ -273,8 +256,11 @@ if SAVE_FIGURES:
             )
 
             fig.savefig(
-                FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"rna_velo_fate_prob_{terminal_state}.eps",
-                format="eps",
+                FIG_DIR
+                / "pseudotime_kernel"
+                / "hematopoiesis"
+                / f"rna_velo_fate_prob_{terminal_state}.{FIGURE_FORMAT}",
+                format=FIGURE_FORMAT,
                 transparent=True,
                 bbox_inches="tight",
             )
@@ -282,46 +268,25 @@ if SAVE_FIGURES:
 # %%
 if running_in_notebook():
     if SAVE_FIGURES:
-        fname = f"{FIG_DIR}/pseudotime_kernel/hematopoiesis/umap_colored_by_rna_velo_fate.pdf"
+        fpath = f"{FIG_DIR}/pseudotime_kernel/hematopoiesis/umap_colored_by_rna_velo_fate.{FIGURE_FORMAT}"
     else:
-        fname = None
+        fpath = None
     fig, ax = plt.subplots(figsize=(6, 4))
     estimator.plot_fate_probabilities(
         same_plot=True,
         basis="umap",
         title="",
         legend_loc=False,
-        save=fname,
+        save=fpath,
         ax=ax,
     )
 
 # %%
 estimator.compute_macrostates(n_states=20, cluster_key="l2_cell_type")
-
-if running_in_notebook():
-    plot_states(
-        adata,
-        estimator=estimator,
-        which="macrostates",
-        basis="umap",
-        legend_loc="right",
-        title="",
-        size=100,
-    )
-
-    if SAVE_FIGURES:
-        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "umap_colored_by_rna_velo_20_macrostates.pdf"
-        plot_states(
-            adata,
-            estimator=estimator,
-            which="macrostates",
-            basis="umap",
-            legend_loc=False,
-            title="",
-            size=100,
-            fpath=fpath,
-            format="pdf",
-        )
+estimator.plot_macrostates(which="all", basis="umap", title="", legend_loc="right", size=100)
+if SAVE_FIGURES:
+    fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"umap_colored_by_rna_velo_20_macrostates.{FIGURE_FORMAT}"
+    estimator.plot_macrostates(which="all", basis="umap", title="", legend_loc=False, size=100, save=fpath)
 
 # %%
 macrostate_purity = get_state_purity(adata, estimator, states="macrostates", obs_col="l2_cell_type")
@@ -329,12 +294,12 @@ print(f"Mean purity: {np.mean(list(macrostate_purity.values()))}")
 
 if running_in_notebook():
     if SAVE_FIGURES:
-        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / "rna_velo_20_macrostate_purity.pdf"
+        fpath = FIG_DIR / "pseudotime_kernel" / "hematopoiesis" / f"rna_velo_20_macrostate_purity.{FIGURE_FORMAT}"
     else:
         fpath = None
 
     macrostates_ordered = estimator.macrostates.cat.categories.sort_values()
     palette = dict(zip(estimator.macrostates.cat.categories, estimator._macrostates.colors))
 
-    plot_state_purity(macrostate_purity, order=macrostates_ordered, palette=palette, fpath=fpath, format="eps")
+    plot_state_purity(macrostate_purity, order=macrostates_ordered, palette=palette, fpath=fpath, format=FIGURE_FORMAT)
     plt.show()

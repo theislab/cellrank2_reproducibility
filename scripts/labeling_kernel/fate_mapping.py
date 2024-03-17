@@ -199,6 +199,48 @@ if running_in_notebook():
     order = estimator.terminal_states.cat.categories.sort_values().to_list()
     plot_state_purity(terminal_state_purity, palette=palette, order=order, fpath=fpath, format=FIGURE_FORMAT)
 
+# %%
+if (DATA_DIR / "sceu_organoid" / "results" / "terminal_state_purity_cr1.csv").is_file():
+    df = pd.concat(
+        [
+            pd.read_csv(DATA_DIR / "sceu_organoid" / "results" / "terminal_state_purity_cr1.csv"),
+            pd.DataFrame(
+                {
+                    "state": terminal_state_purity.keys(),
+                    "purity": terminal_state_purity.values(),
+                    "method": "CellRank 2",
+                },
+            ),
+        ]
+    ).rename(columns={"state": "Terminal state", "purity": "Terminal state purity", "method": "Method"})
+
+    with mplscience.style_context():
+        fig, ax = plt.subplots(figsize=(6, 4))
+        sns.barplot(
+            data=df,
+            x="Terminal state purity",
+            y="Terminal state",
+            hue="Method",
+            palette=sns.color_palette("colorblind").as_hex()[:2],
+            ax=ax,
+        )
+        sns.move_legend(ax, "lower right", bbox_to_anchor=(1.05, 0.15))
+        ax.set_axisbelow(True)
+        ax.xaxis.grid(True)
+
+        if SAVE_FIGURES:
+            fig.savefig(
+                FIG_DIR / "labeling_kernel" / f"terminal_state_purity_cr1_vs_cr2.{FIGURE_FORMAT}",
+                format=FIGURE_FORMAT,
+                transparent=True,
+                bbox_inches="tight",
+            )
+else:
+    print(
+        "To compare the terminal state purity based on CellRank 1 and 2 requires "
+        "running `notebooks/labeling_kernel/rna_velocity/em_model.ipynb` first."
+    )
+
 # %% [markdown]
 # #### Fate probabilities
 
