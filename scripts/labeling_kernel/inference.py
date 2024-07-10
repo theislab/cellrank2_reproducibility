@@ -94,6 +94,7 @@ alpha, gamma, r0, success, opt_res = get_parameters(
     time_key="labeling_time",
     experiment_key="experiment",
     n_neighbors=n_neighbors,
+    x0=None,
     n_jobs=N_JOBS,
 )
 
