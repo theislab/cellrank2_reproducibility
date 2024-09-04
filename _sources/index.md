@@ -1,18 +1,24 @@
 # CellRank 2's reproducibility repository
 
-This repsitory contains the code to reproduce results shown in [_Unified fate mapping in multiview single-cell data_](https://doi.org/10.1101/2023.07.19.549685)
+This repsitory contains the code to reproduce results shown in [_CellRank 2: unified fate mapping in multiview single-cell data_](https://doi.org/10.1038/s41592-024-02303-9)
 and has been rendered as a Jupyter book [here](https://theislab.github.io/cellrank2_reproducibility/index.html). All datasets are freely available via CellRank's
 API or [figshare](https://doi.org/10.6084/m9.figshare.c.6843633.v1). If you use our tool in your own work,
 please cite it as
 
 ```
-@article{weiler:23,
-    title = {Unified fate mapping in multiview single-cell data},
-    author = {Weiler, Philipp and Lange, Marius and Klein, Michal and Pe{\textquotesingle}er, Dana and Theis, Fabian},
-    doi = {10.1101/2023.07.19.549685},
-    url = {https://doi.org/10.1101/2023.07.19.549685},
-    year = {2023},
-    publisher = {Cold Spring Harbor Laboratory},
+@article{weiler:24,
+    title = {CellRank 2: unified fate mapping in multiview single-cell data},
+    volume = {21},
+    ISSN = {1548-7105},
+    url = {http://dx.doi.org/10.1038/s41592-024-02303-9},
+    DOI = {10.1038/s41592-024-02303-9},
+    number = {7},
+    journal = {Nature Methods},
+    publisher = {Springer Science and Business Media LLC},
+    author = {Weiler,  Philipp and Lange,  Marius and Klein,  Michal and Pe’er,  Dana and Theis,  Fabian},
+    year = {2024},
+    month = jun,
+    pages = {1196–1205}
 }
 ```
 
